@@ -5,6 +5,24 @@
     --bg2-color: #EEEEEE;
 }
 
-.dark {
+body {
+    background-color: var(--bg1-color);
+}
+
+header {
     background-color: var(--nav-color);
+    border-bottom: var(--detail-color) 5px solid;
+}
+
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+    font-size: 1.20rem;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: var(--detail-color);
+    text-decoration: underline;
+    transition: color, 200ms;
 }

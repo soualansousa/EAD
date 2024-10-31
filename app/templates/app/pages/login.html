@@ -1,0 +1,40 @@
+{% extends "app/partials/base.html" %}
+
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock style %}
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+    
+    <main>
+        <div class="container mt-5 p-4 login_form">
+            <form method="POST" action="/">
+                    {% csrf_token %}
+                    
+                    <!-- <div class="mb-3 mt-3 text-white">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Digite seu e-mail" name="email">
+                    </div>
+                    <div class="mb-3 text-white">
+                        <label for="pwd" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="pwd" placeholder="Digite sua senha" name="pswd">
+                    </div> -->
+
+                        {% for field in form %}
+                        <div class="info text-white">
+                            {{field.label_tag}}
+                            {{field}}
+                        </div>
+                        {% endfor %}
+
+                    <div class="text-center">
+                        <button class="btn text-white" type="submit" >Entrar</button>
+                    </div>
+            </form>
+        </div>
+    </main>
+
+{% endblock content %}

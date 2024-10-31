@@ -1,3 +1,10 @@
-html {
-    background-color: red;
+:root {
+    --nav-color: #00000A;
+    --detail-color: #FF2900;
+    --bg1-color: #FEFEFE;
+    --bg2-color: #EEEEEE;
+}
+
+.dark {
+    background-color: var(--nav-color);
 }

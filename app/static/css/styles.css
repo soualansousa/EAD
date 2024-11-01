@@ -14,6 +14,11 @@ header {
     border-bottom: var(--detail-color) 5px solid;
 }
 
+.logo {
+    width: 10rem;
+    height: 4rem;
+}
+
 .nav-link {
     color: inherit;
     text-decoration: none;

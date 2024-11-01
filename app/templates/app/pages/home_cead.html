@@ -1,5 +1,7 @@
 {% extends "app/partials/base.html" %}
 
+{% load static %}
+
 {% block style %}
     <!-- <link rel="stylesheet" href="app/static/css/opa.css"> -->
 {% endblock style %}
@@ -9,6 +11,24 @@
     
     <main>
         <h1>CEAD</h1>
+
+        <div class="video-background">
+            <!-- Vídeo de fundo -->
+            <video autoplay loop muted playsinline>
+              <source src="{% static 'imagens/video/if.mp4' %}" type="video/mp4">
+              Seu navegador não suporta vídeos HTML5.
+            </video>
+        
+            <!-- Camada de overlay -->
+            <div class="overlay"></div>
+        
+            <!-- Conteúdo -->
+            <div class="container content">
+              <h1>Bem-vindo ao Meu Site</h1>
+            </div>
+          </div>
     </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 {% endblock content %}

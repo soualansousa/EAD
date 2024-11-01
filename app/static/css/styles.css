@@ -26,8 +26,17 @@ header {
     font-weight: 500;
 }
 
+.navbar-nav .nav-link.show {
+    color: inherit;
+}
+
 .nav-link:hover {
     color: var(--detail-color);
     text-decoration: underline;
+    transition: color, 200ms;
+}
+
+.dropdown-item:hover {
+    color: var(--detail-color);
     transition: color, 200ms;
 }

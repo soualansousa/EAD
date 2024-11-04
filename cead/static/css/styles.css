@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: var(--bg1-color);
+    background-color: var(--bg2-color);
 }
 
 header {
@@ -26,7 +26,7 @@ header {
     font-weight: 500;
 }
 
-.navbar-nav .nav-link.show {
+.navbar-nav .nav-link.show, .nav-link:focus {
     color: inherit;
 }
 

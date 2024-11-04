@@ -1,24 +1,36 @@
 .video-background {
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.video-background video {
+    position: fixed; 
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 89vh; 
-    object-fit: cover;
-   
-}
-
-.overlay {
-    top: 0;
-    left: 0;
-    width: 100vw;
+    width: 100vw; 
     height: 100vh; 
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    z-index: -1; 
 }
+
+video.overlay {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.overlay-filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 7, 7, 0.2); 
+    z-index: 1; 
+}
+
+.content h1 {
+    top: 100px;
+    margin: 80px; 
+    position: absolute; 
+    z-index: 2; 
+    text-align: center;
+    color: white; 
+    font-size: 3rem; 
+}
+

@@ -9,22 +9,21 @@
 
 {% block content %}
     
-    <main>
+<main>
+  <div class="video-background">
+      <video class="overlay" autoplay loop muted playsinline>
+          <source src="{% static 'images/video/if.mp4' %}" type="video/mp4">
+          Seu navegador não suporta vídeos HTML5.
+      </video>
 
-        <div class="video-background">
-          
-            <video class="overlay" autoplay loop muted playsinline>
-              
-              <source src="{% static 'images/video/if.mp4' %}" type="video/mp4">
-              Seu navegador não suporta vídeos HTML5.
-            </video> 
+      <div class="overlay-filter"></div> 
 
-            <!-- <div class="content"></div>
-              <h1>Bem-vindo ao Meu Site</h1>
-            </div> -->
-        
-        </div>
-    </main>
+      <div class="content d-flex justify-content-center">
+          <h1>Bem-vindo, Cleisson</h1>
+      </div>
+  </div>
+</main>
+
 
 
 

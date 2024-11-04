@@ -10,20 +10,20 @@ def user_login(request):
         if form.is_valid():
             login(request, form.get_user())
             if form.get_user().is_superuser:
-                return redirect("app:home_cead")
-            return redirect("app:home_coo")
+                return redirect("cead:home_cead")
+            return redirect("cead:home_coo")
     else:
         form = AuthenticationForm()
-    return render(request, 'app/pages/login.html', {'form': form})
+    return render(request, 'cead/pages/login.html', {'form': form})
 
 @login_required
 def home_cead(request):
-    return render(request, "app/pages/home_cead.html")
+    return render(request, "cead/pages/home_cead.html")
 
 @login_required
 def home_coo(request):
-    return render(request, "app/pages/home_coo.html")
+    return render(request, "cead/pages/home_coo.html")
 
 def noticias(request):
     noticias = request.GET.get(Noticia)
-    return render(request, "app/pages/noticias.html", {'noticias': noticias})
+    return render(request, "cead/pages/noticias.html", {'noticias': noticias})

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app', '0002_noticia_data_mod_alter_noticia_id'),
+        ('cead', '0002_noticia_data_mod_alter_noticia_id'),
     ]
 
     operations = [

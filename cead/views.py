@@ -3,6 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Noticia
+from .models import Polo
 
 def user_login(request):
     if request.method == 'POST':
@@ -48,3 +49,32 @@ def remover_noticia(request, id):
         noticia.delete()
         return redirect('lista_noticias')
     return render(request, 'noticias/remover_noticia.html', {'noticia': noticia})
+
+# polo
+
+def polos_lista(request):
+    polos = Polo.objects.all()  
+    return render(request, 'cead/pages/polos.html', {'polos': polos})
+
+def visualizar_polo(request, id):
+    polo = get_object_or_404(Polo, id=id)
+    return render(request, 'cead/partials/visualizar_polo.html', {'polo': polo})
+
+def editar_polo(request, id):
+    polo = get_object_or_404(Noticia, id=id)
+    if request.method == 'POST':
+        polo.cidade = request.POST['ciade']
+        polo.longitude = request.POST['longitude']
+        polo.latitude = request.POST['latitude']
+        polo.coordenador = request.POST['coordenador']
+        polo.edicao = request.POST['edicao']
+        polo.save()
+        return redirect('lista_polo')
+    return render(request, 'noticias/editar_polo.html', {'polo': polo})
+
+def remover_polo(request, id):
+    polo = get_object_or_404(Polo, id=id)
+    if request.method == 'POST':
+        polo.delete()
+        return redirect('lista_polo')
+    return render(request, 'polos/remover_polo.html', {'polo': polo})

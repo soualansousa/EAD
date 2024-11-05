@@ -1,0 +1,8 @@
+.table_header th {
+    background-color: var(--nav-color);
+    color: white;
+}
+
+.table_body td {
+    background-color: var(--bg1-color);
+}

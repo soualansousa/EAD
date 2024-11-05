@@ -1,0 +1,54 @@
+{% extends "cead/partials/base.html" %}
+
+{% load static %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/polos.css' %}">
+{% endblock style %}
+{% block title %} polos | CEAD {% endblock title %}
+
+{% block content %} 
+
+<main>
+    <h1 class="container d-flex justify-content-center mt-3">Polos</h1>
+    
+    <div class="table-responsive mx-4">
+        <table class="table table-hover mt-3">
+            <thead>
+                <tr class="text-center table_header">
+                    <th>Cidade</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Publicação</th>
+                    <th>Data de Edição</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for polo in polos %}
+                    <tr class="text-center table_body">
+                        <td>{{ polo.id_curso }}</td>
+                        <td>{{ polo.titulo }}</td>
+                        <td>{{ polo.descricao }}</td>
+                        <td>{{ polo.publicacao }}</td>
+                        <td>{{ polo.edicao }}</td>
+                        <td>
+                            <div class="icons_action d-flex justify-content-center gap-2">
+                                <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
+                                <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
+                                <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
+                            </div>
+                        </td>
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Nenhum polo encontrado.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+</main>
+
+{% endblock content %}

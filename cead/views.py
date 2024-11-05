@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.db.models import Q
 from .models import Noticia, Polo
-from .forms import SearchForm
+from .forms import SearchForm, NoticiaForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -21,6 +22,17 @@ def user_login(request):
 @login_required
 def cead(request):
     return render(request, "cead/pages/home.html")
+
+def criar_noticia(request):
+    if request.method == 'POST':
+        form = NoticiaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = NoticiaForm()
+    return render(request, 'criar_noticia.html', {'form': form})
 
 def noticias_lista(request):
     form = SearchForm(request.GET)

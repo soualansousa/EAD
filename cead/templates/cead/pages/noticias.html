@@ -14,13 +14,15 @@
         <h1 class="container d-flex justify-content-center mt-3">Notícias</h1>
         
         <div class="d-flex mx-4 gap-3 jus">
-            <form method="get" action="" class="search_input d-flex p-0">
+            <form method="get" class="search_input d-flex p-0">
                 {{ form.query }}
                 <button type="submit" class="p-2 ms-1">
                     <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </form>
-            <button class="p-2">Criar</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCriarNoticia">
+                Criar
+            </button>
         </div>
         <div class="table-responsive mx-4">
             <table class="table table-hover mt-3 table_rounded">
@@ -59,6 +61,48 @@
                 </tbody>
               </table>
         </div>
+
+        <!-- Modal para criar uma nova notícia -->
+        <div class="modal fade" id="modalCriarNoticia" tabindex="-1" aria-labelledby="modalCriarNoticiaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCriarNoticiaLabel">Criar Nova Notícia</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formCriarNoticia" method="post" action="{% url 'cead:cnoticia' %}">
+                            {% csrf_token %}
+                                {{ form.as_p }}
+                            <button type="submit" class="btn btn-success">Salvar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                // Enviar formulário via AJAX
+                $('#formCriarNoticia').on('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'cead:cnoticia' %}",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                alert("Notícia criada com sucesso!");
+                                location.reload();  // Recarrega a página para atualizar a lista de notícias
+                            } else {
+                                alert("Erro ao criar notícia: " + JSON.stringify(response.errors));
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
 
 {% endblock content %}

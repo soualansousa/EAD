@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Noticia
+from .forms import SearchForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -25,8 +27,21 @@ def home_coo(request):
     return render(request, "cead/pages/home_coo.html")
 
 def noticias_lista(request):
-    noticias = Noticia.objects.all()  # Obtém todas as notícias
-    return render(request, 'cead/pages/noticias.html', {'noticias': noticias})
+    form = SearchForm(request.GET)
+    query = request.GET.get('query')
+    noticias = Noticia.objects.all()
+
+    if query:
+        noticias = noticias.filter(
+            Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query) | Q(edicao__icontains=query)
+        )
+
+    context = {
+        'form': form,
+        'noticias': noticias
+    }
+
+    return render(request, 'cead/pages/noticias.html', context)
 
 def visualizar_noticia(request, id):
     noticia = get_object_or_404(Noticia, id=id)

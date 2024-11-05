@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/noticias.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tabela.css' %}">
 {% endblock style %}
 
 {% block title %} Notícias {% endblock title %}
@@ -37,11 +37,11 @@
                 <tbody>
                     {% for noticia in noticias %}
                         <tr class="text-center table_body">
-                            <td>{{ noticia.id_curso }}</td>
+                            <td>{{ noticia.curso }}</td>
                             <td>{{ noticia.titulo }}</td>
                             <td>{{ noticia.descricao }}</td>
-                            <td>{{ noticia.publicacao }}</td>
-                            <td>{{ noticia.edicao }}</td>
+                            <td>{{ noticia.publicacao|date:"d/m/Y" }}</td>
+                            <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
@@ -53,7 +53,7 @@
 
                     {% empty %}
                         <tr>
-                            <td colspan="4">Nenhuma notícia encontrada.</td>
+                            <td colspan="6">Nenhuma notícia encontrada.</td>
                         </tr>
                     {% endfor %}
                 </tbody>

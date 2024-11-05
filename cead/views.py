@@ -29,7 +29,7 @@ def noticias_lista(request):
 
     if query:
         noticias = noticias.filter(
-            Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query) | Q(edicao__icontains=query)
+            Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
         )
 
     context = {
@@ -40,5 +40,18 @@ def noticias_lista(request):
     return render(request, 'cead/pages/noticias.html', context)
 
 def polos_lista(request):
-    polos = Polo.objects.all()  
-    return render(request, 'cead/pages/polos.html', {'polos': polos})
+    form = SearchForm(request.GET)
+    query = request.GET.get('query')
+    polos = Polo.objects.all()
+
+    if query:
+        polos = polos.filter(
+            Q(cidade__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
+        )
+    
+    context = {
+        'form': form,
+        'polos': polos
+    }
+
+    return render(request, 'cead/pages/polos.html', context)

@@ -3,7 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Noticia
+from .models import Noticia, Polo
 from .forms import SearchForm
 
 def user_login(request):
@@ -12,19 +12,15 @@ def user_login(request):
         if form.is_valid():
             login(request, form.get_user())
             if form.get_user().is_superuser:
-                return redirect("cead:home_cead")
-            return redirect("cead:home_coo")
+                return redirect("cead:cead")
+            return redirect("coo:coordenacao")
     else:
         form = AuthenticationForm()
     return render(request, 'cead/pages/login.html', {'form': form})
 
 @login_required
-def home_cead(request):
-    return render(request, "cead/pages/home_cead.html")
-
-@login_required
-def home_coo(request):
-    return render(request, "cead/pages/home_coo.html")
+def cead(request):
+    return render(request, "cead/pages/home.html")
 
 def noticias_lista(request):
     form = SearchForm(request.GET)
@@ -43,23 +39,6 @@ def noticias_lista(request):
 
     return render(request, 'cead/pages/noticias.html', context)
 
-def visualizar_noticia(request, id):
-    noticia = get_object_or_404(Noticia, id=id)
-    return render(request, 'cead/partials/visualizar_noticia.html', {'noticia': noticia})
-
-def editar_noticia(request, id):
-    noticia = get_object_or_404(Noticia, id=id)
-    if request.method == 'POST':
-        noticia.titulo = request.POST['titulo']
-        noticia.descricao = request.POST['descricao']
-        noticia.edicao = request.POST['edicao']
-        noticia.save()
-        return redirect('lista_noticias')
-    return render(request, 'noticias/editar_noticia.html', {'noticia': noticia})
-
-def remover_noticia(request, id):
-    noticia = get_object_or_404(Noticia, id=id)
-    if request.method == 'POST':
-        noticia.delete()
-        return redirect('lista_noticias')
-    return render(request, 'noticias/remover_noticia.html', {'noticia': noticia})
+def polos_lista(request):
+    polos = Polo.objects.all()  
+    return render(request, 'cead/pages/polos.html', {'polos': polos})

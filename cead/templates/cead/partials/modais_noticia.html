@@ -1,15 +1,19 @@
 <div class="modal fade" id="modalCriarNoticia" tabindex="-1" aria-labelledby="modalCriarNoticiaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalCriarNoticiaLabel">Notícia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title d-flex justify-content-center" id="modalCriarNoticiaLabel">Notícia</h5>
             </div>
             <div class="modal-body">
                 <form id="formCriarNoticia" method="post" action="{% url 'cead:noticia_lista' %}">
                     {% csrf_token %}
-                    {{ make_noticia.as_p }}
-                    <button type="submit" class="btn btn-success">Salvar</button>
+                    
+                    <div class="input">
+                        {{ make_noticia.as_p }}
+                    </div>
+                    <div class="justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
                 </form>
             </div>
         </div>

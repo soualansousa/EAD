@@ -1,3 +1,47 @@
 .modal-content {
     background-color: var(--nav-color);
+    color: white;
+}
+
+.btn-close {
+    color: white;
+}
+
+.input ul {
+    display: none;
+}
+
+.input p {
+    display: flex;
+    flex-direction: column;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+}
+
+.input p input, select{
+    padding: .5rem;
+}
+
+.input p input, select, textarea{
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+}
+
+.input p textarea{
+    max-height: 5rem;
+}
+
+.input p input, select, textarea:focus-visible{
+    border: 1px solid rgba(255, 41, 0, 0.5);
+}
+
+.btn {
+    background-color: var(--detail-color);
+    border: none;
+    color: white;
+}
+
+.btn:hover, .btn:active {
+    opacity: 0.5;
+    background-color: var(--detail-color);
 }

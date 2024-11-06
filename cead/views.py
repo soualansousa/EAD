@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Noticia, Polo
-from .forms import SearchForm, NoticiaForm
+from .forms import SearchForm, NoticiaForm, PoloForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -55,9 +55,11 @@ def noticias_lista(request):
     return render(request, 'cead/pages/noticias.html', context)
 
 def polos_lista(request):
-    form = SearchForm(request.GET)
+    make_polo = PoloForm(request.POST)
+    search_polo = SearchForm(request.GET)
     query = request.GET.get('query')
-    polos = Polo.objects.all()
+    polo = Polo.objects.all()
+
 
     if query:
         polos = polos.filter(
@@ -65,8 +67,21 @@ def polos_lista(request):
         )
     
     context = {
-        'form': form,
-        'polos': polos
+        'make_polo': make_polo,
+        'search_polo': search_polo,
+        'polo': polo,
+        'query': query,
     }
 
     return render(request, 'cead/pages/polos.html', context)
+
+def criar_polo(request):
+    if request.method == 'POST':
+        form = PoloForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = PoloForm()
+    return render(request, 'modais_polo.html', {'form': form})

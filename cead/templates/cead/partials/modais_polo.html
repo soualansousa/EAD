@@ -1,0 +1,43 @@
+<div class="modal fade" id="modalCriarPolo" tabindex="-1" aria-labelledby="modalCriarPoloLabel" aria-hidden="true"></div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCriarPoloLabel">Polo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarPolo" method="post" action="{% url 'cead:polo_lista' %}">
+                    {% csrf_token %}
+                    {{ make_polo.as_p }}
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Enviar formulário via AJAX
+        $('#formCriarPolo').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:criar_polo' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Polo criado com sucesso!");
+                        location.reload();  // Recarrega a página para atualizar a lista de polos
+                    } else {
+                        alert("Erro ao criar polo: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+
+

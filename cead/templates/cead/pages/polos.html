@@ -3,46 +3,49 @@
 {% load static %}
 
 {% block style %}
-  <link rel="stylesheet" href="{% static 'css/tabela.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tabela.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock style %}
-{% block title %} polos | CEAD {% endblock title %}
 
-{% block content %} 
+{% block title %} Polos {% endblock title %}
 
+{% block content %}
+    
     <main>
         <h1 class="container d-flex justify-content-center mt-3">Polos</h1>
         
         <div class="d-flex mx-4 gap-3 jus">
-            <form method="get" action="" class="search_input d-flex p-0">
-                {{ form.query }}
+            <form method="get" class="search_input d-flex p-0">
+                {{ search_polo.query }}
                 <button type="submit" class="p-2 ms-1">
                     <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </form>
-            <button class="p-2">Criar</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCriarPolo">
+                Criar
+            </button>
         </div>
         <div class="table-responsive mx-4">
             <table class="table table-hover mt-3 table_rounded">
                 <thead>
                     <tr class="text-center table_header">
-                        <th>Curso</th>
-                        <th>Cidade</th>
+                        <th class="first_th">Cidade</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
-                        <th>Publicação</th>
-                        <th>Edição</th>
+                        <th>Data de Publicação</th>
+                        <th>Data de Edição</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for polo in polos %}
-                        <tr class="text-center table_body">
-                            <td>{{ polo.curso }}</td>
-                            <td>{{ polo.cidade }}</td>
-                            <td>{{ polo.latitude }}</td>
-                            <td>{{ polo.longitude }}</td>
-                            <td>{{ polo.publicacao|date:"d/m/Y" }}</td>
-                            <td>{{ polo.edicao|date:"d/m/Y" }}</td>
+                    <tr class="text-center table_body">
+                        <td>{{ polo.cidade }}</td>
+                        <td>{{ polo.latitude }}</td>
+                        <td>{{ polo.longitude }}</td>
+                        <td>{{ polo.publicacao|date:"d/m/Y" }}</td>
+                        <td>{{ polo.edicao|date:"d/m/Y" }}</td>
+                        <td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
@@ -54,12 +57,14 @@
 
                     {% empty %}
                         <tr>
-                            <td colspan="4">Nenhum polo encontrada.</td>
+                            <td colspan="6">Nenhum polo encontrado.</td>
                         </tr>
                     {% endfor %}
                 </tbody>
-            </table>
+              </table>
         </div>
+
+        {% include "cead/partials/modais_polo.html" %}
     </main>
 
 {% endblock content %}

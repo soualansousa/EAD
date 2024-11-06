@@ -1,15 +1,20 @@
-<div class="modal fade" id="modalCriarPolo" tabindex="-1" aria-labelledby="modalCriarPoloLabel" aria-hidden="true"></div>
+<!-- Criar -->
+<div class="modal fade" id="modalCriarPolo" tabindex="-1" aria-labelledby="modalCriarPoloLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalCriarPoloLabel">Polo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title d-flex justify-content-center" id="modalCriarPoloLabel">Polo</h5>
             </div>
             <div class="modal-body">
                 <form id="formCriarPolo" method="post" action="{% url 'cead:polo_lista' %}">
                     {% csrf_token %}
-                    {{ make_polo.as_p }}
-                    <button type="submit" class="btn btn-success">Salvar</button>
+                    
+                    <div class="input">
+                        {{ make_polo.as_p }}
+                    </div>
+                    <div class="justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -19,7 +24,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Enviar formulário via AJAX
         $('#formCriarPolo').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
@@ -29,7 +33,7 @@
                 success: function(response) {
                     if (response.success) {
                         alert("Polo criado com sucesso!");
-                        location.reload();  // Recarrega a página para atualizar a lista de polos
+                        location.reload();
                     } else {
                         alert("Erro ao criar polo: " + JSON.stringify(response.errors));
                     }
@@ -38,6 +42,3 @@
         });
     });
 </script>
-
-
-

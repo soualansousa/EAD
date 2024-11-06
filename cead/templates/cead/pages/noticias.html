@@ -29,7 +29,7 @@
             <table class="table table-hover mt-3 table_rounded">
                 <thead>
                     <tr class="text-center table_header">
-                        <th class="first_th">Curso</th>
+                        <th>Curso</th>
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Publicação</th>
@@ -53,7 +53,7 @@
                                     <button class="button_icon">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
                                     </button>
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#modalExcluirNoticia" data-id="{{ noticia.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
                                     </button>
                                 </div>
@@ -70,6 +70,6 @@
         </div>
 
         {% include "cead/partials/modais_noticia.html" %}
+        {% include "cead/partials/modais_gerais.html" %}
     </main>
-
 {% endblock content %}

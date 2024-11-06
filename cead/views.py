@@ -32,12 +32,10 @@ def criar_noticia(request):
         return JsonResponse({'success': False, 'errors': form.errors})
 
 def excluir_noticia(request, noticia_id):
-    print('opa')
     if request.method == 'POST':
         noticia = get_object_or_404(Noticia, id=noticia_id)
         noticia.delete()
         return JsonResponse({'success': True})
-    
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
 def noticias_lista(request):
@@ -64,7 +62,7 @@ def polos_lista(request):
     make_polo = PoloForm(request.POST)
     search_polo = SearchForm(request.GET)
     query = request.GET.get('query')
-    polo = Polo.objects.all()
+    polos = Polo.objects.all()
 
 
     if query:
@@ -75,7 +73,7 @@ def polos_lista(request):
     context = {
         'make_polo': make_polo,
         'search_polo': search_polo,
-        'polo': polo,
+        'polos': polos,
         'query': query,
     }
 

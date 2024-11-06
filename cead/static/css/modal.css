@@ -41,7 +41,7 @@
     color: white;
 }
 
-.btn:hover, .btn:active {
+.btn:hover, .btn:active, .button_search:hover {
     transform: scale(1.1);
     background-color: var(--detail-color);
 }

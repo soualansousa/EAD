@@ -32,10 +32,11 @@ def criar_noticia(request):
         return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = NoticiaForm()
-    return render(request, 'criar_noticia.html', {'form': form})
+    return render(request, 'modais_noticia.html', {'form': form})
 
 def noticias_lista(request):
-    form = SearchForm(request.GET)
+    make_noticia = NoticiaForm(request.POST)
+    search_noticia = SearchForm(request.GET)
     query = request.GET.get('query')
     noticias = Noticia.objects.all()
 
@@ -45,8 +46,10 @@ def noticias_lista(request):
         )
 
     context = {
-        'form': form,
-        'noticias': noticias
+        'make_noticia': make_noticia,
+        'search_noticia': search_noticia,
+        'noticias': noticias,
+        'query': query,
     }
 
     return render(request, 'cead/pages/noticias.html', context)

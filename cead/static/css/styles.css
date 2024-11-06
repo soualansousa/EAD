@@ -30,27 +30,15 @@ header {
     color: inherit;
 }
 
-.nav-link:hover ~ .nav-link {
-    filter: blur(5px);
-    opacity: 0.5;
-    transform: scale(1.1);
-    
-}
-
 .nav-link:hover {
     color: #FF2900;
     filter: none;
-    opacity: 1;
-    transform: scale(1.3);
+    transform: scale(1.1);
+    animation: swing 0.5s;
 }
 
 .nav-link.active {
     animation: pulse 1.5s infinite;
-}
-
-
-.nav-link:hover {
-    animation: swing 0.5s;
 }
 
 .dropdown-item:hover {

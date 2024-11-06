@@ -42,6 +42,6 @@
 }
 
 .btn:hover, .btn:active {
-    opacity: 0.5;
+    transform: scale(1.1);
     background-color: var(--detail-color);
 }

@@ -1,3 +1,4 @@
+<!-- Criação -->
 <div class="modal fade" id="modalCriarNoticia" tabindex="-1" aria-labelledby="modalCriarNoticiaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -23,7 +24,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Enviar formulário via AJAX
         $('#formCriarNoticia').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
@@ -33,7 +33,7 @@
                 success: function(response) {
                     if (response.success) {
                         alert("Notícia criada com sucesso!");
-                        location.reload();  // Recarrega a página para atualizar a lista de notícias
+                        location.reload();
                     } else {
                         alert("Erro ao criar notícia: " + JSON.stringify(response.errors));
                     }
@@ -42,3 +42,59 @@
         });
     });
 </script>
+
+<!-- Exclusão -->
+
+<div class="modal fade" id="modalExcluirNoticia" tabindex="-1" aria-labelledby="modalExcluirNoticiaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExcluirNoticiaLabel">Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir esta notícia?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let noticiaId;
+
+        $('.button_delete').on('click', function() {
+            noticiaId = $(this).data('id');
+        });
+
+        $('#confirmarExclusao').on('click', function() {
+            if (noticiaId) {
+                $.ajax({
+                    type: 'POST',
+                    url: `/excluir_noticia/${noticiaId}/`,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $(`tr[data-id="${noticiaId}"]`).remove();
+                            $('#modalExcluirNoticia').modal('hide');
+                        } else {
+                            alert("Erro ao excluir notícia.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Erro na requisição de exclusão: " + error);
+                    }
+                });
+            } else {
+                alert("Erro: ID da notícia não encontrado.");
+            }
+        });
+    });
+</script>
+

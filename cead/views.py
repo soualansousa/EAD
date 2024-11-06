@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -30,9 +30,15 @@ def criar_noticia(request):
             form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
-    else:
-        form = NoticiaForm()
-    return render(request, 'modais_noticia.html', {'form': form})
+
+def excluir_noticia(request, noticia_id):
+    print('opa')
+    if request.method == 'POST':
+        noticia = get_object_or_404(Noticia, id=noticia_id)
+        noticia.delete()
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
 def noticias_lista(request):
     make_noticia = NoticiaForm(request.POST)

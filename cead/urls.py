@@ -7,6 +7,7 @@ urlpatterns = [
     path('cead/',views.cead, name="cead"),
     path('noticias/',views.noticias_lista, name="noticia_lista"),
     path('criar_noticia/', views.criar_noticia, name='criar_noticia'),
+    path('excluir_noticia/<int:noticia_id>/', views.excluir_noticia, name='excluir_noticia'),
 
 #polo
     path('polos/',views.polos_lista, name="polo_lista"),

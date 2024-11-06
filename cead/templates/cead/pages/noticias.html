@@ -17,7 +17,7 @@
         <div class="d-flex mx-4 gap-3 jus">
             <form method="get" class="search_input d-flex p-0">
                 {{ search_noticia.query }}
-                <button type="submit" class="p-2 ms-1">
+                <button type="submit" class="p-2 ms-1 button_search">
                     <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </form>
@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                     {% for noticia in noticias %}
-                        <tr class="text-center table_body">
+                        <tr class="text-center table_body" data-id="{{ noticia.id }}">
                             <td>{{ noticia.curso }}</td>
                             <td>{{ noticia.titulo }}</td>
                             <td>{{ noticia.descricao }}</td>
@@ -47,9 +47,15 @@
                             <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
-                                    <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
-                                    <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
+                                    <button class="button_icon">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
+                                    </button>
+                                    <button class="button_icon">
+                                        <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
+                                    </button>
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#modalExcluirNoticia" data-id="{{ noticia.id }}">
+                                        <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

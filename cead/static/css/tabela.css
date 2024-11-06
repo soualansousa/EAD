@@ -1,8 +1,17 @@
-button {
+.button_search {
     border: none;
     border-radius: 7px;
     background: var(--detail-color);
     color: white;
+}
+
+.button_icon {
+    background: transparent;
+    border: none;
+}
+
+.button_icon img:hover{
+    transform: scale(1.2);
 }
 
 .search_input input {

@@ -48,7 +48,9 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Nome usuário</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{% if request.user.is_authenticated %}
+                             {{ request.user.first_name|default:request.user.username }}
+                        {% endif %}</a>
                         <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Minhas informações</a></li>
                         <li><a class="dropdown-item" href="/">Sair</a></li>

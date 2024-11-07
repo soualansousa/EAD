@@ -46,11 +46,11 @@ header {
     transition: color, 200ms;
 }
 
-/* Estilo geral para o footer */
+
 footer {
-    background-color: #00000A;  /* Fundo escuro para contraste */
-    color: white;  /* Texto branco */
-    padding: 20px 0;
+    background-color: #00000A; 
+    color: white;  
+    padding: 30px ;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -63,19 +63,22 @@ footer {
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    margin: 0 auto; 
+    padding: 20px;
     height: 60px;
+    gap: 0px;
+ 
 }
 
 .footer-content h4 {
     margin: 0;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
+    text-align: center;
 }
 
 
-.social-icons {
+/* .social-icons {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -94,7 +97,7 @@ footer {
 .social-icon img:hover {
     transform: scale(1.1);
 
-}
+} */
 
 /* Responsividade */
 @media (max-width: 768px) {
@@ -103,13 +106,22 @@ footer {
         align-items: center;
     }
 
-    .social-icons {
+    /* .social-icons {
         margin-top: 10px;
+    } */
+
+    .item.apoio {
+        flex-direction: column; /* Coloca o texto e a imagem um abaixo do outro */
+        gap: 5px;
+    }
+
+    .formigueiro-tecnologico {
+        width: 40px; 
     }
 }
 
 
-/* Ícone do Facebook */
+/* Ícone do Facebook
 .facebook-icon svg {
     fill: #1877f2;
     transition: fill 0.3s;
@@ -119,22 +131,51 @@ footer {
     fill: #0e51a7;
 }
 
-/* Ícone do Twitter */
+
 .twitter-icon svg {
     fill: #1da1f2;
     transition: fill 0.3s;
-}
+} 
 
 .twitter-icon:hover svg {
     fill: #0d8dd9;
 }
 
-/* Ícone do Instagram */
+
 .instagram-icon svg {
-    fill: #c32aa3; /* Cor padrão do Instagram */
+    fill: #c32aa3; 
     transition: fill 0.3s;
 }
 
-.instagram-icon:hover svg {
-    fill: #e1306c; /* Cor ao passar o mouse */
+/* .instagram-icon:hover svg {
+    fill: #e1306c; 
+} */
+
+
+
+.formigueiro-tecnologico {
+    width: 110px;
+    border: 1px solid #868E96;
+    border-radius: 50%;
+    background: #000;
+   
 }
+
+
+
+.item.apoio {
+    display: flex;
+    align-items: center;
+    gap: 50px; /* Ajuste o espaço entre o texto e a imagem conforme necessário */
+}
+
+.item.apoio p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 30px;
+    color: white; 
+}
+
+
+
+  

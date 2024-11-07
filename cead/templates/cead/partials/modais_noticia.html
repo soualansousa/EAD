@@ -21,6 +21,77 @@
     </div>
 </div>
 
+<!-- Excluir -->
+<div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Excluir">Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detalhar -->
+<div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Curso:</strong> <span id="detalheCurso"></span></p>
+                <p><strong>Título:</strong> <span id="detalheTitulo"></span></p>
+                <p><strong>Descrição:</strong> <span id="detalheDescricao"></span></p>
+                <p><strong>Data de Publicação:</strong> <span id="detalhePublicacao"></span></p>
+                <p><strong>Data de Edição:</strong> <span id="detalheEdicao"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Editar -->
+<div id="Editar" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Notícia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarNoticiaForm">
+                    <div class="mb-3">
+                        <label for="editarCurso" class="form-label">Curso</label>
+                        <select class="form-control" id="editarCurso" name="curso">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarTitulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="editarTitulo" name="titulo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarDescricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="salvarEdicao">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -37,6 +108,104 @@
                     } else {
                         alert("Erro ao criar notícia: " + JSON.stringify(response.errors));
                     }
+                }
+            });
+        });
+        
+        $('.button_icon').on('click', function() {
+            noticiaId = $(this).data('id');
+        });
+
+        $('#confirmarExclusao').on('click', function() {
+            if (noticiaId) {
+                $.ajax({
+                    type: 'POST',
+                    url: `/excluir_noticia/${noticiaId}/`, 
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $(`tr[data-id="${noticiaId}"]`).remove();
+                            $('#Excluir').modal('hide');
+                        } else {
+                            alert("Erro ao excluir notícia.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Erro na requisição de exclusão: " + error);
+                    }
+                });
+            } else {
+                alert("Erro: ID da notícia não encontrado.");
+            }
+        });
+
+        $('.btn-detalhar').on('click', function() {
+            $.ajax({
+                type: 'GET',
+                url: `/detalhar_noticia/${noticiaId}/`, 
+                success: function(response) {
+                    $('#detalheCurso').text(response.curso);
+                    $('#detalheTitulo').text(response.titulo);
+                    $('#detalheDescricao').text(response.descricao);
+                    $('#detalhePublicacao').text(response.publicacao);
+                    $('#detalheEdicao').text(response.edicao);
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes da notícia: " + error);
+                }
+            });
+        });
+
+        $('.btn-editar').on('click', function() {
+            $.ajax({
+                type: 'GET',
+                url: `/editar_noticia/${noticiaId}/`,
+                success: function(response) {
+                    $('#editarTitulo').val(response.titulo);
+                    $('#editarDescricao').val(response.descricao);
+                    $('#editarCurso').empty();
+                    response.cursos.forEach(function(curso) {
+                        let option = $('<option></option>').val(curso.id).text(curso.nome);
+                        if (curso.id === response.curso) {
+                            option.prop('selected', true);
+                        }
+                        $('#editarCurso').append(option);
+                    });
+
+                    $('#Editar').data('id', noticiaId);
+                    $('#Editar').modal('show');
+                },
+                error: function() {
+                    alert("Erro ao carregar dados da notícia.");
+                }
+            });
+        });
+
+        $('#salvarEdicao').on('click', function() {
+            let noticiaId = $('#Editar').data('id');
+            let formData = {
+                curso: $('#editarCurso').val(),
+                titulo: $('#editarTitulo').val(),
+                descricao: $('#editarDescricao').val(),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: `/editar_noticia/${noticiaId}/`,
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert("Notícia atualizada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao atualizar notícia: " + JSON.stringify(response.errors));
+                    }
+                },
+                error: function() {
+                    alert("Erro ao salvar as mudanças.");
                 }
             });
         });

@@ -29,7 +29,7 @@
             if (noticiaId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_noticia/${noticiaId}/`,
+                    url: `/excluir_noticia/${noticiaId}/`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },

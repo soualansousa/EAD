@@ -30,6 +30,7 @@
                 <thead>
                     <tr class="text-center table_header">
                         <th>Cidade</th>
+                        <th>Coordenador</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th>Data de Publicação</th>
@@ -41,22 +42,27 @@
                     {% for polo in polos %}
                         <tr class="text-center table_body" data-id="{{ polo.id }}">
                             <td>{{ polo.cidade }}</td>
+                            <td>{{ polo.coordenador }}</td>
                             <td>{{ polo.latitude }}</td>
                             <td>{{ polo.longitude }}</td>
                             <td>{{ polo.publicacao|date:"d/m/Y" }}</td>
                             <td>{{ polo.edicao|date:"d/m/Y" }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon">
-                                        <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ polo.id }}">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
-                                    <button class="button_icon">
-                                        <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
+
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ polo.id }}">
+                                        <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
+                                    
+
                                     <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ polo.id }}">
-                                        <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
+                                        <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>
+                                
                             </td>
                         </tr>
 

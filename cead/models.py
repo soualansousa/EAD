@@ -24,7 +24,6 @@ class Noticia(models.Model):
         return self.titulo
     
 class Polo(models.Model):
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE)
     cidade = models.CharField(max_length=255)
     longitude = models.FloatField()

@@ -3,10 +3,6 @@
     color: white;
 }
 
-.btn-close {
-    color: white;
-}
-
 .input ul {
     display: none;
 }
@@ -27,7 +23,7 @@
     border: 1px solid rgba(0, 0, 0, 0.50);
 }
 
-.input p textarea{
+textarea{
     max-height: 5rem;
 }
 
@@ -44,4 +40,52 @@
 .btn:hover, .btn:active, .button_search:hover {
     transform: scale(1.1);
     background-color: var(--detail-color);
+}
+
+.button_close:hover {
+    transform: scale(1.3);
+}
+
+.modal-header{
+    border-bottom: none;
+}
+
+.text-modal{
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+#Excluir .btn-secondary {
+    background-color: white;
+    color: black;
+}
+
+.button_close {
+    border: none;
+    background: none;
+}
+
+.Garrafinha {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+}
+
+.Garrafinha_descricao {
+    display: flex;
+    padding: .15rem;
+    align-items: center;
+    align-self: stretch;
+    border-radius: .4rem;
+    background: white;
+}
+.Garrafinha_descricao p {
+    color: black;
+    margin-left: 1rem;
+    margin-bottom: 0;
 }

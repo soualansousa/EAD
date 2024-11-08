@@ -1,9 +1,15 @@
+{% load static %}
+
 <!-- Criar -->
 <div class="modal fade" id="modalCriarNoticia" tabindex="-1" aria-labelledby="modalCriarNoticiaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <h5 class="modal-title d-flex justify-content-center" id="modalCriarNoticiaLabel">Notícia</h5>
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalCriarNoticiaLabel">Notícia</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="formCriarNoticia" method="post" action="{% url 'cead:noticia_lista' %}">
@@ -12,7 +18,7 @@
                     <div class="input">
                         {{ make_noticia.as_p }}
                     </div>
-                    <div class="justify-content-center">
+                    <div class="d-flex justify-content-center">
                         <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
                     </div>
                 </form>
@@ -24,17 +30,22 @@
 <!-- Excluir -->
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="Excluir">Confirmação de Exclusão</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
-                Tem certeza de que deseja excluir?
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
+            <div class="modal-footer justify-content-center gap-5">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="confirmarExclusao" class="btn btn-danger">Sim</button>
             </div>
         </div>
     </div>
@@ -44,18 +55,47 @@
 <div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header justify-content-between">
+                <span></span>
                 <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
-            <div class="modal-body">
-                <p><strong>Curso:</strong> <span id="detalheCurso"></span></p>
-                <p><strong>Título:</strong> <span id="detalheTitulo"></span></p>
-                <p><strong>Descrição:</strong> <span id="detalheDescricao"></span></p>
-                <p><strong>Data de Publicação:</strong> <span id="detalhePublicacao"></span></p>
-                <p><strong>Data de Edição:</strong> <span id="detalheEdicao"></span></p>
+            <div class="modal-body gap-2 d-flex flex-column">
+                <div class="Garrafinha">
+                    <h5>Curso</h5>
+                    <div class="Garrafinha_descricao">
+                        <p id="detalheCurso"></p>
+                    </div>
+                </div>
+                <div class="Garrafinha">
+                    <h5>Título</h5>
+                    <div class="Garrafinha_descricao">
+                        <p id="detalheTitulo"></p>
+                    </div>
+                </div>
+                <div class="Garrafinha">
+                    <h5>Descrição</h5>
+                    <div class="Garrafinha_descricao">
+                        <p id="detalheDescricao"></p>
+                    </div>
+                </div>
+                <div class="Garrafinha">
+                    <h5>Data de Publicação</h5>
+                    <div class="Garrafinha_descricao">
+                        <p id="detalhePublicacao"></p>
+                    </div>
+                </div>
+                <div class="Garrafinha">
+                    <h5>Data de Edição</h5>
+                    <div class="Garrafinha_descricao">
+                        <p id="detalheEdicao"></p>
+                    </div>
+                </div>
+
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-flex justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
         </div>
@@ -66,9 +106,12 @@
 <div id="Editar" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header justify-content-between">
+                <span></span>
                 <h5 class="modal-title">Editar Notícia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="editarNoticiaForm">
@@ -85,7 +128,9 @@
                         <label for="editarDescricao" class="form-label">Descrição</label>
                         <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
                     </div>
-                    <button type="button" class="btn btn-primary" id="salvarEdicao">Salvar</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
+                    </div>
                 </form>
             </div>
         </div>

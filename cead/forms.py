@@ -12,4 +12,4 @@ class NoticiaForm(forms.ModelForm):
 class PoloForm(forms.ModelForm):
     class Meta:
         model = Polo
-        fields = ['curso', 'coordenador', 'cidade', 'latitude', 'longitude']
+        fields = ['coordenador', 'cidade', 'latitude', 'longitude']

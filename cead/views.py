@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso
+from .models import Noticia, Polo, Curso, Coordenador
 from .forms import SearchForm, NoticiaForm, PoloForm
 
 def user_login(request):
@@ -90,6 +90,8 @@ def noticias_lista(request):
 
     return render(request, 'cead/pages/noticias.html', context)
 
+# polo
+
 def polos_lista(request):
     make_polo = PoloForm(request.POST)
     search_polo = SearchForm(request.GET)
@@ -128,3 +130,37 @@ def excluir_polo(request, polo_id):
         polo.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+def detalhar_polo(request, polo_id):
+    polo = get_object_or_404(Polo, id=polo_id)
+    dados = {
+        'cidade': polo.cidade,
+        'latitude': polo.latitude,
+        'longitude': polo.longitude,
+        'coordenador': polo.coordenador.nome if polo.coordenador else "Coordenador não informado",
+        'publicacao': polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Data não disponível",
+        'edicao': polo.edicao.strftime('%d/%m/%Y') if polo.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
+
+def editar_polo(request, polo_id):
+    polo = get_object_or_404(Polo, id=polo_id)
+    
+    if request.method == 'POST':
+        form = PoloForm(request.POST, instance=polo)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+    coordenadores = Coordenador.objects.all().values('id', 'nome')
+    dados = {
+        'cidade': polo.cidade,
+        'latitude': polo.latitude,
+        'longitude': polo.longitude,
+        'coordenador': polo.coordenador.id if polo.coordenador else None,
+        'publicacao': polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Data não disponível",
+        'edicao': polo.edicao.strftime('%d/%m/%Y') if polo.edicao else "Não editado",
+        'coordenadores': list(coordenadores)
+    }
+    return JsonResponse(dados)

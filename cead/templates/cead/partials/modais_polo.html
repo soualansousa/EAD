@@ -21,28 +21,6 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#formCriarPolo').on('submit', function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'cead:criar_polo' %}",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        alert("Polo criado com sucesso!");
-                        location.reload();
-                    } else {
-                        alert("Erro ao criar polo: " + JSON.stringify(response.errors));
-                    }
-                }
-            });
-        });
-    });
-</script>
-
 <!-- Excluir -->
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
@@ -62,11 +40,85 @@
     </div>
 </div>
 
+<!-- Detalhar -->
+<div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DetalharLabel">Detalhes de Polo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Cidade:</strong> <span id="detalheCidade"></span></p>
+                <p><strong>Coordenador:</strong> <span id="detalheCoordenador"></span></p>
+                <p><strong>Latitude:</strong> <span id="detalheLatitude"></span></p>
+                <p><strong>Longitude:</strong> <span id="detalheLongitude"></span></p>
+                <p><strong>Data de Publicação:</strong> <span id="detalhePublicacao"></span></p>
+                <p><strong>Data de Edição:</strong> <span id="detalheEdicao"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Editar -->
+<div id="Editar" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Polo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarPoloForm">
+                    <div class="mb-3">
+                        <label for="editarCidade" class="form-label">Cidade</label>
+                        <input class="form-control" id="editarCidade" name="cidade">
+                    </input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarCoordenador" class="form-label">Coordenador</label>
+                        <select type="text" class="form-control" id="editarCoordenador" name="coordenador">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarLatitude" class="form-label">Latitude</label>
+                        <textarea class="form-control" id="editarLatitude" name="latitude"></textarea>
+                    </div>
+                    <div class="mb-3"></div>
+                        <label for="editarLongitude" class="form-label">Longitude</label>
+                        <textarea class="form-control" id="editarLongitude" name="longitude"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="salvarEdicao">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function() {
-        let poloId;
-
-        $('.button_delete').on('click', function() {
+        $('#formCriarPolo').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:criar_polo' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Polo criado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar polo: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+        
+        $('.button_icon').on('click', function() {
             poloId = $(this).data('id');
         });
 
@@ -83,7 +135,7 @@
                             $(`tr[data-id="${poloId}"]`).remove();
                             $('#Excluir').modal('hide');
                         } else {
-                            alert("Erro ao excluir notícia.");
+                            alert("Erro ao excluir polo.");
                         }
                     },
                     error: function(xhr, status, error) {
@@ -91,8 +143,89 @@
                     }
                 });
             } else {
-                alert("Erro: ID da notícia não encontrado.");
+                alert("Erro: ID do polo não encontrado.");
             }
+        });
+
+        $('.btn-detalhar').on('click', function() {
+            let poloId = $(this).data('id');  
+            
+            $.ajax({
+                type: 'GET',
+                url: `/detalhar_polo/${poloId}/`, 
+                success: function(response) {
+                    console.log('a');
+                    $('#detalheCidade').text(response.cidade);
+                    $('#detalheCoordenador').text(response.coordenador);
+                    $('#detalheLatitude').text(response.latitude);
+                    $('#detalheLongitude').text(response.longitude);
+                    $('#detalhePublicacao').text(response.publicacao);
+                    $('#detalheEdicao').text(response.edicao);
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes do polo: " + error);
+                }
+            });
+        });
+
+
+
+
+        $('.btn-editar').on('click', function() {
+            let poloId = $(this).data('id');
+            $.ajax({
+                type: 'GET',
+                url: `/editar_polo/${poloId}/`,
+                success: function(response) {
+                    $('#editarCidade').val(response.cidade);
+                    $('#editarLatitude').val(response.latitude);
+                    $('#editarLongitude').val(response.longitude);
+
+                    $('#editarCoordenador').empty();
+                    response.coordenadores.forEach(function(coordenador) {
+                        let option = $('<option></option>').val(coordenador.id).text(coordenador.nome);
+                        if (coordenador.id === response.coordenador) {
+                            option.prop('selected', true);
+                        }
+                        $('#editarCoordenador').append(option);
+                    });
+
+                    $('#Editar').data('id', poloId);
+                    $('#Editar').modal('show');
+                },
+                error: function() {
+                    alert("Erro ao carregar dados do polo.");
+                }
+            });
+        });
+
+
+        $('#salvarEdicao').on('click', function() {
+            let poloId = $('#Editar').data('id');
+            let formData = {
+                cidade: $('#editarCidade').val(),
+                coordenador: $('#editarCoordenador').val(),
+                latitude: $('#editarLatitude').val(),
+                longitude: $('#editarLongitude').val(),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: `/editar_polo/${poloId}/`,
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert("Polo atualizado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao atualizar polo: " + JSON.stringify(response.errors));
+                    }
+                },
+                error: function() {
+                    alert("Erro ao salvar as mudanças.");
+                }
+            });
         });
     });
 </script>

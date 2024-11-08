@@ -1,9 +1,15 @@
+{% load static %}
+
 <!-- Criar -->
 <div class="modal fade" id="modalCriarPolo" tabindex="-1" aria-labelledby="modalCriarPoloLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <h5 class="modal-title d-flex justify-content-center" id="modalCriarPoloLabel">Polo</h5>
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalCriarPoloLabel">Polo</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="formCriarPolo" method="post" action="{% url 'cead:polo_lista' %}">
@@ -12,7 +18,7 @@
                     <div class="input">
                         {{ make_polo.as_p }}
                     </div>
-                    <div class="justify-content-center">
+                    <div class="d-flex justify-content-center">
                         <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
                     </div>
                 </form>
@@ -24,15 +30,20 @@
 <!-- Excluir -->
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="Excluir">Confirmação de Exclusão</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title text-center" id="Excluir">Confirmação de Exclusão</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
-                Tem certeza de que deseja excluir?
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-center gap-5">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
             </div>
@@ -44,19 +55,52 @@
 <div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header justify-content-between">
+                <span></span>
                 <h5 class="modal-title" id="DetalharLabel">Detalhes de Polo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
-                <p><strong>Cidade:</strong> <span id="detalheCidade"></span></p>
-                <p><strong>Coordenador:</strong> <span id="detalheCoordenador"></span></p>
-                <p><strong>Latitude:</strong> <span id="detalheLatitude"></span></p>
-                <p><strong>Longitude:</strong> <span id="detalheLongitude"></span></p>
-                <p><strong>Data de Publicação:</strong> <span id="detalhePublicacao"></span></p>
-                <p><strong>Data de Edição:</strong> <span id="detalheEdicao"></span></p>
+                <div class="modal_info">
+                    <h5>Cidade</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheCidade"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Coordenador</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheCoordenador"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Latitude</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheLatitude"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Longitude</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheLongitude"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Data de Publicação</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheEdicao"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Data de Edição</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheEdicao"></p>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-flex justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
         </div>
@@ -67,9 +111,12 @@
 <div id="Editar" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header justify-content-between">
+                <span></span>
                 <h5 class="modal-title">Editar Polo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="editarPoloForm">
@@ -81,6 +128,7 @@
                     <div class="mb-3">
                         <label for="editarCoordenador" class="form-label">Coordenador</label>
                         <select type="text" class="form-control" id="editarCoordenador" name="coordenador">
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="editarLatitude" class="form-label">Latitude</label>
@@ -90,7 +138,9 @@
                         <label for="editarLongitude" class="form-label">Longitude</label>
                         <textarea class="form-control" id="editarLongitude" name="longitude"></textarea>
                     </div>
-                    <button type="button" class="btn btn-primary" id="salvarEdicao">Salvar</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -27,29 +27,57 @@
     </div>
 </div>
 
+<div id="menuLateral" class="menu-lateral">
+    <span class="close-btn">&times;</span>
+    <h2>Detalhes do Curso</h2>
+    <p><strong>Nome:</strong> <span id="detalheNome"></span></p>
+    <p><strong>Descrição:</strong> <span id="detalheDescricao"></span></p>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('#formCriarPolo').on('submit', function(e) {
+        $('#formCriarCurso').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'cead:criar_polo' %}",
+                url: "{% url 'cead:criar_curso' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Polo criado com sucesso!");
+                        alert("Curso criado com sucesso!");
                         location.reload();
                     } else {
-                        alert("Erro ao criar polo: " + JSON.stringify(response.errors));
+                        alert("Erro ao criar curso: " + JSON.stringify(response.errors));
                     }
                 }
             });
         });
         
         $('.button_icon').on('click', function() {
-            poloId = $(this).data('id');
+            console.log('opa');
+            cursoId = $(this).data('id');
+            
+            $.ajax({
+                type: 'GET',
+                url: `/detalhar_curso/${cursoId}/`, // Defina a URL para a view que retorna os detalhes do curso
+                success: function(response) {
+                    // Preencher o menu com os dados do curso
+                    $('#detalheNome').text(response.nome || "Nome não disponível");
+                    $('#detalheDescricao').text(response.descricao || "Descrição não disponível");    
+                    // Exibir o menu lateral
+                    $('#menuLateral').addClass('open');
+                },
+                error: function() {
+                    alert("Erro ao carregar detalhes do curso.");
+                }
+            })
         });
+
+        $('.close-btn').on('click', function() {
+            $('#menuLateral').removeClass('open');
+        });
+
     });
 </script>

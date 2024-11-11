@@ -19,4 +19,12 @@ urlpatterns = [
     path('excluir_polo/<int:polo_id>/', views.excluir_polo, name='excluir_polo'),
     path('detalhar_polo/<int:polo_id>/', views.detalhar_polo, name='detalhar_polo'),
     path('editar_polo/<int:polo_id>/', views.editar_polo, name='editar_polo'),
+
+
+#coordenadores
+    path('coordenadores/',views.coordenadores_lista, name="coordenador_lista"),
+    path('criar_coordenador/', views.criar_coordenador, name='criar_coordenador'),
+    path('excluir_coordenador/<int:coordenador_id>/', views.excluir_coordenador, name='excluir_coordenador'),
+    path('detalhar_coordenador/<int:coordenador_id>/', views.detalhar_coordenador, name='detalhar_coordenador'),
+    path('editar_coordenador/<int:coordenador_id>/', views.editar_coordenador, name='editar_coordenador'),
 ]

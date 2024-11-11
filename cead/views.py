@@ -164,3 +164,81 @@ def editar_polo(request, polo_id):
         'coordenadores': list(coordenadores)
     }
     return JsonResponse(dados)
+
+# coordenador
+
+def coordenadores_lista(request):
+    make_coordenador = CoordenadorForm(request.POST)
+    search_coordenador = SearchForm(request.GET)
+    query = request.GET.get('query')
+    coordenadores = Coordenador.objects.all()
+
+
+    if query:
+        coordenadores = coordenadores.filter(
+            Q(situacao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
+        )
+    
+    context = {
+        'make_coordenador': make_coordenador,
+        'search_coordenador': search_coordenador,
+        'coordenadores': coordenadores,
+        'query': query,
+    }
+
+    return render(request, 'cead/pages/coordenadores.html', context)
+
+
+def criar_coordenador(request):
+    if request.method == 'POST':
+        form = CoordenadorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = CoordenadorForm()
+    return render(request, 'modais_coordenadores.html', {'form': form})
+
+
+def detalhar_coordenador(request, coordenador_id):
+    coordenador = get_object_or_404(Coordenador, id=coordenador_id)
+    dados = {
+        'nome': coordenador.nome,
+        'email': coordenador.email,
+        'telefone': coordenador.telefone,
+        'situacao': situacao.coordenador.nome if coordenador.situacao else "Situação não informada",
+        'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
+        'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
+ 
+
+def editar_coordenador(request, coordenador_id):
+    coordenador = get_object_or_404(Coordenador, id=coordenador_id)
+    
+    if request.method == 'POST':
+        form = CoordenadorForm(request.POST, instance=coordenador)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+    coordenadores = Coordenador.objects.all().values('id', 'nome')
+    dados = {
+        'nome': coordenador.nome,
+        'email': coordenador.email,
+        'telefone': coordenador.telefone,
+        'situacao': coordenador.situacao.id if coordenador.situacao else None,
+        'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
+        'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
+        'coordenadores': list(coordenadores)
+    }
+    return JsonResponse(dados)
+
+def excluir_coordenador(request, coordenador_id):
+    if request.method == 'POST':
+        coordenador = get_object_or_404(Coordenador, id=coordenador_id)
+        coordenador.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})

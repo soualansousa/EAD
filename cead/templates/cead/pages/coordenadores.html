@@ -1,0 +1,81 @@
+{% extends "cead/partials/base.html" %}
+
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/tabela.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+{% endblock style %}
+
+{% block title %} Coordenadores {% endblock title %}
+
+{% block content %}
+    
+    <main>
+        <h1 class="container d-flex justify-content-center mt-3">Coordenadores</h1>
+        
+        <div class="d-flex mx-4 gap-3 jus">
+            <form method="get" class="search_input d-flex p-0">
+                {{ search_coordenador.query }}
+                <button type="submit" class="p-2 ms-1 button_search">
+                    <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </form>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCriarCoordenador">
+                Criar
+            </button>
+        </div>
+        <div class="table-responsive mx-4">
+            <table class="table table-hover mt-3 table_rounded">
+                <thead>
+                    <tr class="text-center table_header">
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Situação</th>
+                        <th>Data de Publicação</th>
+                        <th>Data de Edição</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for coordenador in coordenadores %}
+                        <tr class="text-center table_body" data-id="{{ coordenador.id }}">
+                            <td>{{ coordenador.nome }}</td>
+                            <td>{{ coordenador.email }}</td>
+                            <td>{{ coordenador.telefone }}</td>
+                            <td>{{ coordenador.Situação }}</td>
+                            <td>{{ coordenador.publicacao|date:"d/m/Y" }}</td>
+                            <td>{{ coordenador.edicao|date:"d/m/Y" }}</td>
+                            <td>
+                                <div class="icons_action d-flex justify-content-center gap-2">
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ coordenador.id }}">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
+                                    </button>
+
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ coordenador.id }}">
+                                        <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
+                                    </button>
+                                    
+
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ coordenador.id }}">
+                                        <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
+                                    </button>
+                                </div>
+                                
+                            </td>
+                        </tr>
+
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">Nenhum coordenador encontrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+
+        {% include "cead/partials/modais_coordenadores.html" %}
+    </main>
+
+{% endblock content %}

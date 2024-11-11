@@ -1,5 +1,5 @@
 from django import forms
-from .models import Noticia, Polo, Coordenador
+from .models import Noticia, Polo, Coordenador, Curso
 
 class SearchForm(forms.Form):
     query = forms.CharField(label="Buscar", max_length=100, required=False)
@@ -18,3 +18,8 @@ class CoordenadorForm(forms.ModelForm):
     class Meta:
         model = Coordenador
         fields = ['nome', 'email', 'telefone', 'situacao']
+
+class CursoForm(forms.ModelForm):
+    class Meta:
+        model = Curso
+        fields = ['nome', 'sobre',]

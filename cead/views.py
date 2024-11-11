@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Noticia, Polo, Curso, Coordenador
-from .forms import SearchForm, NoticiaForm, PoloForm
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -242,3 +242,33 @@ def excluir_coordenador(request, coordenador_id):
         coordenador.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+#Curso
+
+def criar_curso(request):
+    if request.method == 'POST':
+        form = CursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+def curso_lista(request):
+    make_curso = CursoForm(request.POST)
+    search_curso = SearchForm(request.GET)
+    query = request.GET.get('query')
+    cursos = Curso.objects.all()
+
+    if query:
+        cursos = cursos.filter(
+            Q(nome__icontains=query) | Q(sobre__icontains=query)
+        )
+    
+    context = {
+        'make_curso': make_curso,
+        'search_curso': search_curso,
+        'cursos': cursos,
+        'query': query,
+    }
+
+    return render(request, 'cead/pages/curso.html', context)

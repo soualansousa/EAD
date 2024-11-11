@@ -27,4 +27,8 @@ urlpatterns = [
     path('excluir_coordenador/<int:coordenador_id>/', views.excluir_coordenador, name='excluir_coordenador'),
     path('detalhar_coordenador/<int:coordenador_id>/', views.detalhar_coordenador, name='detalhar_coordenador'),
     path('editar_coordenador/<int:coordenador_id>/', views.editar_coordenador, name='editar_coordenador'),
+
+#custo
+    path('curso/',views.curso_lista, name="curso_lista"),
+    path('criar_curso/', views.criar_curso, name='criar_curso'),
 ]

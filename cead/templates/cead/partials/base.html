@@ -28,23 +28,23 @@
             <nav class="navbar navbar-expand-sm justify-content-center">
                 <ul class="navbar-nav container px-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/cead/">Home</a>
+                        <a class="nav-link" href="{% url 'cead:cead' %}">Home</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/noticias/">Notícias</a>
+                        <a class="nav-link" href="{% url 'cead:noticia_lista' %}">Notícias</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/polos/">Polos</a>
+                        <a class="nav-link" href="{% url 'cead:polo_lista' %}">Polos</a>
                     </li>
                 
                     <li class="nav-item">
-                        <a class="nav-link" href="">Coordenadores</a>
+                        <a class="nav-link" href="{% url 'cead:coordenador_lista' %}">Coordenadores</a>
                     </li>
                 
                     <li class="nav-item">
-                        <a class="nav-link" href="">Cursos</a>
+                        <a class="nav-link" href="{% url 'cead:curso_lista' %}">Cursos</a>
                     </li>
 
                     <li class="nav-item dropdown">

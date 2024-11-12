@@ -14,6 +14,10 @@ header {
     border-bottom: var(--detail-color) 5px solid;
 }
 
+main {
+    margin-bottom: 6rem;
+}
+
 .logo {
     width: 10rem;
     height: 4rem;
@@ -48,35 +52,26 @@ header {
 
 
 footer {
-    background-color: #00000A; 
-    color: white;  
-    padding: 30px ;
+    background-color: var(--nav-color);   
+    padding: 1rem;
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%;  /* Ocupa toda a largura da tela */
-    z-index: 1000;  /* Garante que o footer fique sobre outros elementos */
+    width: 100%;
+    z-index: 1000;
 }
 
 .footer-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto; 
-    padding: 20px;
+    padding: 1rem;
     height: 60px;
     gap: 0px;
  
 }
-
-.footer-content h4 {
-    margin: 0;
-    font-size: 30px;
-    font-weight: bold;
-    text-align: center;
-}
-
 
 /* .social-icons {
     display: flex;
@@ -99,27 +94,25 @@ footer {
 
 } */
 
-/* Responsividade */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .footer-container {
         flex-direction: column;
         align-items: center;
     }
 
-    /* .social-icons {
+    .social-icons {
         margin-top: 10px;
-    } */
+    }
 
     .item.apoio {
-        flex-direction: column; /* Coloca o texto e a imagem um abaixo do outro */
+        flex-direction: column;
         gap: 5px;
     }
 
     .formigueiro-tecnologico {
         width: 40px; 
     }
-}
-
+} */
 
 /* Ícone do Facebook
 .facebook-icon svg {
@@ -151,29 +144,9 @@ footer {
     fill: #e1306c; 
 } */
 
-
-
 .formigueiro-tecnologico {
-    width: 110px;
-    border: 1px solid #868E96;
+    width: 5rem;
     border-radius: 50%;
-    background: #000;
-   
-}
-
-
-
-.item.apoio {
-    display: flex;
-    align-items: center;
-    gap: 50px; /* Ajuste o espaço entre o texto e a imagem conforme necessário */
-}
-
-.item.apoio p {
-    margin: 0;
-    font-weight: bold;
-    font-size: 30px;
-    color: white; 
 }
 
 

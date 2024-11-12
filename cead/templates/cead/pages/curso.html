@@ -25,6 +25,13 @@
                 Criar
             </button>
         </div>
+
+        <div>
+            {% for noticia in noticias %}
+                <h1>{{ noticia.titulo }}</h1>
+            {% endfor %}
+        </div>
+
         <div class="table-responsive mx-4">
             <table class="table table-hover mt-3 table_rounded">
                 <thead>

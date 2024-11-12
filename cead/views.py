@@ -70,11 +70,12 @@ def editar_noticia(request, noticia_id):
     }
     return JsonResponse(dados)
 
-def noticias_lista(request):
+def noticias_lista(request, curso_id=None):
     make_noticia = NoticiaForm(request.POST)
     search_noticia = SearchForm(request.GET)
     query = request.GET.get('query')
-    noticias = Noticia.objects.all()
+    curso = get_object_or_404(Curso, id=curso_id) if curso_id else None
+    noticias = noticias_por_curso(curso) if curso else Noticia.objects.all()
 
     if query:
         noticias = noticias.filter(
@@ -89,6 +90,18 @@ def noticias_lista(request):
     }
 
     return render(request, 'cead/pages/noticias.html', context)
+
+def noticias_por_curso(curso):
+    noticias = Noticia.objects.filter(curso=curso)
+    return [
+        {
+            'titulo': noticia.titulo,
+            'descricao': noticia.descricao,
+            'publicacao': noticia.publicacao.strftime('%d/%m/%Y'),
+            'edicao': noticia.edicao.strftime('%d/%m/%Y'),
+        }
+        for noticia in noticias
+    ]
 
 # polo
 
@@ -275,10 +288,16 @@ def curso_lista(request):
 
 def detalhar_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
-    dados = {
+    noticias = noticias_por_curso(curso)
+
+    dados_curso = {
         'nome': curso.nome,
         'sobre': curso.sobre,
         'publicacao': curso.publicacao.strftime('%d/%m/%Y') if curso.publicacao else "Data não disponível",
         'edicao': curso.edicao.strftime('%d/%m/%Y') if curso.edicao else "Não editado",
     }
-    return JsonResponse(dados)
+
+    return JsonResponse({
+        'curso': dados_curso,
+        'noticias': noticias,
+    })

@@ -28,56 +28,53 @@
 </div>
 
 <div id="menuLateral" class="menu-lateral">
-    <span class="close-btn">&times;</span>
-    <h2>Detalhes do Curso</h2>
-    <p><strong>Nome:</strong> <span id="detalheNome"></span></p>
-    <p><strong>Descrição:</strong> <span id="detalheDescricao"></span></p>
+    <div class="modal-header d-flex justify-content-between align-items-center">
+        <span></span>
+        <h5 class="modal-title">Detalhes</h5>
+        <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+            <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+        </button>
+    </div>
+    <div class="table-responsive mx-4">
+        <table class="table table-hover mt-3 table_rounded">
+            <thead>
+                <tr class="text-center table_header">
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Publicação</th>
+                    <th>Edição</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for noticia in noticias %}
+                    <tr class="text-center table_body" data-id="{{ noticia.id }}">
+                        <td>{{ noticia.titulo }}</td>
+                        <td>{{ noticia.descricao }}</td>
+                        <td>{{ noticia.publicacao|date:"d/m/Y" }}</td>
+                        <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
+                        <td>
+                            <div class="icons_action d-flex justify-content-center gap-2">
+                                <button class="button_icon btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
+                                    <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
+                                </button>
+                                <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" 
+                                data-id="{{ noticia.id }}">
+                                    <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
+                                </button>
+                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia.id }}">
+                                    <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="6">Nenhuma notícia encontrada.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#formCriarCurso').on('submit', function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'cead:criar_curso' %}",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        alert("Curso criado com sucesso!");
-                        location.reload();
-                    } else {
-                        alert("Erro ao criar curso: " + JSON.stringify(response.errors));
-                    }
-                }
-            });
-        });
-        
-        $('.button_icon').on('click', function() {
-            console.log('opa');
-            cursoId = $(this).data('id');
-            
-            $.ajax({
-                type: 'GET',
-                url: `/detalhar_curso/${cursoId}/`, // Defina a URL para a view que retorna os detalhes do curso
-                success: function(response) {
-                    // Preencher o menu com os dados do curso
-                    $('#detalheNome').text(response.nome || "Nome não disponível");
-                    $('#detalheDescricao').text(response.descricao || "Descrição não disponível");    
-                    // Exibir o menu lateral
-                    $('#menuLateral').addClass('open');
-                },
-                error: function() {
-                    alert("Erro ao carregar detalhes do curso.");
-                }
-            })
-        });
-
-        $('.close-btn').on('click', function() {
-            $('#menuLateral').removeClass('open');
-        });
-
-    });
-</script>

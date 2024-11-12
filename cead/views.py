@@ -207,7 +207,7 @@ def detalhar_coordenador(request, coordenador_id):
         'nome': coordenador.nome,
         'email': coordenador.email,
         'telefone': coordenador.telefone,
-        'situacao': situacao.coordenador.nome if coordenador.situacao else "Situação não informada",
+        'situacao': "Ativo" if coordenador.situacao else "Inativo",
         'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
         'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
     }
@@ -218,21 +218,35 @@ def editar_coordenador(request, coordenador_id):
     coordenador = get_object_or_404(Coordenador, id=coordenador_id)
     
     if request.method == 'POST':
-        form = CoordenadorForm(request.POST, instance=coordenador)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
+        if request.method == 'POST':
+            # Obtém o valor de 'situacao' enviado pelo formulário
+            situacao = request.POST.get('situacao')  # Recebe o valor como string ('ATIVO' ou 'INATIVO')
+        
+        # Atribui o valor de 'situacao' ao coordenador
+        coordenador.situacao = situacao  # Atribui diretamente a string ('ATIVO' ou 'INATIVO')
+        
+        
+        coordenador.nome = request.POST.get('nome')
+        coordenador.email = request.POST.get('email')
+        coordenador.telefone = request.POST.get('telefone')
+
+        coordenador.save()
+
+
+            # form.save()
+        return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     
-    coordenadores = Coordenador.objects.all().values('id', 'nome')
+    # coordenadores = Coordenador.objects.all().values('id', 'nome')
+
     dados = {
         'nome': coordenador.nome,
         'email': coordenador.email,
         'telefone': coordenador.telefone,
-        'situacao': coordenador.situacao.id if coordenador.situacao else None,
+        'situacao': coordenador.situacao,
         'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
         'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
-        'coordenadores': list(coordenadores)
+        # 'coordenadores': list(coordenadores)
     }
     return JsonResponse(dados)
 

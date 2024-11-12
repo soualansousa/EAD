@@ -72,15 +72,14 @@ class Contato(models.Model):
 
 class Coordenador(models.Model):
     SITUACAO_CHOICES = [
-        ('CEAD', 'CEAD'),
-        ('COOPOLO', 'Coordenador Polo'),
-        ('COOCURSO', 'Coordenador Curso'),
-        ('COO', 'Coordenador'),
+        ('ATIVO', 'Ativo'),
+        ('INATIVO', 'Inativo'),
+      
         ]
     nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, null=True)
-    telefone = models.CharField(max_length=11, null=True)
-    situacao = models.CharField(max_length=20, choices=SITUACAO_CHOICES, null=True)
+    email = models.EmailField(max_length=100, default="email@exemplo.com")
+    telefone = models.CharField(max_length=11, default="7499999999")
+    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
     publicacao = models.DateField(auto_now_add=True, null=True)
     edicao = models.DateField(auto_now=True)
 
@@ -111,8 +110,8 @@ class Polo(models.Model):
 
 class Mediador(models.Model):
     nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, null=True)
-    telefone = models.CharField(max_length=11, null=True)
+    email = models.EmailField(max_length=100, default="email@exemplo.com")
+    telefone = models.CharField(max_length=11, default="7499999999")
     formacao = models.TextField(max_length=255)
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)

@@ -135,8 +135,10 @@
                         <textarea class="form-control" id="editarTelefone" name="telefone"></textarea>
                     </div>
                     <div class="mb-3"></div>
-                        <label for="editarSituacao" class="form-label">Situação</label>
-                        <select class="form-control" id="editarSituacao" name="situacao"></select>
+                    <select id="editarSituacao" name="situacao">
+                        <option value="1" {% if coordenador.situacao.id == 1 %}selected{% endif %}>Ativo</option>
+                        <option value="2" {% if coordenador.situacao.id == 2 %}selected{% endif %}>Inativo</option>
+                    </select>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
@@ -220,27 +222,22 @@
 
 
 
-
         $('.btn-editar').on('click', function() {
             let coordenadorId = $(this).data('id');
+            console.log(coordenadorId);
+
             $.ajax({
                 type: 'GET',
-                url: `/editar_coordenador/${coordenadorId}/`,
+                url: `/editar_coordenador/${coordenadorId}/`,  
                 success: function(response) {
+                    
                     $('#editarNome').val(response.nome);
                     $('#editarEmail').val(response.email);
                     $('#editarTelefone').val(response.telefone);
+                    $('#editarSituacao').val(response.situacao);
+                    $('#Editar').data('id', coordenadorId);
 
-                    $('#editarSituacao').empty();
-                    response.situacao.forEach(function(situacao) {
-                        let option = $('<option></option>').val(coordenador.id).text(situacao.situacao);
-                        if (coordenador.id === response.coordenador) {
-                            option.prop('selected', true);
-                        }
-                        $('#editarCoordenador').append(option);
-                    });
-
-                    $('#Editar').data('id', coordenador);
+                    
                     $('#Editar').modal('show');
                 },
                 error: function() {
@@ -250,8 +247,9 @@
         });
 
 
+
         $('#salvarEdicao').on('click', function() {
-            let coordenador = $('#Editar').data('id');
+            let coordenadorId = $('#Editar').data('id');
             let formData = {
                 nome: $('#editarNome').val(),
                 email: $('#editarEmail').val(),

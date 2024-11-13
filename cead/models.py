@@ -78,7 +78,7 @@ class Coordenador(models.Model):
         ]
     nome = models.CharField(max_length=150)
     email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.CharField(max_length=11, default="7499999999")
+    telefone = models.IntegerField(default="7499999999")
     situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
     publicacao = models.DateField(auto_now_add=True, null=True)
     edicao = models.DateField(auto_now=True)

@@ -90,6 +90,9 @@ textarea{
     margin-bottom: 0;
 }
 
+
+
+
 /* Estilo do Menu Lateral */
 .menu-lateral {
     position: fixed;
@@ -117,3 +120,4 @@ textarea{
     font-size: 24px;
     cursor: pointer;
 }
+

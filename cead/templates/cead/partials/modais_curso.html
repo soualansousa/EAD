@@ -27,11 +27,11 @@
     </div>
 </div>
 
-<div id="menuLateral" class="menu-lateral">
+<!-- <div id="menuLateral" class="menu-lateral">
     <div class="modal-header d-flex justify-content-between align-items-center">
         <span></span>
         <h5 class="modal-title">Detalhes</h5>
-        <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="button_close" aria-label="Close">
             <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
         </button>
     </div>
@@ -49,10 +49,6 @@
             <tbody>
                 {% for noticia in noticias %}
                     <tr class="text-center table_body" data-id="{{ noticia.id }}">
-                        <td>{{ noticia.titulo }}</td>
-                        <td>{{ noticia.descricao }}</td>
-                        <td>{{ noticia.publicacao|date:"d/m/Y" }}</td>
-                        <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
                         <td>
                             <div class="icons_action d-flex justify-content-center gap-2">
                                 <button class="button_icon btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
@@ -76,5 +72,30 @@
                 {% endfor %}
             </tbody>
           </table>
+    </div>
+</div> -->
+
+<div id="menuLateral" class="menu-lateral">
+    <div class="modal-header d-flex justify-content-between align-items-center">
+        <span></span>
+        <h5 class="modal-title">Detalhes</h5>
+        <button type="button" class="button_close" aria-label="Close">
+            <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+        </button>
+    </div>
+    <div class="table-responsive mx-4">
+        <table class="table table-hover mt-3 table_rounded" id="tabelaNoticias">
+            <thead>
+                <tr class="text-center table_header">
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Publicação</th>
+                    <th>Edição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- As notícias serão preenchidas via AJAX -->
+            </tbody>
+        </table>
     </div>
 </div>

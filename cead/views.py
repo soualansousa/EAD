@@ -176,7 +176,12 @@ def coordenadores_lista(request):
 
     if query:
         coordenadores = coordenadores.filter(
-            Q(situacao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
+        Q(situacao__icontains=query) |
+        Q(edicao__icontains=query) |
+        Q(publicacao__icontains=query) |
+        Q(nome__icontains=query) |
+        Q(telefone__icontains=query) |
+        Q(email__icontains=query)
         )
     
     context = {
@@ -218,14 +223,11 @@ def editar_coordenador(request, coordenador_id):
     coordenador = get_object_or_404(Coordenador, id=coordenador_id)
     
     if request.method == 'POST':
-        if request.method == 'POST':
-            # Obtém o valor de 'situacao' enviado pelo formulário
-            situacao = request.POST.get('situacao')  # Recebe o valor como string ('ATIVO' ou 'INATIVO')
-        
-        # Atribui o valor de 'situacao' ao coordenador
-        coordenador.situacao = situacao  # Atribui diretamente a string ('ATIVO' ou 'INATIVO')
-        
-        
+        # if request.method == 'POST':
+            
+        #     situacao = request.POST.get('situacao') 
+
+        coordenador.situacao = request.POST.get('situacao')
         coordenador.nome = request.POST.get('nome')
         coordenador.email = request.POST.get('email')
         coordenador.telefone = request.POST.get('telefone')
@@ -256,6 +258,7 @@ def excluir_coordenador(request, coordenador_id):
         coordenador.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
 
 #Curso
 

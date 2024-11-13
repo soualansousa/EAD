@@ -10,7 +10,7 @@
 {% block title %} Coordenadores {% endblock title %}
 
 {% block content %}
-    
+
     <main>
         <h1 class="container d-flex justify-content-center mt-3">Coordenadores</h1>
         
@@ -21,6 +21,7 @@
                     <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </form>
+            
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCriarCoordenador">
                 Criar
             </button>
@@ -44,7 +45,7 @@
                             <td>{{ coordenador.nome }}</td>
                             <td>{{ coordenador.email }}</td>
                             <td>{{ coordenador.telefone }}</td>
-                            <td>{{ situacao.coordenador }}</td>
+                            <td>{{ coordenador.get_situacao_display }}</td>
                             <td>{{ coordenador.publicacao|date:"d/m/Y" }}</td>
                             <td>{{ coordenador.edicao|date:"d/m/Y" }}</td>
                             <td>

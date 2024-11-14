@@ -4,8 +4,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso, Coordenador
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm
+from .models import (
+    Noticia,
+    Polo,
+    Coordenador,
+    Curso,
+    Mediador
+)
+
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -43,6 +50,7 @@ def detalhar_noticia(request, noticia_id):
     dados = {
         'titulo': noticia.titulo,
         'descricao': noticia.descricao,
+        'arquivo': noticia.arquivo,
         'curso': noticia.curso.nome if noticia.curso else "Curso não informado",
         'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
         'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
@@ -63,6 +71,7 @@ def editar_noticia(request, noticia_id):
     dados = {
         'titulo': noticia.titulo,
         'descricao': noticia.descricao,
+        'arquivo': noticia.arquivo,
         'curso': noticia.curso.id if noticia.curso else None,
         'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
         'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
@@ -78,7 +87,7 @@ def noticias_lista(request):
 
     if query:
         noticias = noticias.filter(
-            Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
+            Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)| Q(arquivo__icontains=query)
         )
 
     context = {
@@ -235,11 +244,11 @@ def editar_coordenador(request, coordenador_id):
         coordenador.save()
 
 
-            # form.save()
+           
         return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     
-    # coordenadores = Coordenador.objects.all().values('id', 'nome')
+    
 
     dados = {
         'nome': coordenador.nome,
@@ -248,7 +257,7 @@ def editar_coordenador(request, coordenador_id):
         'situacao': coordenador.situacao,
         'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
         'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
-        # 'coordenadores': list(coordenadores)
+        
     }
     return JsonResponse(dados)
 
@@ -258,6 +267,102 @@ def excluir_coordenador(request, coordenador_id):
         coordenador.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+
+# mediador
+
+def mediadores_lista(request):
+    make_mediador = MediadorForm(request.POST)
+    search_mediador = SearchForm(request.GET)
+    query = request.GET.get('query')
+    mediadores = Mediador.objects.all()
+
+
+    if query:
+        mediadores = mediadores.filter(
+        Q(situacao__icontains=query) |
+        Q(edicao__icontains=query) |
+        Q(publicacao__icontains=query) |
+        Q(nome__icontains=query) |
+        Q(telefone__icontains=query) |
+        Q(email__icontains=query)
+        )
+    
+    context = {
+        'make_mediador': make_mediador,
+        'search_mediador': search_mediador,
+        'mediadores': mediadores,
+        'query': query,
+    }
+
+    return render(request, 'cead/pages/mediadores.html', context)
+
+
+def criar_mediador(request):
+    if request.method == 'POST':
+        form = MediadorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = MediadorForm()
+    return render(request, 'modais_mediadores.html', {'form': form})
+
+
+def detalhar_mediador(request, mediador_id):
+    mediador = get_object_or_404(Mediador, id=mediador_id)
+    dados = {
+        'nome': mediador.nome,
+        'email': mediador.email,
+        'telefone': mediador.telefone,
+        'formacao': mediador.formacao,
+        'situacao': "Ativo" if mediador.situacao else "Inativo",
+        'publicacao': mediador.publicacao.strftime('%d/%m/%Y') if mediador.publicacao else "Data não disponível",
+        'edicao': mediador.edicao.strftime('%d/%m/%Y') if mediador.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
+ 
+
+def editar_mediador(request, coordenador_id):
+    mediador = get_object_or_404(Mediador, id=mediador_id)
+    
+    if request.method == 'POST':
+       
+        mediador.situacao = request.POST.get('situacao')
+        mediadorador.nome = request.POST.get('nome')
+        mediador.email = request.POST.get('email')
+        mediador.telefone = request.POST.get('telefone')
+        mediador.formacao = request.POST.get('formacao')
+
+        mediador.save()
+
+
+            
+        return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+   
+
+    dados = {
+        'nome': mediador.nome,
+        'email': mediador.email,
+        'telefone': mediador.telefone,
+        'formacao': mediador.formacao,
+        'situacao': mediador.situacao,
+        'publicacao': mediador.publicacao.strftime('%d/%m/%Y') if mediador.publicacao else "Data não disponível",
+        'edicao': mediador.edicao.strftime('%d/%m/%Y') if mediador.edicao else "Não editado",
+        
+    }
+    return JsonResponse(dados)
+
+def excluir_mediador(request, coordenador_id):
+    if request.method == 'POST':
+        mediador = get_object_or_404(Mediador, id=mediador_id)
+        mediador.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
 
 
 #Curso

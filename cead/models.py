@@ -2,8 +2,24 @@ from django.db import models
 from datetime import date
 from django.utils.safestring import mark_safe
 
+class Coordenador(models.Model):
+    SITUACAO_CHOICES = [
+        ('ATIVO', 'Ativo'),
+        ('INATIVO', 'Inativo'),
+      
+        ]
+    nome = models.CharField(max_length=150)
+    email = models.EmailField(max_length=100, default="email@exemplo.com")
+    telefone = models.IntegerField(default="7499999999")
+    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
+    publicacao = models.DateField(auto_now_add=True)
+    edicao = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.nome
 
 class Curso(models.Model):
+    coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE)
     nome = models.CharField(max_length=150)
     sobre = models.TextField()
     publicacao = models.DateField(auto_now_add=True)
@@ -70,27 +86,11 @@ class Contato(models.Model):
     def __str__(self):
         return self.assunto
 
-class Coordenador(models.Model):
-    SITUACAO_CHOICES = [
-        ('ATIVO', 'Ativo'),
-        ('INATIVO', 'Inativo'),
-      
-        ]
-    nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.IntegerField(default="7499999999")
-    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
-    publicacao = models.DateField(auto_now_add=True, null=True)
-    edicao = models.DateField(auto_now=True)
-
-    def __str__(self):
-        return self.nome
-
 class Noticia(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
     descricao = models.TextField(max_length=900)
-    arquivo = models.FileField()
+    arquivo = models.FileField(blank=True)
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
 
@@ -108,7 +108,17 @@ class Polo(models.Model):
     def __str__(self):
         return self.cidade
 
+class CursoPolo(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name="curso_polos")
+    polo = models.ForeignKey(Polo, on_delete=models.CASCADE, related_name="curso_polos")
+    publicacao = models.DateField(auto_now_add=True)
+    edicao = models.DateField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.curso.nome} - {self.polo.cidade}"
+
 class Mediador(models.Model):
+    curso_polo = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="mediadores")
     nome = models.CharField(max_length=150)
     email = models.EmailField(max_length=100, default="email@exemplo.com")
     telefone = models.CharField(max_length=11, default="7499999999")
@@ -117,4 +127,4 @@ class Mediador(models.Model):
     edicao = models.DateField(auto_now=True)
 
     def __str__(self):
-        return self.cidade
+        return self.nome

@@ -45,7 +45,7 @@
                             <td>{{ curso.edicao|date:"d/m/Y" }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <a href="{% url 'cead:detalhar_curso' curso.id %}" target="_blank">
+                                    <a href="{% url 'cead:detalhar_curso' curso.id %}">
                                         <button class="button_icon btn-more" data-id="{{ curso.id }}">
                                             <img src="{% static 'images/icons/more.svg' %}" alt="More"></img>
                                         </button>
@@ -63,6 +63,7 @@
                 </tbody>
               </table>
         </div>
+        
     </main>
 
 {% endblock content %}

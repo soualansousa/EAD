@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso, Coordenador
+from .models import Noticia, Polo, Curso, Coordenador, CursoPolo
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm
 
 def user_login(request):
@@ -291,10 +291,14 @@ def curso_lista(request):
     return render(request, 'cead/pages/curso.html', context)
 
 def detalhar_curso(request, curso_id):
-    curso = get_object_or_404(Curso, id=curso_id)
-    noticias = Noticia.objects.filter(curso=curso)
+    cursos = get_object_or_404(Curso, id=curso_id)
+    noticias = Noticia.objects.filter(curso=cursos)
+    curso_polos = CursoPolo.objects.filter(curso=cursos)
+    coordenadores = Coordenador.objects.filter(curso=cursos)
 
     return render(request, 'cead/pages/detalhes_curso.html', {
-        'curso': curso,
-        'noticias': noticias
+        'cursos': cursos,
+        'noticias': noticias,
+        'curso_polos': curso_polos,
+        'coordenadores': coordenadores,
     })

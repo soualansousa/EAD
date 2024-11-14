@@ -1,22 +1,22 @@
 {% load static %}
 
 <!-- Criar -->
-<div class="modal fade" id="modalCriarNoticia" tabindex="-1" aria-labelledby="modalCriarNoticiaLabel" aria-hidden="true">
+<div class="modal fade" id="modalCriarMediador" tabindex="-1" aria-labelledby="modalCriarMediadorLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <span></span>
-                <h5 class="modal-title" id="modalCriarNoticiaLabel">Notícia</h5>
+                <h5 class="modal-title" id="modalCriarMediadorLabel">Mediador</h5>
                 <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formCriarNoticia" method="post" action="{% url 'cead:noticia_lista' %}">
+                <form id="formCriarMediador" method="post" action="{% url 'cead:mediador_lista' %}">
                     {% csrf_token %}
                     
                     <div class="input">
-                        {{ make_noticia.as_p }}
+                        {{ make_mediador.as_p }}
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
@@ -33,7 +33,7 @@
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header justify-content-between">
                 <span></span>
-                <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
+                <h5 class="modal-title text-center" id="Excluir">Confirmação de Exclusão</h5>
                 <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
@@ -44,8 +44,8 @@
                 </p>
             </div>
             <div class="modal-footer justify-content-center gap-5">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                <button type="button" id="confirmarExclusao" class="btn btn-danger">Sim</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
             </div>
         </div>
     </div>
@@ -57,40 +57,46 @@
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <span></span>
-                <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
+                <h5 class="modal-title" id="DetalharLabel">Detalhes de Mediador</h5>
                 <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </div>
-            <div class="modal-body gap-2 d-flex flex-column">
+            <div class="modal-body">
                 <div class="modal_info">
-                    <h5>Curso</h5>
+                    <h5>Nome</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheCurso"></p>
+                        <p id="detalheNome"></p>
                     </div>
                 </div>
                 <div class="modal_info">
-                    <h5>Título</h5>
+                    <h5>E-mail</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheTitulo"></p>
+                        <p id="detalheEmail"></p>
                     </div>
                 </div>
                 <div class="modal_info">
-                    <h5>Descrição</h5>
+                    <h5>Telefone</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheDescricao"></p>
+                        <p id="detalheTelefone"></p>
                     </div>
                 </div>
                 <div class="modal_info"></div>
-                    <h5>Arquivo</h5>
+                    <h5>Formação</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheArquivo"></p>
+                        <p id="detalheFormacao"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Situação</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheSituacao"></p>
                     </div>
                 </div>
                 <div class="modal_info">
                     <h5>Data de Publicação</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalhePublicacao"></p>
+                        <p id="detalheEdicao"></p>
                     </div>
                 </div>
                 <div class="modal_info">
@@ -99,7 +105,6 @@
                         <p id="detalheEdicao"></p>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -114,29 +119,36 @@
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <span></span>
-                <h5 class="modal-title">Editar Notícia</h5>
+                <h5 class="modal-title">Editar Mediador</h5>
                 <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editarNoticiaForm">
+                <form id="editarMediadorForm">
                     <div class="mb-3">
-                        <label for="editarCurso" class="form-label">Curso</label>
-                        <select class="form-control" id="editarCurso" name="curso">
-                        </select>
+                        <label for="editarNome" class="form-label">Nome</label>
+                        <input class="form-control" id="editarNome" name="nome">
+                    </input>
                     </div>
                     <div class="mb-3">
-                        <label for="editarTitulo" class="form-label">Título</label>
-                        <input type="text" class="form-control" id="editarTitulo" name="titulo">
+                        <label for="editarEmail" class="form-label">E-mail</label>
+                        <textarea type="text" class="form-control" id="editarEmail" name="email">
+                        </textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="editarDescricao" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
+                        <label for="editarTelefone" class="form-label">Telefone</label>
+                        <textarea class="form-control" id="editarTelefone" name="telefone"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarFormacao" class="form-label">Formação</label>
+                        <textarea class="form-control" id="editarFormacao" name="formacao"></textarea>
                     </div>
                     <div class="mb-3"></div>
-                        <label for="editaArquivo" class="form-label">Arquivo</label>
-                        <textarea class="form-control" id="editarArquivo" name="arquivo"></textarea>
+                    <select id="editarSituacao" name="situacao">
+                        <option value="ATIVO" {% if coordenador.situacao == "ATIVO" %}selected{% endif %}>Ativo</option>
+                        <option value="INATIVO" {% if coordenador.situacao == "INATIVO" %}selected{% endif %}>Inativo</option>
+                    </select>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
@@ -148,43 +160,44 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function() {
-        $('#formCriarNoticia').on('submit', function(e) {
+        $('#formCriarMediador').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'cead:criar_noticia' %}",
+                url: "{% url 'cead:criar_mediador' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Notícia criada com sucesso!");
+                        alert("Mediador criado com sucesso!");
                         location.reload();
                     } else {
-                        alert("Erro ao criar notícia: " + JSON.stringify(response.errors));
+                        alert("Erro ao criar mediador: " + JSON.stringify(response.errors));
                     }
                 }
             });
         });
         
         $('.button_icon').on('click', function() {
-            noticiaId = $(this).data('id');
+            mediadorId = $(this).data('id');
         });
 
         $('#confirmarExclusao').on('click', function() {
-            if (noticiaId) {
+            if (mediadorId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_noticia/${noticiaId}/`, 
+                    url: `/excluir_mediador/${mediadorId}/`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function(response) {
                         if (response.success) {
-                            $(`tr[data-id="${noticiaId}"]`).remove();
+                            $(`tr[data-id="${mediadorId}"]`).remove();
                             $('#Excluir').modal('hide');
                         } else {
-                            alert("Erro ao excluir notícia.");
+                            alert("Erro ao excluir mediador.");
                         }
                     },
                     error: function(xhr, status, error) {
@@ -192,74 +205,82 @@
                     }
                 });
             } else {
-                alert("Erro: ID da notícia não encontrado.");
+                alert("Erro: ID do mediador não encontrado.");
             }
         });
 
         $('.btn-detalhar').on('click', function() {
+            let mediadorId = $(this).data('id');  
+            
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_noticia/${noticiaId}/`, 
+                url: `/detalhar_mediador/${mediadorId}/`, 
                 success: function(response) {
-                    $('#detalheCurso').text(response.curso);
-                    $('#detalheTitulo').text(response.titulo);
-                    $('#detalheDescricao').text(response.descricao);
-                    $('#detalheArquivo').text(response.arquivo);
+                    console.log('a');
+                    $('#detalheNome').text(response.nome);
+                    $('#detalheEmail').text(response.email);
+                    $('#detalheTelefone').text(response.telefone);
+                    $('#detalheFormacao').text(response.formacao);
+                    $('#detalheSituacao').text(response.situacao);
                     $('#detalhePublicacao').text(response.publicacao);
                     $('#detalheEdicao').text(response.edicao);
                 },
                 error: function(xhr, status, error) {
-                    alert("Erro ao carregar detalhes da notícia: " + error);
+                    alert("Erro ao carregar detalhes do mediador: " + error);
                 }
             });
         });
 
+
+
         $('.btn-editar').on('click', function() {
+            let mediadorId = $(this).data('id');
+            console.log(mediadorId);
+
             $.ajax({
                 type: 'GET',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `/editar_mediador/${mediadorId}/`,  
                 success: function(response) {
-                    $('#editarTitulo').val(response.titulo);
-                    $('#editarDescricao').val(response.descricao);
-                    $('#editarArquivo').val(response.arquivo);
-                    $('#editarCurso').empty();
-                    response.cursos.forEach(function(curso) {
-                        let option = $('<option></option>').val(curso.id).text(curso.nome);
-                        if (curso.id === response.curso) {
-                            option.prop('selected', true);
-                        }
-                        $('#editarCurso').append(option);
-                    });
+                    $('#editarNome').val(response.nome);
+                    $('#editarEmail').val(response.email);
+                    $('#editarTelefone').val(response.telefone);
+                    $('#editarFormacao').val(response.formacao);
+                    $('#editarSituacao').val(response.situacao);
+                    $('#Editar').data('id', mediadorId);  // Corrigido aqui
 
-                    $('#Editar').data('id', noticiaId);
                     $('#Editar').modal('show');
                 },
                 error: function() {
-                    alert("Erro ao carregar dados da notícia.");
+                    alert("Erro ao carregar dados do mediador.");
                 }
             });
         });
 
+
+
+
         $('#salvarEdicao').on('click', function() {
-            let noticiaId = $('#Editar').data('id');
+            let mediadorId = $('#Editar').data('id');
             let formData = {
-                curso: $('#editarCurso').val(),
-                titulo: $('#editarTitulo').val(),
-                descricao: $('#editarDescricao').val(),
-                arquivo: $('#editarArquivo').val(),
+                nome: $('#editarNome').val(),
+                email: $('#editarEmail').val(),
+                telefone: $('#editarTelefone').val(),
+                formacao: $('#editarFormacao').val(),
+                situacao: $('#editarSituacao').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
+            
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `/editar_mediador/${mediadorId}/`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert("Notícia atualizada com sucesso!");
+                        alert("Mediador atualizado com sucesso!");
                         location.reload();
                     } else {
-                        alert("Erro ao atualizar notícia: " + JSON.stringify(response.errors));
+                        alert("Erro ao atualizar mediador: " + JSON.stringify(response.errors));
                     }
                 },
                 error: function() {

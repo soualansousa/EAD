@@ -45,9 +45,11 @@
                             <td>{{ curso.edicao|date:"d/m/Y" }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-more" data-bs-toggle="modal" data-bs-target="#More" data-id="{{ curso.id }}">
-                                        <img src="{% static 'images/icons/more.svg' %}" alt="More"></img>
-                                    </button>
+                                    <a href="{% url 'cead:detalhar_curso' curso.id %}" target="_blank">
+                                        <button class="button_icon btn-more" data-id="{{ curso.id }}">
+                                            <img src="{% static 'images/icons/more.svg' %}" alt="More"></img>
+                                        </button>
+                                    </a>
                                 </div>
                                 
                             </td>
@@ -61,8 +63,6 @@
                 </tbody>
               </table>
         </div>
-
-        {% include "cead/partials/modais_curso.html" %}
     </main>
 
 {% endblock content %}

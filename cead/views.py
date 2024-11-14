@@ -292,10 +292,9 @@ def curso_lista(request):
 
 def detalhar_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
-    dados = {
-        'nome': curso.nome,
-        'sobre': curso.sobre,
-        'publicacao': curso.publicacao.strftime('%d/%m/%Y') if curso.publicacao else "Data não disponível",
-        'edicao': curso.edicao.strftime('%d/%m/%Y') if curso.edicao else "Não editado",
-    }
-    return JsonResponse(dados)
+    noticias = Noticia.objects.filter(curso=curso)
+
+    return render(request, 'cead/pages/detalhes_curso.html', {
+        'curso': curso,
+        'noticias': noticias
+    })

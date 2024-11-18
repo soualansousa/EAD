@@ -119,10 +119,16 @@ class CursoPolo(models.Model):
 
 class Mediador(models.Model):
     curso_polo = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="mediadores")
+    SITUACAO_CHOICES = [
+        ('ATIVO', 'Ativo'),
+        ('INATIVO', 'Inativo'),
+      
+        ]
     nome = models.CharField(max_length=150)
     email = models.EmailField(max_length=100, default="email@exemplo.com")
     telefone = models.CharField(max_length=11, default="7499999999")
     formacao = models.TextField(max_length=255)
+    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
 

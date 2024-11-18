@@ -28,6 +28,13 @@ urlpatterns = [
     path('detalhar_coordenador/<int:coordenador_id>/', views.detalhar_coordenador, name='detalhar_coordenador'),
     path('editar_coordenador/<int:coordenador_id>/', views.editar_coordenador, name='editar_coordenador'),
 
+#mediadores
+    path('mediadores/',views.mediadores_lista, name="mediador_lista"),
+    path('criar_mediador/', views.criar_mediador, name='criar_mediador'),
+    path('excluir_mediador/<int:mediador_id>/', views.excluir_mediador, name='excluir_mediador'),
+    path('detalhar_mediador/<int:mediador_id>/', views.detalhar_mediador, name='detalhar_mediador'),
+    path('editar_mediador/<int:mediador_id>/', views.editar_mediador, name='editar_mediador'),
+
 #curso
     path('curso/',views.curso_lista, name="curso_lista"),
     path('criar_curso/', views.criar_curso, name='criar_curso'),

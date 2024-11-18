@@ -81,6 +81,12 @@
                         <p id="detalheDescricao"></p>
                     </div>
                 </div>
+                <div class="modal_info"></div>
+                    <h5>Arquivo</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheArquivo"></p>
+                    </div>
+                </div>
                 <div class="modal_info">
                     <h5>Data de Publicação</h5>
                     <div class="modal_info_descricao">
@@ -127,6 +133,10 @@
                     <div class="mb-3">
                         <label for="editarDescricao" class="form-label">Descrição</label>
                         <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
+                    </div>
+                    <div class="mb-3"></div>
+                        <label for="editaArquivo" class="form-label">Arquivo</label>
+                        <textarea class="form-control" id="editarArquivo" name="arquivo"></textarea>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
@@ -194,6 +204,7 @@
                     $('#detalheCurso').text(response.curso);
                     $('#detalheTitulo').text(response.titulo);
                     $('#detalheDescricao').text(response.descricao);
+                    $('#detalheArquivo').text(response.arquivo);
                     $('#detalhePublicacao').text(response.publicacao);
                     $('#detalheEdicao').text(response.edicao);
                 },
@@ -210,6 +221,7 @@
                 success: function(response) {
                     $('#editarTitulo').val(response.titulo);
                     $('#editarDescricao').val(response.descricao);
+                    $('#editarArquivo').val(response.arquivo);
                     $('#editarCurso').empty();
                     response.cursos.forEach(function(curso) {
                         let option = $('<option></option>').val(curso.id).text(curso.nome);
@@ -234,6 +246,7 @@
                 curso: $('#editarCurso').val(),
                 titulo: $('#editarTitulo').val(),
                 descricao: $('#editarDescricao').val(),
+                arquivo: $('#editarArquivo').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
 

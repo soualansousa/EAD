@@ -16,7 +16,7 @@
         
         <div class="d-flex mx-4 gap-3 jus">
             <form method="get" class="search_input d-flex p-0">
-                {{ search_mediadores.query }}
+                <input type="text" name="query" class="form-control" placeholder="Buscar mediadores" value="{{ query }}">
                 <button type="submit" class="p-2 ms-1 button_search">
                     <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
                 </button>

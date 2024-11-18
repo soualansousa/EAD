@@ -53,50 +53,54 @@
 
 <!-- Detalhar -->
 <div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-between">
-                <span></span>
+
+            <div class="modal-header d-flex justify-content-center position-relative">
+                
                 <h5 class="modal-title" id="DetalharLabel">Detalhes de Coordenador</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
-                </button>
+                
             </div>
+
+
             <div class="modal-body">
-                <div class="modal_info">
-                    <h5>Nome</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheNome"></p>
+                <div class="mb-3">
+                    <h5 class="mb-1">Nome</h5>
+                    <div>
+                        <p id="detalheNome" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>E-mail</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheEmail"></p>
+            
+                <div class="mb-3">
+                    <h5 class="mb-1">E-mail</h5>
+                    <div>
+                        <p id="detalheEmail" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Telefone</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheTelefone"></p>
+            
+                <div class="mb-3">
+                    <h5 class="mb-1">Telefone</h5>
+                    <div>
+                        <p id="detalheTelefone" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Situação</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheSituacao"></p>
+                <div class="mb-3">
+                    <h5 class="mb-1">Situação</h5>
+                    <div>
+                        <p id="detalheSituacao" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Data de Publicação</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheEdicao"></p>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Publicação</h5>
+                    <div>
+                        <p id="detalhePublicacao" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Data de Edição</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheEdicao"></p>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Edição</h5>
+                    <div>
+                        <p id="detalheEdicao" class="form-control bg-light"></p>
                     </div>
                 </div>
             </div>
@@ -108,46 +112,59 @@
 </div>
 
 <!-- Editar -->
-<div id="Editar" class="modal" tabindex="-1">
+<div id="Editar" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-between">
-                <span></span>
+            <div class="modal-header justify-content-center position-relative">
                 <h5 class="modal-title">Editar Coordenador</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                <button type="button" class="button_close p-0 position-absolute end-0 top-0 me-3 mt-2" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action" style="width: 30px; height: 30px;">
                 </button>
             </div>
+
             <div class="modal-body">
                 <form id="editarCoordenadorForm">
+                    <!-- Campo Nome -->
                     <div class="mb-3">
                         <label for="editarNome" class="form-label">Nome</label>
-                        <input class="form-control" id="editarNome" name="nome">
-                    </input>
+                        <input type="text" class="form-control" id="editarNome" name="nome">
                     </div>
+
+                    <!-- Campo E-mail -->
                     <div class="mb-3">
                         <label for="editarEmail" class="form-label">E-mail</label>
-                        <textarea type="text" class="form-control" id="editarEmail" name="email">
-                        </textarea>
+                        <textarea class="form-control" id="editarEmail" name="email"></textarea>
                     </div>
+
+                    <!-- Campo Telefone -->
                     <div class="mb-3">
                         <label for="editarTelefone" class="form-label">Telefone</label>
                         <textarea class="form-control" id="editarTelefone" name="telefone"></textarea>
                     </div>
-                    <div class="mb-3"></div>
-                    <select id="editarSituacao" name="situacao">
-                        <option value="ATIVO" {% if coordenador.situacao == "ATIVO" %}selected{% endif %}>Ativo</option>
-                        <option value="INATIVO" {% if coordenador.situacao == "INATIVO" %}selected{% endif %}>Inativo</option>
-                    </select>
+
+                    <!-- Campo Situação -->
+                    <div class="mb-3">
+                        <label for="editarSituacao" class="form-label">Situação</label>
+                        <!-- Componente dropdown com seta -->
+                        <select id="editarSituacao" name="situacao" class="form-select">
+                            <option value="ATIVO" {% if coordenador.situacao == "ATIVO" %}selected{% endif %}>Ativo</option>
+                            <option value="INATIVO" {% if coordenador.situacao == "INATIVO" %}selected{% endif %}>Inativo</option>
+                        </select>
                     </div>
+
+                    <!-- Botão Salvar -->
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
+                        <button type="button" class="btn btn-primary" id="salvarEdicao">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Salvar
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -276,4 +293,13 @@
             });
         });
     });
+
+    $('#salvarEdicao').on('click', function() {
+    let spinner = $(this).find('.spinner-border');
+    spinner.removeClass('d-none'); // Mostrar spinner
+    // Processar salvamento...
+    setTimeout(function() {
+        spinner.addClass('d-none'); // Ocultar spinner após o processamento
+    }, 2000); // Simulação do tempo de processamento
+});
 </script>

@@ -22,4 +22,4 @@ class CoordenadorForm(forms.ModelForm):
 class CursoForm(forms.ModelForm):
     class Meta:
         model = Curso
-        fields = ['nome', 'sobre',]
+        fields = ['coordenador', 'nome', 'sobre',]

@@ -28,8 +28,11 @@ urlpatterns = [
     path('detalhar_coordenador/<int:coordenador_id>/', views.detalhar_coordenador, name='detalhar_coordenador'),
     path('editar_coordenador/<int:coordenador_id>/', views.editar_coordenador, name='editar_coordenador'),
 
-#custo
+#curso
     path('curso/',views.curso_lista, name="curso_lista"),
     path('criar_curso/', views.criar_curso, name='criar_curso'),
     path('detalhar_curso/<int:curso_id>/', views.detalhar_curso, name='detalhar_curso'),
+    path('excluir_cursoPolo/<int:cursoPolo_id>/', views.excluir_cursoPolo, name='excluir_cursoPolo'),
+    path('detalhar_cursoPolo/<int:cursoPolo_id>/', views.detalhar_cursoPolo, name='detalhar_cursoPolo'),
+
 ]

@@ -277,6 +277,10 @@ def mediadores_lista(request):
     query = request.GET.get('query')
     mediadores = Mediador.objects.all()
 
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''  # Corrige o valor se for "none"
+
 
     if query:
         mediadores = mediadores.filter(
@@ -324,13 +328,13 @@ def detalhar_mediador(request, mediador_id):
     return JsonResponse(dados)
  
 
-def editar_mediador(request, coordenador_id):
+def editar_mediador(request, mediador_id):
     mediador = get_object_or_404(Mediador, id=mediador_id)
     
     if request.method == 'POST':
        
         mediador.situacao = request.POST.get('situacao')
-        mediadorador.nome = request.POST.get('nome')
+        mediador.nome = request.POST.get('nome')
         mediador.email = request.POST.get('email')
         mediador.telefone = request.POST.get('telefone')
         mediador.formacao = request.POST.get('formacao')

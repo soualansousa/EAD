@@ -1,3 +1,10 @@
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 15rem;
+}
+
 .button_search {
     border: none;
     border-radius: 7px;

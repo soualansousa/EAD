@@ -4,15 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import (
-    Noticia,
-    Polo,
-    Coordenador,
-    Curso,
-    Mediador
-)
-
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm
+from .models import Noticia, Polo, Curso, Coordenador, CursoPolo
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -400,10 +393,33 @@ def curso_lista(request):
     return render(request, 'cead/pages/curso.html', context)
 
 def detalhar_curso(request, curso_id):
-    curso = get_object_or_404(Curso, id=curso_id)
-    noticias = Noticia.objects.filter(curso=curso)
+    cursos = get_object_or_404(Curso, id=curso_id)
+    polos = get_object_or_404(Polo, id=curso_id)
+    noticias = Noticia.objects.filter(curso=cursos)
+    curso_polos = CursoPolo.objects.filter(curso=cursos)
+    coordenadores = Coordenador.objects.filter(curso=cursos)
 
     return render(request, 'cead/pages/detalhes_curso.html', {
-        'curso': curso,
-        'noticias': noticias
+        'cursos': cursos,
+        'polos': polos,
+        'noticias': noticias,
+        'curso_polos': curso_polos,
+        'coordenadores': coordenadores,
     })
+
+def excluir_cursoPolo(request, cursoPolo_id):
+    if request.method == 'POST':
+        cursoPolo = get_object_or_404(CursoPolo, id=cursoPolo_id)
+        cursoPolo.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+def detalhar_cursoPolo(request, cursoPolo_id):
+    curso_polos = get_object_or_404(CursoPolo, id=cursoPolo_id)
+    dados = {
+        'curso': curso_polos.curso.nome,
+        'polo': curso_polos.polo.cidade,
+        'publicacao': curso_polos.publicacao.strftime('%d/%m/%Y') if curso_polos.publicacao else "Data não disponível",
+        'edicao': curso_polos.edicao.strftime('%d/%m/%Y') if curso_polos.edicao else "Não editado",
+    }
+    return JsonResponse(dados)

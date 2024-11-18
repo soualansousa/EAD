@@ -1,0 +1,227 @@
+{% load static %}
+
+<!-- ExcluirCursoPolo -->
+<div class="modal fade" id="ExcluirCursoPolo" tabindex="-1" aria-labelledby="ExcluirCursoPolo" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title text-center" id="ExcluirCursoPolo">Confirmação</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center gap-5">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="ExclusaoCursoPolo" class="btn btn-danger">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DetalharCursoPolo -->
+<div class="modal fade" id="DetalharCursoPolo" tabindex="-1" aria-labelledby="DetalharCursoPoloLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="DetalharCursoPoloLabel">Detalhes do Polo</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body gap-2 d-flex flex-column">
+                <div class="modal_info">
+                    <h5>Curso</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheCurso"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Polo</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalhePolo"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Publicação</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalhePublicacao"></p>
+                    </div>
+                </div>
+                <div class="modal_info">
+                    <h5>Edição</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheEdicao"></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Editar -->
+<div id="Editar" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title">Editar Notícia</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editarNoticiaForm">
+                    <div class="mb-3">
+                        <label for="editarCurso" class="form-label">Curso</label>
+                        <select class="form-control" id="editarCurso" name="curso">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarTitulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="editarTitulo" name="titulo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarDescricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.button_icon').on('click', function() {
+            cursoPoloId = $(this).data('id');
+        });
+        
+        $('#formCriarNoticia').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:criar_noticia' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Notícia criada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar notícia: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+
+        $('#ExclusaoCursoPolo').on('click', function() {
+            if (cursoPoloId) {
+                $.ajax({
+                    type: 'POST',
+                    url: `/excluir_cursoPolo/${cursoPoloId}/`, 
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $(`tr[data-id="${cursoPoloId}"]`).remove();
+                            $('#Excluir').modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Erro ao excluir polo.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Erro na requisição de exclusão: " + error);
+                    }
+                });
+            } else {
+                alert("Erro: ID do CursoPolo não encontrado.");
+            }
+        });
+
+        $('.btn-detalhar-cursoPolo').on('click', function() {
+            let cursoPoloId = $(this).data('id');  
+            $.ajax({
+                type: 'GET',
+                url: `/detalhar_cursoPolo/${cursoPoloId}/`, 
+                success: function(response) {
+                    $('#detalheCurso').text(response.curso);
+                    $('#detalhePolo').text(response.polo);
+                    $('#detalhePublicacao').text(response.publicacao);
+                    $('#detalheEdicao').text(response.edicao);
+                    
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes do polo: " + error);
+                }
+            });
+        });
+
+        $('.btn-editar').on('click', function() {
+            $.ajax({
+                type: 'GET',
+                url: `/editar_noticia/${noticiaId}/`,
+                success: function(response) {
+                    $('#editarTitulo').val(response.titulo);
+                    $('#editarDescricao').val(response.descricao);
+                    $('#editarCurso').empty();
+                    response.cursos.forEach(function(curso) {
+                        let option = $('<option></option>').val(curso.id).text(curso.nome);
+                        if (curso.id === response.curso) {
+                            option.prop('selected', true);
+                        }
+                        $('#editarCurso').append(option);
+                    });
+
+                    $('#Editar').data('id', noticiaId);
+                    $('#Editar').modal('show');
+                },
+                error: function() {
+                    alert("Erro ao carregar dados da notícia.");
+                }
+            });
+        });
+
+        $('#salvarEdicao').on('click', function() {
+            let noticiaId = $('#Editar').data('id');
+            let formData = {
+                curso: $('#editarCurso').val(),
+                titulo: $('#editarTitulo').val(),
+                descricao: $('#editarDescricao').val(),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: `/editar_noticia/${noticiaId}/`,
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert("Notícia atualizada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao atualizar notícia: " + JSON.stringify(response.errors));
+                    }
+                },
+                error: function() {
+                    alert("Erro ao salvar as mudanças.");
+                }
+            });
+        });
+    });
+</script>

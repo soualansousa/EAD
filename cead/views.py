@@ -4,8 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso, Coordenador, CursoPolo
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm
+from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -310,6 +310,7 @@ def criar_mediador(request):
 def detalhar_mediador(request, mediador_id):
     mediador = get_object_or_404(Mediador, id=mediador_id)
     dados = {
+        'cursoPolo': mediador.curso_polo,
         'nome': mediador.nome,
         'email': mediador.email,
         'telefone': mediador.telefone,
@@ -327,6 +328,7 @@ def editar_mediador(request, mediador_id):
     if request.method == 'POST':
        
         mediador.situacao = request.POST.get('situacao')
+        mediador.curso_polo = request.POST.get('nome')
         mediador.nome = request.POST.get('nome')
         mediador.email = request.POST.get('email')
         mediador.telefone = request.POST.get('telefone')

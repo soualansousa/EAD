@@ -27,4 +27,4 @@ class CursoForm(forms.ModelForm):
 class MediadorForm(forms.ModelForm):
     class Meta:
         model = Mediador
-        fields = ['nome', 'email', 'telefone', 'formacao', 'situacao']
+        fields = ['curso_polo', 'nome', 'email', 'telefone', 'formacao', 'situacao']

@@ -93,14 +93,14 @@
                                 <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
                                 <td>
                                     <div class="icons_action d-flex justify-content-center gap-2">
-                                        <button class="button_icon btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
+                                        <button class="button_icon btn-noticia btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
                                             <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
                                         </button>
-                                        <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" 
+                                        <button class="button_icon btn-noticia btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" 
                                         data-id="{{ noticia.id }}">
                                             <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
                                         </button>
-                                        <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia.id }}">
+                                        <button class="button_icon btn-noticia button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia.id }}">
                                             <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
                                         </button>
                                     </div>
@@ -118,6 +118,8 @@
         </div>
 
         {% include "cead/partials/modais_cursoPolo.html" %}
+        {% include "cead/partials/modais_noticia.html" %}
+
     </main>
 
 {% endblock content %}

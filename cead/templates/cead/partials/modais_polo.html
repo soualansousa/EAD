@@ -31,12 +31,10 @@
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
-            <div class="modal-header justify-content-between">
+            <div class="modal-header d-flex justify-content-center position-relative">
                 <span></span>
                 <h5 class="modal-title text-center" id="Excluir">Confirmação de Exclusão</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
-                </button>
+              
             </div>
             <div class="modal-body">
                 <p class="text-center text-modal">
@@ -53,14 +51,14 @@
 
 <!-- Detalhar -->
 <div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-between">
-                <span></span>
+
+            <div class="modal-header d-flex justify-content-center position-relative">
+                
                 <h5 class="modal-title" id="DetalharLabel">Detalhes de Polo</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
-                </button>
+                
             </div>
             <div class="modal-body">
                 <div class="modal_info">
@@ -90,7 +88,7 @@
                 <div class="modal_info">
                     <h5>Data de Publicação</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheEdicao"></p>
+                        <p id="detalhePublicacao"></p>
                     </div>
                 </div>
                 <div class="modal_info">
@@ -108,18 +106,19 @@
 </div>
 
 <!-- Editar -->
-<div id="Editar" class="modal" tabindex="-1">
+<div id="Editar" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-between">
-                <span></span>
+            <div class="modal-header d-flex justify-content-center position-relative">
+                
                 <h5 class="modal-title">Editar Polo</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="button_close p-0 position-absolute end-0 top-0 me-3 mt-2" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="editarPoloForm">
+
                     <div class="mb-3">
                         <label for="editarCidade" class="form-label">Cidade</label>
                         <input class="form-control" id="editarCidade" name="cidade">
@@ -139,7 +138,10 @@
                         <textarea class="form-control" id="editarLongitude" name="longitude"></textarea>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary d-flex justify-content-center" id="salvarEdicao">Salvar</button>
+                       <button type="button" class="btn btn-primary" id="salvarEdicao">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Salvar
+                        </button>
                     </div>
                 </form>
             </div>
@@ -278,4 +280,14 @@
             });
         });
     });
+
+
+    $('#salvarEdicao').on('click', function() {
+    let spinner = $(this).find('.spinner-border');
+    spinner.removeClass('d-none'); // Mostrar spinner
+    // Processar salvamento...
+    setTimeout(function() {
+        spinner.addClass('d-none'); // Ocultar spinner após o processamento
+    }, 2000); // Simulação do tempo de processamento
+});
 </script>

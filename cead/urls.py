@@ -1,10 +1,14 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 app_name= 'cead'
 
 urlpatterns = [
     path('',views.user_login, name="login"),
     path('cead/',views.cead, name="cead"),
+
+   
 
 #notícias
     path('noticias/',views.noticias_lista, name="noticia_lista"),

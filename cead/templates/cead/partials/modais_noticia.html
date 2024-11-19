@@ -31,12 +31,10 @@
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
-            <div class="modal-header justify-content-between">
+            <div class="modal-header d-flex justify-content-center position-relative">
                 <span></span>
                 <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
-                </button>
+                
             </div>
             <div class="modal-body">
                 <p class="text-center text-modal">
@@ -55,48 +53,50 @@
 <div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header justify-content-between">
-                <span></span>
+            <div
+            class="modal-header d-flex justify-content-center position-relative">
+               
                 <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
-                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
-                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
-                </button>
+               
             </div>
-            <div class="modal-body gap-2 d-flex flex-column">
-                <div class="modal_info">
-                    <h5>Curso</h5>
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Curso</h5>
+                        <p id="detalheCurso" class="form-control bg-light"></p>
+                </div>
+
+                <div class="modal-body">
+                    <h5 class="mb-3">Título</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheCurso"></p>
+                        <p id="detalheTitulo" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Título</h5>
+
+                <div class="modal-body">
+                    <h5 class="mb-3">Descrição</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheTitulo"></p>
+                        <p id="detalheDescricao" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Descrição</h5>
+
+                <div class="modal-body"></div>
+                    <h5 class="mb-3">Arquivo</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheDescricao"></p>
+                        <p id="detalheArquivo" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info"></div>
-                    <h5>Arquivo</h5>
+
+                <div class="modal-body">
+                    <h5 class="mb-3">Data de Publicação</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheArquivo"></p>
+                        <p id="detalhePublicacao" class="form-control bg-light"></p>
                     </div>
                 </div>
-                <div class="modal_info">
-                    <h5>Data de Publicação</h5>
+                <div class="modal-body">
+                    <h5 class="mb-3">Data de Edição</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalhePublicacao"></p>
-                    </div>
-                </div>
-                <div class="modal_info">
-                    <h5>Data de Edição</h5>
-                    <div class="modal_info_descricao">
-                        <p id="detalheEdicao"></p>
+                        <p id="detalheEdicao" class="form-control bg-light"></p>
                     </div>
                 </div>
 

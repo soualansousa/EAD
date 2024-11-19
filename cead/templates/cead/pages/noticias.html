@@ -16,7 +16,7 @@
         
         <div class="d-flex mx-4 gap-3 jus">
             <form method="get" class="search_input d-flex p-0">
-                {{ search_noticia.query }}
+                <input type="text" name="query" class="form-control" placeholder="Buscar notícias" value="{{ query }}">
                 <button type="submit" class="p-2 ms-1 button_search">
                     <img src="{% static 'images/icons/search.svg' %}" alt="" class="icons_action"></img>
                 </button>
@@ -44,7 +44,13 @@
                             <td>{{ noticia.curso }}</td>
                             <td>{{ noticia.titulo }}</td>
                             <td>{{ noticia.descricao }}</td>
-                            <td>{{ noticia.arquivo }}</td>
+                            <td>
+                                {% if noticia.arquivo and noticia.arquivo.url %}
+                                    <img src="{{ noticia.arquivo.url }}" alt="{{ noticia.titulo }}" style="max-width: 100px; height: auto;">
+                                {% else %}
+                                    <span>Sem imagem</span>
+                                {% endif %}
+                            </td>
                             <td>{{ noticia.publicacao|date:"d/m/Y" }}</td>
                             <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
                             <td>

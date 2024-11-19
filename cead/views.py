@@ -78,6 +78,10 @@ def noticias_lista(request):
     query = request.GET.get('query')
     noticias = Noticia.objects.all()
 
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''  # Corrige o valor se for "none"
+
     if query:
         noticias = noticias.filter(
             Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)| Q(arquivo__icontains=query)
@@ -100,6 +104,9 @@ def polos_lista(request):
     query = request.GET.get('query')
     polos = Polo.objects.all()
 
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''  # Corrige o valor se for "none"
 
     if query:
         polos = polos.filter(
@@ -175,6 +182,9 @@ def coordenadores_lista(request):
     query = request.GET.get('query')
     coordenadores = Coordenador.objects.all()
 
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''  # Corrige o valor se for "none"
 
     if query:
         coordenadores = coordenadores.filter(

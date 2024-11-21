@@ -1,6 +1,8 @@
 .modal-content {
     background-color: var(--nav-color);
     color: white;
+    max-height: 35rem;
+    overflow-x: scroll;
 }
 
 .input ul {
@@ -89,9 +91,6 @@ textarea{
     margin-left: 1rem;
     margin-bottom: 0;
 }
-
-
-
 
 /* Estilo do Menu Lateral */
 .menu-lateral {

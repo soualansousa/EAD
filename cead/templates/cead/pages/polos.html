@@ -31,10 +31,10 @@
                     <tr class="text-center table_header">
                         <th>Cidade</th>
                         <th>Coordenador</th>
-                        <th>Latitude</th>
+                        <!-- <th>Latitude</th>
                         <th>Longitude</th>
                         <th>Data de Publicação</th>
-                        <th>Data de Edição</th>
+                        <th>Data de Edição</th> -->
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -43,10 +43,10 @@
                         <tr class="text-center table_body" data-id="{{ polo.id }}">
                             <td>{{ polo.cidade }}</td>
                             <td>{{ polo.coordenador }}</td>
-                            <td>{{ polo.latitude }}</td>
+                            <!-- <td>{{ polo.latitude }}</td>
                             <td>{{ polo.longitude }}</td>
                             <td>{{ polo.publicacao|date:"d/m/Y" }}</td>
-                            <td>{{ polo.edicao|date:"d/m/Y" }}</td>
+                            <td>{{ polo.edicao|date:"d/m/Y" }}</td> -->
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ polo.id }}">

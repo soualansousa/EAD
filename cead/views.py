@@ -4,8 +4,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador
+from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -102,11 +103,11 @@ def polos_lista(request):
     make_polo = PoloForm(request.POST)
     search_polo = SearchForm(request.GET)
     query = request.GET.get('query')
-    polos = Polo.objects.all()
+    polos = Polo.objects.all().order_by('cidade')
 
-    query = request.GET.get('query', '')
-    if query == 'none':
-        query = ''  # Corrige o valor se for "none"
+    query = request.GET.get('query', '').strip()
+    if query.lower() == 'none':
+        query = '' 
 
     if query:
         polos = polos.filter(
@@ -435,3 +436,4 @@ def detalhar_cursoPolo(request, cursoPolo_id):
         'edicao': curso_polos.edicao.strftime('%d/%m/%Y') if curso_polos.edicao else "Não editado",
     }
     return JsonResponse(dados)
+

@@ -33,8 +33,6 @@
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Arquivo</th>
-                        <th>Publicação</th>
-                        <th>Edição</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -44,15 +42,7 @@
                             <td>{{ noticia.curso }}</td>
                             <td>{{ noticia.titulo }}</td>
                             <td>{{ noticia.descricao }}</td>
-                            <td>
-                                {% if noticia.arquivo and noticia.arquivo.url %}
-                                    <img src="{{ noticia.arquivo.url }}" alt="{{ noticia.titulo }}" style="max-width: 100px; height: auto;">
-                                {% else %}
-                                    <span>Sem imagem</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ noticia.publicacao|date:"d/m/Y" }}</td>
-                            <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
+                            <td>{{ noticia.arquivo }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <button class="button_icon btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
@@ -71,7 +61,7 @@
 
                     {% empty %}
                         <tr>
-                            <td colspan="6">Nenhuma notícia encontrada.</td>
+                            <td colspan="5">Nenhuma notícia encontrada.</td>
                         </tr>
                     {% endfor %}
                 </tbody>

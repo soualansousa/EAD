@@ -43,7 +43,7 @@ def detalhar_noticia(request, noticia_id):
     dados = {
         'titulo': noticia.titulo,
         'descricao': noticia.descricao,
-        'arquivo': noticia.arquivo,
+        'arquivo': noticia.arquivo.url if noticia.arquivo else None,
         'curso': noticia.curso.nome if noticia.curso else "Curso não informado",
         'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
         'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
@@ -64,7 +64,7 @@ def editar_noticia(request, noticia_id):
     dados = {
         'titulo': noticia.titulo,
         'descricao': noticia.descricao,
-        'arquivo': noticia.arquivo,
+        'arquivo': noticia.arquivo.url if noticia.arquivo else None,
         'curso': noticia.curso.id if noticia.curso else None,
         'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
         'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",

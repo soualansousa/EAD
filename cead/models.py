@@ -2,6 +2,22 @@ from django.db import models
 from datetime import date
 from django.utils.safestring import mark_safe
 
+class Cead(models.Model):
+    SITUACAO_CHOICES = [
+        ('ATIVO', 'Ativo'),
+        ('INATIVO', 'Inativo'),
+      
+        ]
+    nome = models.CharField(max_length=150)
+    email = models.EmailField(max_length=100, default="email@exemplo.com")
+    telefone = models.IntegerField(default="7499999999")
+    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
+    publicacao = models.DateField(auto_now_add=True)
+    edicao = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.nome
+
 class Coordenador(models.Model):
     SITUACAO_CHOICES = [
         ('ATIVO', 'Ativo'),
@@ -96,7 +112,14 @@ class Noticia(models.Model):
 
     def __str__(self):
         return self.titulo
+
+class NoticiaCurso(models.Model):
+    noticia = models.ForeignKey(Noticia, on_delete=models.CASCADE, related_name="noticia_curso")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name="noticia_curso")
     
+    def __str__(self):
+        return f"{self.noticia.titulo} - {self.curso.nome}"
+
 class Polo(models.Model):
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE)
     cidade = models.CharField(max_length=100)

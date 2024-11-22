@@ -2,7 +2,7 @@ function checkScreenWidth() {
     const navDesktop = document.querySelector('.navDesktop');
     const navMob = document.querySelector('.navMob');
     
-    if (window.innerWidth <= 600) {
+    if (window.innerWidth <= 815) {
         navDesktop.classList.add('disable');
         navMob.classList.remove('disable');
     } else {

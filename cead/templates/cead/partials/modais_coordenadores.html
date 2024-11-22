@@ -150,6 +150,12 @@
                         </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="editarCurso" class="form-label">Curso</label>
+                        <select id="editarCurso" name="curso" class="form-select">
+                        </select>
+                    </div>
+
                     <!-- Botão Salvar -->
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary" id="salvarEdicao">
@@ -190,6 +196,7 @@
         });
 
         $('#confirmarExclusao').on('click', function() {
+            console.log(coordenadorId)
             if (coordenadorId) {
                 $.ajax({
                     type: 'POST',
@@ -239,7 +246,6 @@
 
         $('.btn-editar').on('click', function() {
             let coordenadorId = $(this).data('id');
-            console.log(coordenadorId);
 
             $.ajax({
                 type: 'GET',
@@ -250,9 +256,18 @@
                     $('#editarEmail').val(response.email);
                     $('#editarTelefone').val(response.telefone);
                     $('#editarSituacao').val(response.situacao);
-                    $('#Editar').data('id', coordenadorId);
+                    $('#editarCurso').empty();
+                    response.cursos.forEach(function(curso) {
+                        let option = $('<option></option>').val(curso.id).text(curso.nome);
+                        if (curso.id === response.curso) {
+                            option.prop('selected', true);
+                        } else {
+                            console.log('a')
+                        }
+                        $('#editarCurso').append(option);
+                    });
 
-                    
+                    $('#Editar').data('id', coordenadorId);
                     $('#Editar').modal('show');
                 },
                 error: function() {
@@ -262,11 +277,11 @@
         });
 
 
-
         $('#salvarEdicao').on('click', function() {
             let coordenadorId = $('#Editar').data('id');
             let formData = {
                 nome: $('#editarNome').val(),
+                curso: $('#editarCurso').val(),
                 email: $('#editarEmail').val(),
                 telefone: $('#editarTelefone').val(),
                 situacao: $('#editarSituacao').val(),

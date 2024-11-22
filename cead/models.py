@@ -43,6 +43,15 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nome
+    
+class CoordenadorCurso(models.Model):
+    coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, related_name="coordenador_curso")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name="coordenador_curso")
+    entrada = models.DateField(auto_now_add=True)
+    saida = models.DateField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.coordenador.nome} - {self.curso.nome}"
 
 class Documentos(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)

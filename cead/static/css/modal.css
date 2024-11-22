@@ -2,7 +2,7 @@
     background-color: var(--nav-color);
     color: white;
     max-height: 35rem;
-    overflow-x: scroll;
+    overflow-y: scroll;
 }
 
 .input ul {
@@ -91,32 +91,3 @@ textarea{
     margin-left: 1rem;
     margin-bottom: 0;
 }
-
-/* Estilo do Menu Lateral */
-.menu-lateral {
-    position: fixed;
-    top: 0;
-    right: -300px; /* Inicia fora da tela */
-    width: 300px;
-    height: 100%;
-    background-color: #f1f1f1;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    transition: right 0.3s ease; /* Efeito de deslize */
-    z-index: 1000;
-}
-
-/* Exibir o menu lateral ao ativar a classe "open" */
-.menu-lateral.open {
-    right: 0;
-}
-
-/* Botão de fechar */
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-}
-

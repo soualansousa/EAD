@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos
+from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm
 
 
@@ -181,26 +181,26 @@ def coordenadores_lista(request):
     make_coordenador = CoordenadorForm(request.POST)
     search_coordenador = SearchForm(request.GET)
     query = request.GET.get('query')
-    coordenadores = Coordenador.objects.all()
+    coordenador_cursos = CoordenadorCurso.objects.select_related('coordenador', 'curso').all()
 
     query = request.GET.get('query', '')
     if query == 'none':
         query = ''  # Corrige o valor se for "none"
 
     if query:
-        coordenadores = coordenadores.filter(
-        Q(situacao__icontains=query) |
-        Q(edicao__icontains=query) |
-        Q(publicacao__icontains=query) |
-        Q(nome__icontains=query) |
-        Q(telefone__icontains=query) |
-        Q(email__icontains=query)
+        coordenador_cursos = coordenador_cursos.filter(
+        Q(coordenador__situacao__icontains=query) |
+        Q(coordenador__edicao__icontains=query) |
+        Q(coordenador__publicacao__icontains=query) |
+        Q(coordenador__nome__icontains=query) |
+        Q(coordenador__telefone__icontains=query) |
+        Q(coordenador__email__icontains=query)
         )
-    
+
     context = {
         'make_coordenador': make_coordenador,
         'search_coordenador': search_coordenador,
-        'coordenadores': coordenadores,
+        'coordenador_cursos': coordenador_cursos,
         'query': query,
     }
 
@@ -235,24 +235,20 @@ def detalhar_coordenador(request, coordenador_id):
 def editar_coordenador(request, coordenador_id):
     coordenador = get_object_or_404(Coordenador, id=coordenador_id)
     
-    if request.method == 'POST':
-        # if request.method == 'POST':
-            
-        #     situacao = request.POST.get('situacao') 
-
-        coordenador.situacao = request.POST.get('situacao')
-        coordenador.nome = request.POST.get('nome')
-        coordenador.email = request.POST.get('email')
-        coordenador.telefone = request.POST.get('telefone')
-
-        coordenador.save()
+    coordenador_curso = CoordenadorCurso.objects.filter(coordenador_id=coordenador_id).first()
 
 
-           
-        return JsonResponse({'success': True})
+    if request.method == 'POST': 
+        form = CoordenadorForm(request.POST, instance=coordenador)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
-    
-    
+
+    cursos = Curso.objects.all().values('id', 'nome')
+
+    curso_relacionado = coordenador_curso.curso.id if coordenador_curso else None
+
 
     dados = {
         'nome': coordenador.nome,
@@ -261,6 +257,8 @@ def editar_coordenador(request, coordenador_id):
         'situacao': coordenador.situacao,
         'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
         'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
+        'curso': curso_relacionado,
+        'cursos': list(cursos),
         
     }
     return JsonResponse(dados)

@@ -31,35 +31,31 @@
                 <thead>
                     <tr class="text-center table_header">
                         <th>Nome</th>
+                        <th>Curso</th>
                         <th>E-mail</th>
                         <th>Telefone</th>
-                        <th>Situação</th>
-                        <th>Data de Publicação</th>
-                        <th>Data de Edição</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for coordenador in coordenadores %}
-                        <tr class="text-center table_body" data-id="{{ coordenador.id }}">
-                            <td>{{ coordenador.nome }}</td>
-                            <td>{{ coordenador.email }}</td>
-                            <td>{{ coordenador.telefone }}</td>
-                            <td>{{ coordenador.get_situacao_display }}</td>
-                            <td>{{ coordenador.publicacao|date:"d/m/Y" }}</td>
-                            <td>{{ coordenador.edicao|date:"d/m/Y" }}</td>
+                    {% for coordenador_curso in coordenador_cursos %}
+                        <tr class="text-center table_body" data-id="{{ coordenador_curso.coordenador.id }}">
+                            <td>{{ coordenador_curso.coordenador.nome }}</td>
+                            <td>{{ coordenador_curso.curso.nome }}</td>
+                            <td>{{ coordenador_curso.coordenador.email }}</td>
+                            <td>{{ coordenador_curso.coordenador.telefone }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ coordenador.id }}">
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ coordenador_curso.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ coordenador.id }}">
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ coordenador_curso.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ coordenador.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ coordenador_curso.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>

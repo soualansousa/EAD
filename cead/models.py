@@ -172,6 +172,7 @@ class Gestor(models.Model):
     situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
+    formacao = models.TextField(max_length=255)
 
     def __str__(self):
         return self.nome

@@ -8,6 +8,17 @@ urlpatterns = [
     path('',views.user_login, name="login"),
     path('cead/',views.cead, name="cead"),
 
+
+
+#gestores
+    path('gestores/', views.gestores_lista, name="gestor_lista"), 
+    path('criar_gestor/', views.criar_gestor, name='criar_gestor'),
+    path('excluir_gestor/<int:gestor_id>/', views.excluir_gestor, name='excluir_gestor'),
+    path('detalhar_gestor/<int:gestor_id>/', views.detalhar_gestor, name='detalhar_gestor'),
+    path('editar_gestor/<int:gestor_id>/', views.editar_gestor, name='editar_gestor'),
+    
+    
+
    
 
 #notícias
@@ -49,3 +60,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

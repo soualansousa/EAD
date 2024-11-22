@@ -4,8 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm
+
+
+
+from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm
+
 
 
 def user_login(request):
@@ -435,3 +439,101 @@ def detalhar_cursoPolo(request, cursoPolo_id):
     }
     return JsonResponse(dados)
 
+#gestor 
+
+def gestores_lista(request):
+    make_gestor = GestorForm(request.POST)
+    search_gestor = SearchForm(request.GET)
+    query = request.GET.get('query')
+    gestores = Gestor.objects.all().order_by('situacao', 'nome')
+
+
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''  
+
+
+    if query:
+        gestores = gestores.filter(
+        Q(situacao__icontains=query) |
+        Q(edicao__icontains=query) |
+        Q(publicacao__icontains=query) |
+        Q(nome__icontains=query) |
+        Q(telefone__icontains=query) |
+        Q(email__icontains=query)
+        )
+    
+    context = {
+        'make_gestor': make_gestor,
+        'search_gestor': search_gestor,
+        'gestores': gestores,
+        'query': query,
+    }
+
+    return render(request, 'cead/pages/gestores.html', context)
+    
+def criar_gestor(request):
+    if request.method == 'POST':
+        form = GestorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = GestorFormorForm()
+    return render(request, 'modais_gestores.html', {'form': form})
+
+
+def detalhar_gestor(request, gestor_id):
+    gestor = get_object_or_404(Gestor, id=gestor_id)
+    dados = {
+        
+        'nome': gestor.nome,
+        'email': gestor.email,
+        'telefone': gestor.telefone,
+        'formacao': gestor.formacao,
+        'situacao': "Ativo" if gestor.situacao else "Inativo",
+        'publicacao': gestor.publicacao.strftime('%d/%m/%Y') if gestor.publicacao else "Data não disponível",
+        'edicao': gestor.edicao.strftime('%d/%m/%Y') if gestor.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
+ 
+
+def editar_gestor(request, gestor_id):
+    gestor = get_object_or_404(Gestor, id=gestor_id)
+    
+    if request.method == 'POST':
+       
+        gestor.situacao = request.POST.get('situacao')
+        gestor.nome = request.POST.get('nome')
+        gestor.email = request.POST.get('email')
+        gestor.telefone = request.POST.get('telefone')
+        gestor.formacao = request.POST.get('formacao')
+
+        gestor.save()
+
+
+            
+        return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+   
+
+    dados = {
+        'nome': gestor.nome,
+        'email': gestor.email,
+        'telefone': gestor.telefone,
+        'formacao': gestor.formacao,
+        'situacao': gestor.situacao,
+        'publicacao': gestor.publicacao.strftime('%d/%m/%Y') if gestor.publicacao else "Data não disponível",
+        'edicao': gestor.edicao.strftime('%d/%m/%Y') if gestor.edicao else "Não editado",
+        
+    }
+    return JsonResponse(dados)
+
+def excluir_gestor(request, gestor_id):
+    if request.method == 'POST':
+        gestor = get_object_or_404(Gestor, id=gestor_id)
+        gestor.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})

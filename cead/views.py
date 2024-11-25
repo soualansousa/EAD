@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
@@ -224,46 +225,45 @@ def criar_coordenador(request):
 
 
 def detalhar_coordenador(request, coordenador_id):
-    coordenador = get_object_or_404(Coordenador, id=coordenador_id)
+    coordenador_cursos = get_object_or_404(CoordenadorCurso, id=coordenador_id)
     dados = {
-        'nome': coordenador.nome,
-        'email': coordenador.email,
-        'telefone': coordenador.telefone,
-        'situacao': "Ativo" if coordenador.situacao else "Inativo",
-        'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
-        'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
+        'curso': coordenador_cursos.curso.nome,
+        'nome': coordenador_cursos.coordenador.nome,
+        'email': coordenador_cursos.coordenador.email,
+        'telefone': coordenador_cursos.coordenador.telefone,
+        'situacao': coordenador_cursos.situacao,
+        'publicacao': coordenador_cursos.coordenador.publicacao.strftime('%d/%m/%Y') if coordenador_cursos.coordenador.publicacao else "Data não disponível",
+        'edicao': coordenador_cursos.coordenador.edicao.strftime('%d/%m/%Y') if coordenador_cursos.coordenador.edicao else "Não editado",
+        'saida': coordenador_cursos.saida.strftime('%d/%m/%Y') if coordenador_cursos.saida else "Data não disponível",
     }
     return JsonResponse(dados)
- 
+
+import logging
+logger = logging.getLogger(__name__)
 
 def editar_coordenador(request, coordenador_id):
     coordenador = get_object_or_404(Coordenador, id=coordenador_id)
-    
-    coordenador_curso = CoordenadorCurso.objects.filter(coordenador_id=coordenador_id).first()
+    coordenador_curso = CoordenadorCurso.objects.filter(coordenador=coordenador).first()
 
+    if request.method == 'POST':
+        logger.debug(f"Dados POST recebidos: {request.POST}")
 
-    if request.method == 'POST': 
-        form = CoordenadorForm(request.POST, instance=coordenador)
+        form = CoordenadorForm(request.POST, instance=coordenador, coordenador_curso=coordenador_curso)
         if form.is_valid():
             form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
 
     cursos = Curso.objects.all().values('id', 'nome')
-
     curso_relacionado = coordenador_curso.curso.id if coordenador_curso else None
-
 
     dados = {
         'nome': coordenador.nome,
         'email': coordenador.email,
         'telefone': coordenador.telefone,
-        'situacao': coordenador.situacao,
-        'publicacao': coordenador.publicacao.strftime('%d/%m/%Y') if coordenador.publicacao else "Data não disponível",
-        'edicao': coordenador.edicao.strftime('%d/%m/%Y') if coordenador.edicao else "Não editado",
+        'saida': coordenador_curso.saida.strftime('%Y-%m-%d') if coordenador_curso and coordenador_curso.saida else "",
         'curso': curso_relacionado,
         'cursos': list(cursos),
-        
     }
     return JsonResponse(dados)
 

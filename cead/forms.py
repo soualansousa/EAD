@@ -25,10 +25,22 @@ class CoordenadorForm(forms.ModelForm):
         label="Curso",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+    saida = forms.DateField(
+        required=False,
+        label="Data de Saída",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
 
     class Meta:
         model = Coordenador
         fields = ['nome', 'email', 'telefone']
+
+    def __init__(self, *args, **kwargs):
+        self.coordenador_curso = kwargs.pop('coordenador_curso', None)
+        super().__init__(*args, **kwargs)
+
+        if self.coordenador_curso:
+            self.fields['saida'].initial = self.coordenador_curso.saida
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -37,10 +49,17 @@ class CoordenadorForm(forms.ModelForm):
             instance.save()
 
         curso = self.cleaned_data.get('curso')
-        if curso:
-            CoordenadorCurso.objects.update_or_create(
+        saida = self.cleaned_data.get('saida')
+
+        if self.coordenador_curso:
+            self.coordenador_curso.curso = curso
+            self.coordenador_curso.saida = saida
+            self.coordenador_curso.save()
+        else:
+            CoordenadorCurso.objects.create(
                 coordenador=instance,
-                defaults={'curso': curso}
+                curso=curso,
+                saida=saida
             )
 
         return instance

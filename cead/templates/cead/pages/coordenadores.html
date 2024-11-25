@@ -34,6 +34,7 @@
                         <th>Curso</th>
                         <th>E-mail</th>
                         <th>Telefone</th>
+                        <th>Situação</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -44,6 +45,7 @@
                             <td>{{ coordenador_curso.curso.nome }}</td>
                             <td>{{ coordenador_curso.coordenador.email }}</td>
                             <td>{{ coordenador_curso.coordenador.telefone }}</td>
+                            <td>{{ coordenador_curso.situacao }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ coordenador_curso.id }}">

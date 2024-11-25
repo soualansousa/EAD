@@ -50,6 +50,10 @@ class CoordenadorCurso(models.Model):
     entrada = models.DateField(auto_now_add=True)
     saida = models.DateField(blank=True, null=True)
     
+    @property
+    def situacao(self):
+        return 'Ativo' if not self.saida else 'Inativo'
+
     def __str__(self):
         return f"{self.coordenador.nome} - {self.curso.nome}"
 

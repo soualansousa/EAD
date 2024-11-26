@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor
+from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm
 
 
@@ -37,6 +37,39 @@ def criar_noticia(request):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
 
+def noticias_lista(request):
+    make_noticia = NoticiaForm(request.POST)
+    search_noticia = SearchForm(request.GET)
+    query = request.GET.get('query')
+    noticia_cursos = NoticiaCurso.objects.select_related('noticia', 'curso').all()
+
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''  # Corrige o valor se for "none"
+
+    if query:
+        noticia_cursos = noticia_cursos.filter(
+            Q(curso__nome__icontains=query) | Q(noticia__titulo__icontains=query) | Q(noticia__descricao__icontains=query) | Q(noticia__edicao__icontains=query) | Q(noticia__publicacao__icontains=query)
+        )
+
+    noticia_cursos_paginada = Paginator(noticia_cursos, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = noticia_cursos_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = noticia_cursos_paginada.page(1)
+    except EmptyPage:
+        pagina = noticia_cursos_paginada.page(1)
+
+    context = {
+        'make_noticia': make_noticia,
+        'search_noticia': search_noticia,
+        'noticia_cursos': pagina,
+        'query': query,
+    }
+
+    return render(request, 'cead/pages/noticias.html', context)
+
 def excluir_noticia(request, noticia_id):
     if request.method == 'POST':
         noticia = get_object_or_404(Noticia, id=noticia_id)
@@ -45,71 +78,49 @@ def excluir_noticia(request, noticia_id):
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
 def detalhar_noticia(request, noticia_id):
-    noticia = get_object_or_404(Noticia, id=noticia_id)
+    curso_id = request.GET.get('curso')
+
+    try:
+        noticia_curso = NoticiaCurso.objects.select_related('noticia', 'curso').get(
+            noticia_id=noticia_id,
+            curso_id=curso_id
+        )
+    except NoticiaCurso.DoesNotExist:
+        return JsonResponse({'error': 'Notícia ou curso não encontrados.'}, status=404)
+
     dados = {
-        'titulo': noticia.titulo,
-        'descricao': noticia.descricao,
-        'arquivo': noticia.arquivo.url if noticia.arquivo else None,
-        'curso': noticia.curso.nome if noticia.curso else "Curso não informado",
-        'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
-        'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
+        'titulo': noticia_curso.noticia.titulo,
+        'descricao': noticia_curso.noticia.descricao,
+        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
+        'curso': noticia_curso.curso.nome if noticia_curso.curso else "Curso não informado",
+        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
+        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
     }
     return JsonResponse(dados)
 
 def editar_noticia(request, noticia_id):
-    noticia = get_object_or_404(Noticia, id=noticia_id)
-    
+    curso_id = request.GET.get('curso')
+    noticia_curso = NoticiaCurso.objects.filter(noticia_id=noticia_id, curso_id=curso_id).first()
+
     if request.method == 'POST':
-        form = NoticiaForm(request.POST, instance=noticia)
+        form = NoticiaForm(request.POST, instance=noticia_curso.noticia, noticia_curso=noticia_curso)
         if form.is_valid():
-            form.save()
+            noticia = form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     
     cursos = Curso.objects.all().values('id', 'nome')
+    curso_relacionado = noticia_curso.curso.id if noticia_curso else None
     dados = {
-        'titulo': noticia.titulo,
-        'descricao': noticia.descricao,
-        'arquivo': noticia.arquivo.url if noticia.arquivo else None,
-        'curso': noticia.curso.id if noticia.curso else None,
-        'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
-        'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
+        'titulo': noticia_curso.noticia.titulo,
+        'descricao': noticia_curso.noticia.descricao,
+        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
+        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
+        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
+        'curso': curso_relacionado,
         'cursos': list(cursos)
     }
     return JsonResponse(dados)
-
-def noticias_lista(request):
-    make_noticia = NoticiaForm(request.POST)
-    search_noticia = SearchForm(request.GET)
-    query = request.GET.get('query')
-    noticias = Noticia.objects.all()
-
-    query = request.GET.get('query', '')
-    if query == 'none':
-        query = ''  # Corrige o valor se for "none"
-
-    if query:
-        noticias = noticias.filter(
-            Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)| Q(arquivo__icontains=query)
-        )
-
-    noticias_paginada = Paginator(noticias, 10)
-    p = request.GET.get("p")
-    try:
-        pagina = noticias_paginada.page(p)
-    except PageNotAnInteger:
-        pagina = noticias_paginada.page(1)
-    except EmptyPage:
-        pagina = noticias_paginada.page(1)
-
-    context = {
-        'make_noticia': make_noticia,
-        'search_noticia': search_noticia,
-        'noticias': pagina,
-        'query': query,
-    }
-
-    return render(request, 'cead/pages/noticias.html', context)
 
 # polo
 
@@ -271,8 +282,6 @@ def editar_coordenador(request, coordenador_id):
     coordenador = get_object_or_404(Coordenador, id=coordenador_id)
 
     if request.method == 'POST':
-        logger.debug(f"Dados POST recebidos: {request.POST}")
-
         form = CoordenadorForm(request.POST, instance=coordenador, coordenador_curso=coordenador_curso)
         if form.is_valid():
             form.save()

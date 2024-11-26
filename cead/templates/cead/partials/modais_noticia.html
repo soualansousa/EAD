@@ -61,7 +61,6 @@
                     <h5 class="mb-1">Curso</h5>
                         <p id="detalheCurso" class="form-control bg-light"></p>
                 </div>
-
                 <div class="mb-3">
                     <h5 class="mb-1">Título</h5>
                     <p id="detalheTitulo" class="form-control bg-light"></p>
@@ -111,7 +110,7 @@
                 <form id="editarNoticiaForm">
                     <div class="mb-3">
                         <label for="editarCurso" class="form-label">Curso</label>
-                        <select class="form-control" id="editarCurso" name="curso">
+                        <select id="editarCurso" name="curso" class="form-select">
                         </select>
                     </div>
                     <div class="mb-3">
@@ -125,10 +124,10 @@
                     <div class="mb-3"></div>
                         <label for="editaArquivo" class="form-label">Arquivo</label>
                         <input type="text" class="form-control" id="editarArquivo" name="arquivo" value="{{ arquivo }}" readonly>
-
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvarEdicao">Salvar</button>
+                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvarEdicao" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                     </div>
                 </form>
             </div>
@@ -140,6 +139,7 @@
 <script>
     $(document).ready(function() {
         $('#formCriarNoticia').on('submit', function(e) {
+            console.log('vida própria??')
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -157,38 +157,44 @@
         });
         
         $('.button_icon').on('click', function() {
-            noticiaId = $(this).data('id');
+            dataId = $(this).data('id');
+            [noticiaId, cursoId] = dataId.split('-');
         });
 
         $('#confirmarExclusao').on('click', function() {
-            if (noticiaId) {
-                $.ajax({
-                    type: 'POST',
-                    url: `/excluir_noticia/${noticiaId}/`, 
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $(`tr[data-id="${noticiaId}"]`).remove();
-                            $('#Excluir').modal('hide');
-                        } else {
-                            alert("Erro ao excluir notícia.");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert("Erro na requisição de exclusão: " + error);
+
+            $.ajax({
+                type: 'POST',
+                url: `/excluir_noticia/${noticiaId}/`, 
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $(`tr[data-id="${noticiaId}"]`).remove();
+                        $('#Excluir').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir notícia.");
                     }
-                });
-            } else {
-                alert("Erro: ID da notícia não encontrado.");
-            }
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro na requisição de exclusão: " + error);
+                }
+            });
         });
 
         $('.btn-detalhar').on('click', function() {
+
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+            
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_noticia/${noticiaId}/`, 
+                url: `/detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
                     $('#detalheCurso').text(response.curso);
                     $('#detalheTitulo').text(response.titulo);
@@ -206,7 +212,7 @@
         $('.btn-editar').on('click', function() {
             $.ajax({
                 type: 'GET',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
                     $('#editarTitulo').val(response.titulo);
                     $('#editarDescricao').val(response.descricao);
@@ -220,8 +226,8 @@
                         $('#editarCurso').append(option);
                     });
 
-                    $('#Editar').data('id', noticiaId);
-                    $('#Editar').modal('show');
+                    $('#Editar').data('id', `${noticiaId}-${cursoId}`);
+                    $('#Editar').modal('show'); 
                 },
                 error: function() {
                     alert("Erro ao carregar dados da notícia.");
@@ -230,7 +236,6 @@
         });
 
         $('#salvarEdicao').on('click', function() {
-            let noticiaId = $('#Editar').data('id');
             let formData = {
                 curso: $('#editarCurso').val(),
                 titulo: $('#editarTitulo').val(),
@@ -241,7 +246,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

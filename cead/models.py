@@ -116,7 +116,6 @@ class Contato(models.Model):
         return self.assunto
 
 class Noticia(models.Model):
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
     descricao = models.TextField(max_length=900)
     arquivo = models.FileField(blank=True)

@@ -15,7 +15,6 @@ header {
 }
 
 main {
-    
     height: 100vh;
 }
 
@@ -160,4 +159,13 @@ footer {
 .offcanvas{
     background-color: var(--nav-color);
     color: white;
+}
+
+.pagination li a {
+    background-color: var(--bg1-color);
+    color: black;
+}
+
+.pagination li a:hover {
+    color: black;
 }

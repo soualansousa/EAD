@@ -68,9 +68,9 @@
                     </div>
                 </div>
                 <div class="modal_info">
-                    <h5>Coordenador</h5>
+                    <h5>Gestor</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheCoordenador"></p>
+                        <p id="detalheGestorr"></p>
                     </div>
                 </div>
                 <div class="modal_info">
@@ -125,8 +125,8 @@
                     </input>
                     </div>
                     <div class="mb-3">
-                        <label for="editarCoordenador" class="form-label">Coordenador</label>
-                        <select type="text" class="form-control" id="editarCoordenador" name="coordenador">
+                        <label for="editarGestor" class="form-label">Gestor</label>
+                        <select type="text" class="form-control" id="editarGestor" name="coordenador">
                         </select>
                     </div>
                     <div class="mb-3">
@@ -208,7 +208,7 @@
                 success: function(response) {
                     console.log('a');
                     $('#detalheCidade').text(response.cidade);
-                    $('#detalheCoordenador').text(response.coordenador);
+                    $('#detalheGestor').text(response.gestor);
                     $('#detalheLatitude').text(response.latitude);
                     $('#detalheLongitude').text(response.longitude);
                     $('#detalhePublicacao').text(response.publicacao);
@@ -233,13 +233,13 @@
                     $('#editarLatitude').val(response.latitude);
                     $('#editarLongitude').val(response.longitude);
 
-                    $('#editarCoordenador').empty();
-                    response.coordenadores.forEach(function(coordenador) {
-                        let option = $('<option></option>').val(coordenador.id).text(coordenador.nome);
-                        if (coordenador.id === response.coordenador) {
+                    $('#editarGestor').empty();
+                    response.gestores.forEach(function(gestor) {
+                        let option = $('<option></option>').val(gestor.id).text(gestor.nome);
+                        if (gestor.id === response.gestor) {
                             option.prop('selected', true);
                         }
-                        $('#editarCoordenador').append(option);
+                        $('#editarGestor').append(option);
                     });
 
                     $('#Editar').data('id', poloId);
@@ -256,7 +256,7 @@
             let poloId = $('#Editar').data('id');
             let formData = {
                 cidade: $('#editarCidade').val(),
-                coordenador: $('#editarCoordenador').val(),
+                gestor: $('#editarGestor').val(),
                 latitude: $('#editarLatitude').val(),
                 longitude: $('#editarLongitude').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()

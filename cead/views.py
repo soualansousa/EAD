@@ -107,26 +107,27 @@ def noticias_lista(request):
 def polos_lista(request):
     make_polo = PoloForm(request.POST)
     search_polo = SearchForm(request.GET)
-    query = request.GET.get('query')
-    polos = Polo.objects.all().order_by('cidade')
-
     query = request.GET.get('query', '').strip()
+    
+    polos_gestores = GestorPolos.objects.select_related('polo', 'gestor').order_by('polo__cidade')
+    
     if query.lower() == 'none':
         query = '' 
 
     if query:
-        polos = polos.filter(
-            Q(cidade__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
+        polos_gestores = polos_gestores.filter(
+            Q(polo__cidade__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
         )
     
     context = {
         'make_polo': make_polo,
         'search_polo': search_polo,
-        'polos': polos,
+        'polos_gestores': polos_gestores,
         'query': query,
     }
 
     return render(request, 'cead/pages/polos.html', context)
+
 
 def criar_polo(request):
     if request.method == 'POST':
@@ -147,36 +148,42 @@ def excluir_polo(request, polo_id):
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
 def detalhar_polo(request, polo_id):
-    polo = get_object_or_404(Polo, id=polo_id)
+    polos_gestores = get_object_or_404(GestorPolos, id=polo_id)
     dados = {
-        'cidade': polo.cidade,
-        'latitude': polo.latitude,
-        'longitude': polo.longitude,
-        'coordenador': polo.coordenador.nome if polo.coordenador else "Coordenador não informado",
-        'publicacao': polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Data não disponível",
-        'edicao': polo.edicao.strftime('%d/%m/%Y') if polo.edicao else "Não editado",
+        'cidade': polos_gestores.polo.cidade,
+        'latitude': polos_gestores.polo.latitude,
+        'longitude': polos_gestores.polo.longitude,
+        'gestor': polos_gestores.gestor.nome if polos_gestores.gestor.nome else "Coordenador não informado",
+        'publicacao': polos_gestores.polo.publicacao.strftime('%d/%m/%Y') if  polos_gestores.polo.publicacao else "Data não disponível",
+        'edicao': polos_gestores.polo.publicacao.strftime('%d/%m/%Y') if  polos_gestores.polo.publicacao else "Não editado",
     }
     return JsonResponse(dados)
 
+    import logging
+    logger = logging.getLogger(__name__)
+
 def editar_polo(request, polo_id):
     polo = get_object_or_404(Polo, id=polo_id)
+    polos_gestores = GestorPolos.objects.filter(polo=polo).first()
     
     if request.method == 'POST':
-        form = PoloForm(request.POST, instance=polo)
+        logger.debug(f"Dados POST recebidos: {request.POST}")
+        form = PoloForm(request.POST, instance=polo, polos_gestores=polos_gestores)
         if form.is_valid():
             form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     
-    coordenadores = Coordenador.objects.all().values('id', 'nome')
+    gestor = Gestor.objects.all().values('id', 'nome')
+    gestor_relacionamento = polos_gestores.gestor.id if polos_gestores else None
+
     dados = {
         'cidade': polo.cidade,
         'latitude': polo.latitude,
         'longitude': polo.longitude,
-        'coordenador': polo.coordenador.id if polo.coordenador else None,
-        'publicacao': polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Data não disponível",
-        'edicao': polo.edicao.strftime('%d/%m/%Y') if polo.edicao else "Não editado",
-        'coordenadores': list(coordenadores)
+        'gestor': gestor_relacionamento
+        
+       
     }
     return JsonResponse(dados)
 

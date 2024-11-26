@@ -35,10 +35,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for polo in polos %}
+                    {% for polos_gestor in polos_gestores %}
                         <tr class="text-center table_body" data-id="{{ polo.id }}">
-                            <td>{{ polo.cidade }}</td>
-                            <td>{{ polo.gestor}}</td>
+                            <td>{{ polos_gestor.polo.cidade }}</td>
+                            <td>{{ polos_gestor.gestor.nome}}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ polo.id }}">

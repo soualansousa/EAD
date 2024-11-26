@@ -255,8 +255,6 @@
                         let option = $('<option></option>').val(curso.id).text(curso.nome);
                         if (curso.id === response.curso) {
                             option.prop('selected', true);
-                        } else {
-                            console.log('a')
                         }
                         $('#editarCurso').append(option);
                     });

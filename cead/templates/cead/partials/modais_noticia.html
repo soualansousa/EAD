@@ -61,7 +61,6 @@
                     <h5 class="mb-1">Curso</h5>
                         <p id="detalheCurso" class="form-control bg-light"></p>
                 </div>
-
                 <div class="mb-3">
                     <h5 class="mb-1">Título</h5>
                     <p id="detalheTitulo" class="form-control bg-light"></p>
@@ -111,7 +110,7 @@
                 <form id="editarNoticiaForm">
                     <div class="mb-3">
                         <label for="editarCurso" class="form-label">Curso</label>
-                        <select class="form-control" id="editarCurso" name="curso">
+                        <select id="editarCurso" name="curso" class="form-select">
                         </select>
                     </div>
                     <div class="mb-3">
@@ -172,6 +171,7 @@
                         if (response.success) {
                             $(`tr[data-id="${noticiaId}"]`).remove();
                             $('#Excluir').modal('hide');
+                            location.reload();
                         } else {
                             alert("Erro ao excluir notícia.");
                         }
@@ -186,9 +186,12 @@
         });
 
         $('.btn-detalhar').on('click', function() {
+            let dataId = $(this).data('id');
+            let [noticiaId, cursoId] = dataId.split('-');
+
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_noticia/${noticiaId}/`, 
+                url: `/detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
                     $('#detalheCurso').text(response.curso);
                     $('#detalheTitulo').text(response.titulo);
@@ -204,9 +207,12 @@
         });
 
         $('.btn-editar').on('click', function() {
+            let dataId = $(this).data('id');
+            let [noticiaId, cursoId] = dataId;
+
             $.ajax({
                 type: 'GET',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
                     $('#editarTitulo').val(response.titulo);
                     $('#editarDescricao').val(response.descricao);
@@ -230,7 +236,8 @@
         });
 
         $('#salvarEdicao').on('click', function() {
-            let noticiaId = $('#Editar').data('id');
+            let dataId = $(this).data('id');
+            let [noticiaId, cursoId] = dataId;
             let formData = {
                 curso: $('#editarCurso').val(),
                 titulo: $('#editarTitulo').val(),
@@ -241,7 +248,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

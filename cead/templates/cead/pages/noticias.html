@@ -37,22 +37,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for noticia in noticias %}
-                        <tr class="text-center table_body" data-id="{{ noticia.id }}">
-                            <td>{{ noticia.curso }}</td>
-                            <td>{{ noticia.titulo }}</td>
-                            <td>{{ noticia.descricao }}</td>
-                            <td>{{ noticia.arquivo }}</td>
+                    {% for noticia_curso in noticia_cursos %}
+                        <tr class="text-center table_body">
+                            <td>{{ noticia_curso.curso.nome }}</td>
+                            <td>{{ noticia_curso.noticia.titulo }}</td>
+                            <td>{{ noticia_curso.noticia.descricao }}</td>
+                            <td>{{ noticia_curso.noticia.arquivo }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
+                                    <button class="button_icon btn-editar" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}" data-bs-target="#Editar">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
                                     </button>
                                     <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" 
-                                    data-id="{{ noticia.id }}">
+                                    data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
                                     </button>
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia_curso.noticia.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
                                     </button>
                                 </div>
@@ -69,12 +69,12 @@
 
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                {% if noticias.has_previous %}
+                {% if noticia_cursos.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?status={{ status }}&p=1">&laquo;</a>
                         </li>
                         <li class="page-item"> 
-                            <a class="page-link" href="?status={{ status }}&p={{ noticias.previous_page_number }}">Anterior</a>
+                            <a class="page-link" href="?status={{ status }}&p={{ noticia_cursos.previous_page_number }}">Anterior</a>
                         </li>
                 {% else  %}
                         <li class="page-item disabled">
@@ -85,14 +85,14 @@
                         </li>
                 {% endif %}
                         <li class="page-item">
-                            <a class="page-link">{{noticias.number}}</a>
+                            <a class="page-link">{{noticia_cursos.number}}</a>
                         </li>
-                {% if noticias.has_next %}
+                {% if noticia_cursos.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?status={{ status }}&p={{ noticias.next_page_number }}">Próxima</a>
+                            <a class="page-link" href="?status={{ status }}&p={{ noticia_cursos.next_page_number }}">Próxima</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?status={{ status }}&p={{ noticias.paginator.num_pages }}">&raquo;</a>
+                            <a class="page-link" href="?status={{ status }}&p={{ noticia_cursos.paginator.num_pages }}">&raquo;</a>
                         </li>
                 {% else %}
                         <li class="page-item disabled">

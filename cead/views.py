@@ -37,58 +37,6 @@ def criar_noticia(request):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
 
-def excluir_noticia(request, noticia_id):
-    if request.method == 'POST':
-        noticia = get_object_or_404(Noticia, id=noticia_id)
-        noticia.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'error': 'Método não permitido'})
-
-def detalhar_noticia(request, noticia_id):
-    curso_id = request.GET.get('curso')
-
-    try:
-        noticia_curso = NoticiaCurso.objects.select_related('noticia', 'curso').get(
-            noticia_id=noticia_id,
-            curso_id=curso_id
-        )
-    except NoticiaCurso.DoesNotExist:
-        return JsonResponse({'error': 'Notícia ou curso não encontrados.'}, status=404)
-
-    dados = {
-        'titulo': noticia_curso.noticia.titulo,
-        'descricao': noticia_curso.noticia.descricao,
-        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
-        'curso': noticia_curso.curso.nome if noticia_curso.curso else "Curso não informado",
-        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
-        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
-    }
-    return JsonResponse(dados)
-
-def editar_noticia(request, noticia_id):
-    noticia_curso = NoticiaCurso.objects.filter(id=noticia_id).first()
-    noticia = get_object_or_404(Noticia, id=noticia_id)
-    
-    if request.method == 'POST':
-        form = NoticiaForm(request.POST, instance=noticia, noticia_curso=noticia_curso)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'errors': form.errors})
-    
-    cursos = Curso.objects.all().values('id', 'nome')
-    curso_relacionado = noticia_curso.curso.id if noticia_curso else None
-    dados = {
-        'titulo': noticia.titulo,
-        'descricao': noticia.descricao,
-        'arquivo': noticia.arquivo.url if noticia.arquivo else None,
-        'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
-        'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
-        'curso': curso_relacionado,
-        'cursos': list(cursos)
-    }
-    return JsonResponse(dados)
-
 def noticias_lista(request):
     make_noticia = NoticiaForm(request.POST)
     search_noticia = SearchForm(request.GET)
@@ -121,6 +69,58 @@ def noticias_lista(request):
     }
 
     return render(request, 'cead/pages/noticias.html', context)
+
+def excluir_noticia(request, noticia_id):
+    if request.method == 'POST':
+        noticia = get_object_or_404(Noticia, id=noticia_id)
+        noticia.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+def detalhar_noticia(request, noticia_id):
+    curso_id = request.GET.get('curso')
+
+    try:
+        noticia_curso = NoticiaCurso.objects.select_related('noticia', 'curso').get(
+            noticia_id=noticia_id,
+            curso_id=curso_id
+        )
+    except NoticiaCurso.DoesNotExist:
+        return JsonResponse({'error': 'Notícia ou curso não encontrados.'}, status=404)
+
+    dados = {
+        'titulo': noticia_curso.noticia.titulo,
+        'descricao': noticia_curso.noticia.descricao,
+        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
+        'curso': noticia_curso.curso.nome if noticia_curso.curso else "Curso não informado",
+        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
+        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
+
+def editar_noticia(request, noticia_id):
+    curso_id = request.GET.get('curso')
+    noticia_curso = NoticiaCurso.objects.filter(noticia_id=noticia_id, curso_id=curso_id).first()
+
+    if request.method == 'POST':
+        form = NoticiaForm(request.POST, instance=noticia_curso.noticia, noticia_curso=noticia_curso)
+        if form.is_valid():
+            noticia = form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+    cursos = Curso.objects.all().values('id', 'nome')
+    curso_relacionado = noticia_curso.curso.id if noticia_curso else None
+    dados = {
+        'titulo': noticia_curso.noticia.titulo,
+        'descricao': noticia_curso.noticia.descricao,
+        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
+        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
+        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
+        'curso': curso_relacionado,
+        'cursos': list(cursos)
+    }
+    return JsonResponse(dados)
 
 # polo
 

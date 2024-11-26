@@ -52,13 +52,12 @@
                                     data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
                                     </button>
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia_curso.noticia.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
                                     </button>
                                 </div>
                             </td>
                         </tr>
-
                     {% empty %}
                         <tr>
                             <td colspan="5">Nenhuma notícia encontrada.</td>

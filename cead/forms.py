@@ -32,10 +32,13 @@ class NoticiaForm(forms.ModelForm):
 
         curso = self.cleaned_data.get('curso')
 
+        # Atualiza o NoticiaCurso existente ou cria um novo, se necessário
         if self.noticia_curso:
+            # Se a notícia já está associada a um curso, atualize o relacionamento
             self.noticia_curso.curso = curso
             self.noticia_curso.save()
         else:
+            # Caso contrário, cria um novo relacionamento
             NoticiaCurso.objects.create(
                 noticia=instance,
                 curso=curso,

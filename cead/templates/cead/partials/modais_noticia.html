@@ -124,10 +124,10 @@
                     <div class="mb-3"></div>
                         <label for="editaArquivo" class="form-label">Arquivo</label>
                         <input type="text" class="form-control" id="editarArquivo" name="arquivo" value="{{ arquivo }}" readonly>
-
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvarEdicao">Salvar</button>
+                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvarEdicao" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                     </div>
                 </form>
             </div>
@@ -139,6 +139,7 @@
 <script>
     $(document).ready(function() {
         $('#formCriarNoticia').on('submit', function(e) {
+            console.log('vida própria??')
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -156,39 +157,41 @@
         });
         
         $('.button_icon').on('click', function() {
-            noticiaId = $(this).data('id');
+            dataId = $(this).data('id');
+            [noticiaId, cursoId] = dataId.split('-');
         });
 
         $('#confirmarExclusao').on('click', function() {
-            if (noticiaId) {
-                $.ajax({
-                    type: 'POST',
-                    url: `/excluir_noticia/${noticiaId}/`, 
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $(`tr[data-id="${noticiaId}"]`).remove();
-                            $('#Excluir').modal('hide');
-                            location.reload();
-                        } else {
-                            alert("Erro ao excluir notícia.");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert("Erro na requisição de exclusão: " + error);
+
+            $.ajax({
+                type: 'POST',
+                url: `/excluir_noticia/${noticiaId}/`, 
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $(`tr[data-id="${noticiaId}"]`).remove();
+                        $('#Excluir').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir notícia.");
                     }
-                });
-            } else {
-                alert("Erro: ID da notícia não encontrado.");
-            }
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro na requisição de exclusão: " + error);
+                }
+            });
         });
 
         $('.btn-detalhar').on('click', function() {
-            let dataId = $(this).data('id');
-            let [noticiaId, cursoId] = dataId.split('-');
 
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+            
             $.ajax({
                 type: 'GET',
                 url: `/detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
@@ -207,9 +210,6 @@
         });
 
         $('.btn-editar').on('click', function() {
-            let dataId = $(this).data('id');
-            let [noticiaId, cursoId] = dataId;
-
             $.ajax({
                 type: 'GET',
                 url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
@@ -226,7 +226,7 @@
                         $('#editarCurso').append(option);
                     });
 
-                    $('#Editar').data('id', noticiaId);
+                    $('#Editar').data('id', `${noticiaId}-${cursoId}`);
                     $('#Editar').modal('show'); 
                 },
                 error: function() {
@@ -236,8 +236,6 @@
         });
 
         $('#salvarEdicao').on('click', function() {
-            let dataId = $(this).data('id');
-            let [noticiaId, cursoId] = dataId;
             let formData = {
                 curso: $('#editarCurso').val(),
                 titulo: $('#editarTitulo').val(),

@@ -14,9 +14,12 @@ class NoticiaForm(forms.ModelForm):
         fields = ['curso', 'titulo', 'descricao', 'arquivo']
 
 class PoloForm(forms.ModelForm):
-    class Meta:
-        model = Polo
-        fields = ['coordenador', 'cidade', 'latitude', 'longitude']
+    gestor = forms.ModelChoiceField(
+        queryset=Gestor.objects.all(),
+        required=False,
+        label="Gestor",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
 class CoordenadorForm(forms.ModelForm):
     curso = forms.ModelChoiceField(

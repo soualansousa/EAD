@@ -148,42 +148,11 @@
     {% block content %}
     {% endblock content %}
 
-    {% if request.resolver_match.url_name == 'detalhar_curso' %}
-        <footer style="position: relative;">
-            <div class="footer-container justify-content-between">
-                <div class="footer-content d-flex justify-content-center">
-                    <p>&copy; 2024 Curso Técnico Subsequente ao Ensino Médio</p>
-                    <img class="formigueiro-tecnologico" src="{% static 'images/logos/Formigueiro-tec.svg' %}" alt="">
-                </div>
-                <!-- 
-                <div class="social-icons">
-                    <a href="#" class="social-icon facebook-icon">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22.675 0H1.325C0.593 0 0 0.593 0 1.325V22.675C0 23.406 0.593 24 1.325 24H12.82V14.709H9.692V11.273H12.82V8.838C12.82 5.845 14.816 4.072 17.562 4.072C18.957 4.072 19.893 4.182 20.138 4.217V7.215H18.268C16.877 7.215 16.618 7.867 16.618 8.899V11.273H20.036L19.507 14.709H16.618V24H22.675C23.406 24 24 23.406 24 22.675V1.325C24 0.593 23.406 0 22.675 0Z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="social-icon twitter-icon">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M23.954 4.569c-0.885 0.392-1.833 0.656-2.825 0.775 1.014-0.611 1.794-1.574 2.163-2.723-0.951 0.555-2.005 0.959-3.127 1.184-0.897-0.959-2.178-1.558-3.594-1.558-2.717 0-4.917 2.201-4.917 4.917 0 0.39 0.045 0.765 0.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-0.427 0.732-0.666 1.581-0.666 2.475 0 1.708 0.87 3.216 2.188 4.1-0.807-0.026-1.566-0.248-2.228-0.616v0.061c0 2.385 1.693 4.374 3.946 4.827-0.413 0.111-0.849 0.171-1.296 0.171-0.314 0-0.622-0.03-0.924-0.086 0.623 1.953 2.428 3.377 4.566 3.417-1.674 1.309-3.778 2.092-6.063 2.092-0.394 0-0.779-0.023-1.161-0.068 2.163 1.391 4.735 2.204 7.504 2.204 9.054 0 14-7.496 14-13.986 0-0.213-0.005-0.425-0.014-0.637 0.961-0.689 1.8-1.56 2.46-2.548l-0.047-0.02z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="social-icon instagram-icon">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2.163c3.204 0 3.584 0.012 4.85 0.07 1.366 0.062 2.633 0.311 3.608 1.286 0.975 0.975 1.224 2.243 1.286 3.608 0.058 1.266 0.07 1.645 0.07 4.85s-0.012 3.584-0.07 4.85c-0.062 1.366-0.311 2.633-1.286 3.608-0.975 0.975-2.243 1.224-3.608 1.286-1.266 0.058-1.645 0.07-4.85 0.07s-3.584-0.012-4.85-0.07c-1.366-0.062-2.633-0.311-3.608-1.286-0.975-0.975-1.224-2.243-1.286-3.608-0.058-1.266-0.07-1.645-0.07-4.85s0.012-3.584 0.07-4.85c0.062-1.366 0.311-2.633 1.286-3.608 0.975-0.975 2.243-1.224 3.608-1.286 1.266-0.058 1.645-0.07 4.85-0.07m0-2.163c-3.259 0-3.67 0.012-4.947 0.071-1.559 0.07-2.97 0.362-4.052 1.444-1.082 1.082-1.374 2.493-1.444 4.052-0.059 1.277-0.071 1.688-0.071 4.947s0.012 3.67 0.071 4.947c0.07 1.559 0.362 2.97 1.444 4.052 1.082 1.082 2.493 1.374 4.052 1.444 1.277 0.059 1.688 0.071 4.947 0.071s3.67-0.012 4.947-0.071c1.559-0.07 2.97-0.362 4.052-1.444 1.082-1.082 1.374-2.493 1.444-4.052 0.059-1.277 0.071-1.688 0.071-4.947s-0.012-3.67-0.071-4.947c-0.07-1.559-0.362-2.97-1.444-4.052-1.082-1.082-2.493-1.374-4.052-1.444-1.277-0.059-1.688-0.071-4.947-0.071z"/>
-                            <circle cx="12" cy="12" r="3.5"/>
-                            <circle cx="18.406" cy="5.594" r="1.44"/>
-                        </svg>
-                    </a>
-                </div> -->
-            </div>
-        </footer>
-    {% else %}
-        <footer class="footer-content d-flex justify-content-between align-items-center"">
-            <span></span>
-            <p>&copy; 2024 Curso Técnico Subsequente ao Ensino Médio</p>
-            <img class="formigueiro-tecnologico" src="{% static 'images/logos/Formigueiro-tec.svg' %}" alt="">
-        </footer>
-    {% endif %}
+    <footer class="footer-content d-flex justify-content-between align-items-center mt-5">
+        <span></span>
+        <p>&copy; 2024 Curso Técnico Subsequente ao Ensino Médio</p>
+        <img class="formigueiro-tecnologico" src="{% static 'images/logos/Formigueiro-tec.svg' %}" alt="">
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>

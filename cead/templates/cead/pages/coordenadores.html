@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                     {% for coordenador_curso in coordenador_cursos %}
-                        <tr class="text-center table_body" data-id="{{ coordenador_curso.coordenador.id }}">
+                        <tr class="text-center table_body">
                             <td>{{ coordenador_curso.coordenador.nome }}</td>
                             <td>{{ coordenador_curso.curso.nome }}</td>
                             <td>{{ coordenador_curso.coordenador.email }}</td>
@@ -52,12 +52,12 @@
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ coordenador_curso.id }}">
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ coordenador_curso.coordenador.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ coordenador_curso.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ coordenador_curso.coordenador.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>
@@ -72,6 +72,45 @@
                     {% endfor %}
                 </tbody>
               </table>
+
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                {% if coordenador_cursos.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?status={{ status }}&p=1">&laquo;</a>
+                        </li>
+                        <li class="page-item"> 
+                            <a class="page-link" href="?status={{ status }}&p={{ coordenador_cursos.previous_page_number }}">Anterior</a>
+                        </li>
+                {% else  %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">&laquo;</a>
+                        </li>
+                        <li class="page-item disabled"> 
+                            <a class="page-link" href="#">Anterior</a>
+                        </li>
+                {% endif %}
+                        <li class="page-item">
+                            <a class="page-link">{{coordenador_cursos.number}}</a>
+                        </li>
+                {% if coordenador_cursos.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?status={{ status }}&p={{ coordenador_cursos.next_page_number }}">Próxima</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?status={{ status }}&p={{ coordenador_cursos.paginator.num_pages }}">&raquo;</a>
+                        </li>
+                {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="">Próxima</a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">&raquo;</a>
+                        </li>
+                {% endif %}
+                </ul>
+            </nav>
+
         </div>
 
         {% include "cead/partials/modais_coordenadores.html" %}

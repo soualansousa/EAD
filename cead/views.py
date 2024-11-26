@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 from .models import Noticia, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor
@@ -93,10 +93,19 @@ def noticias_lista(request):
             Q(titulo__icontains=query) | Q(descricao__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)| Q(arquivo__icontains=query)
         )
 
+    noticias_paginada = Paginator(noticias, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = noticias_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = noticias_paginada.page(1)
+    except EmptyPage:
+        pagina = noticias_paginada.page(1)
+
     context = {
         'make_noticia': make_noticia,
         'search_noticia': search_noticia,
-        'noticias': noticias,
+        'noticias': pagina,
         'query': query,
     }
 
@@ -202,10 +211,19 @@ def coordenadores_lista(request):
         Q(coordenador__email__icontains=query)
         )
 
+    coordenador_cursos_paginada = Paginator(coordenador_cursos, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = coordenador_cursos_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = coordenador_cursos_paginada.page(1)
+    except EmptyPage:
+        pagina = coordenador_cursos_paginada.page(1)
+
     context = {
         'make_coordenador': make_coordenador,
         'search_coordenador': search_coordenador,
-        'coordenador_cursos': coordenador_cursos,
+        'coordenador_cursos': pagina,
         'query': query,
     }
 
@@ -242,8 +260,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 def editar_coordenador(request, coordenador_id):
+    coordenador_curso = CoordenadorCurso.objects.filter(id=coordenador_id).first()
     coordenador = get_object_or_404(Coordenador, id=coordenador_id)
-    coordenador_curso = CoordenadorCurso.objects.filter(coordenador=coordenador).first()
 
     if request.method == 'POST':
         logger.debug(f"Dados POST recebidos: {request.POST}")

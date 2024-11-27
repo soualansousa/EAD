@@ -183,11 +183,11 @@
         });
         
         $('.button_icon').on('click', function() {
-            coordenadorId = $(this).data('id');
+            dataId = $(this).data('id');
+            [coordenadorId, cursoId] = dataId.split('-');
         });
 
         $('#confirmarExclusao').on('click', function() {
-            console.log(coordenadorId)
             if (coordenadorId) {
                 $.ajax({
                     type: 'POST',
@@ -199,6 +199,7 @@
                         if (response.success) {
                             $(`tr[data-id="${coordenadorId}"]`).remove();
                             $('#Excluir').modal('hide');
+                            location.reload();
                         } else {
                             alert("Erro ao excluir coordenador.");
                         }
@@ -212,14 +213,17 @@
             }
         });
 
-        $('.btn-detalhar').on('click', function() {
-            let coordenadorId = $(this).data('id');  
-            
+        $('.btn-detalhar').on('click', function() {            
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_coordenador/${coordenadorId}/`, 
+                url: `/detalhar_coordenador/${coordenadorId}/?curso=${cursoId}`, 
                 success: function(response) {
-                    console.log('a');
                     $('#detalheCurso').text(response.curso);
                     $('#detalheNome').text(response.nome);
                     $('#detalheEmail').text(response.email);
@@ -238,13 +242,10 @@
 
 
         $('.btn-editar').on('click', function() {
-            let coordenadorId = $(this).data('id');
-
             $.ajax({
                 type: 'GET',
-                url: `/editar_coordenador/${coordenadorId}/`,  
+                url: `/editar_coordenador/${coordenadorId}/?curso=${cursoId}`,  
                 success: function(response) {
-                    
                     $('#editarNome').val(response.nome);
                     $('#editarEmail').val(response.email);
                     $('#editarTelefone').val(response.telefone);
@@ -259,7 +260,7 @@
                         $('#editarCurso').append(option);
                     });
 
-                    $('#Editar').data('id', coordenadorId);
+                    $('#Editar').data('id', `${coordenadorId}-${cursoId}`);
                     $('#Editar').modal('show');
                 },
                 error: function() {
@@ -270,7 +271,6 @@
 
 
         $('#salvarEdicao').on('click', function() {
-            let coordenadorId = $('#Editar').data('id');
             let formData = {
                 nome: $('#editarNome').val(),
                 curso: $('#editarCurso').val(),
@@ -282,7 +282,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_coordenador/${coordenadorId}/`,
+                url: `/editar_coordenador/${coordenadorId}/?curso=${cursoId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

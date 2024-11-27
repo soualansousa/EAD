@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor
+from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm
 
 
@@ -314,27 +314,36 @@ def mediadores_lista(request):
     make_mediador = MediadorForm(request.POST)
     search_mediador = SearchForm(request.GET)
     query = request.GET.get('query')
-    mediadores = Mediador.objects.all()
+    mediacoes = Mediacao.objects.select_related('mediador', 'curso_polos').all()
 
     query = request.GET.get('query', '')
     if query == 'none':
         query = ''  # Corrige o valor se for "none"
 
-
     if query:
-        mediadores = mediadores.filter(
-        Q(situacao__icontains=query) |
-        Q(edicao__icontains=query) |
-        Q(publicacao__icontains=query) |
-        Q(nome__icontains=query) |
-        Q(telefone__icontains=query) |
-        Q(email__icontains=query)
+        mediacoes = mediacoes.filter(
+        Q(mediador__situacao__icontains=query) |
+        Q(mediador__edicao__icontains=query) |
+        Q(mediador__publicacao__icontains=query) |
+        Q(mediador__nome__icontains=query) |
+        Q(mediador__telefone__icontains=query) |
+        Q(mediador__email__icontains=query)
         )
     
+    mediacoes_paginada = Paginator(mediacoes, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = mediacoes_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = mediacoes_paginada.page(1)
+    except EmptyPage:
+        pagina = mediacoes_paginada.page(1)
+
+
     context = {
         'make_mediador': make_mediador,
         'search_mediador': search_mediador,
-        'mediadores': mediadores,
+        'mediacoes': pagina,
         'query': query,
     }
 
@@ -401,10 +410,14 @@ def editar_mediador(request, mediador_id):
     }
     return JsonResponse(dados)
 
-def excluir_mediador(request, coordenador_id):
+def excluir_mediador(request, mediador_id):
     if request.method == 'POST':
-        mediador = get_object_or_404(Mediador, id=mediador_id)
-        mediador.delete()
+        curso_polos_id = request.GET.get("curso")
+        if not curso_polos_id:
+            return JsonResponse({"success": False, "message": "ID do CursoPolo não fornecido."})
+        
+        mediacao = get_object_or_404(Mediacao, mediador_id=mediador_id, curso_polos_id=curso_polos_id)
+        mediacao.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 

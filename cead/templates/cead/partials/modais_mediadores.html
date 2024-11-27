@@ -185,21 +185,23 @@
         });
         
         $('.button_icon').on('click', function() {
-            mediadorId = $(this).data('id');
+            dataId = $(this).data('id');
+            [mediadorId, cursoPolosId] = dataId.split('-');
         });
 
         $('#confirmarExclusao').on('click', function() {
-            if (mediadorId) {
+            if (mediadorId && cursoPolosId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_mediador/${mediadorId}/`, 
+                    url: `/excluir_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function(response) {
                         if (response.success) {
-                            $(`tr[data-id="${mediadorId}"]`).remove();
+                            $(`tr[data-id="${mediadorId}-${cursoPolosId}"]`).remove();
                             $('#Excluir').modal('hide');
+                            location.reload();
                         } else {
                             alert("Erro ao excluir mediador.");
                         }

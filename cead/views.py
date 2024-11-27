@@ -261,7 +261,16 @@ def criar_coordenador(request):
 
 
 def detalhar_coordenador(request, coordenador_id):
-    coordenador_cursos = get_object_or_404(CoordenadorCurso, id=coordenador_id)
+    curso_id = request.GET.get('curso')
+    
+    try:
+        coordenador_cursos = CoordenadorCurso.objects.select_related('coordenador', 'curso').get(
+            coordenador_id=coordenador_id,
+            curso_id=curso_id
+        )
+    except NoticiaCurso.DoesNotExist:
+        return JsonResponse({'error': 'Notícia ou curso não encontrados.'}, status=404)
+
     dados = {
         'curso': coordenador_cursos.curso.nome,
         'nome': coordenador_cursos.coordenador.nome,
@@ -274,17 +283,14 @@ def detalhar_coordenador(request, coordenador_id):
     }
     return JsonResponse(dados)
 
-import logging
-logger = logging.getLogger(__name__)
-
 def editar_coordenador(request, coordenador_id):
-    coordenador_curso = CoordenadorCurso.objects.filter(id=coordenador_id).first()
-    coordenador = get_object_or_404(Coordenador, id=coordenador_id)
+    curso_id = request.GET.get('curso')
+    coordenador_curso = CoordenadorCurso.objects.filter(coordenador_id=coordenador_id, curso_id=curso_id).first()
 
     if request.method == 'POST':
-        form = CoordenadorForm(request.POST, instance=coordenador, coordenador_curso=coordenador_curso)
+        form = CoordenadorForm(request.POST, instance=coordenador_curso.coordenador, coordenador_curso=coordenador_curso)
         if form.is_valid():
-            form.save()
+            coordenador_form = form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
 
@@ -292,9 +298,9 @@ def editar_coordenador(request, coordenador_id):
     curso_relacionado = coordenador_curso.curso.id if coordenador_curso else None
 
     dados = {
-        'nome': coordenador.nome,
-        'email': coordenador.email,
-        'telefone': coordenador.telefone,
+        'nome': coordenador_curso.coordenador.nome,
+        'email': coordenador_curso.coordenador.email,
+        'telefone': coordenador_curso.coordenador.telefone,
         'saida': coordenador_curso.saida.strftime('%Y-%m-%d') if coordenador_curso and coordenador_curso.saida else "",
         'curso': curso_relacionado,
         'cursos': list(cursos),

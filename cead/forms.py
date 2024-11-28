@@ -2,7 +2,7 @@ from django import forms
 
 from .models import Noticia, Polo, Coordenador, Curso, Mediador, Gestor
 
-from .models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao
+from .models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, GestorPolos
 
 
 class SearchForm(forms.Form):
@@ -47,7 +47,7 @@ class PoloForm(forms.ModelForm):
 
     gestor = forms.ModelChoiceField(
         queryset=Gestor.objects.all(),
-        required=False,
+        required=True,
         label="Gestor",
         widget=forms.Select(attrs={'class': 'form-control'})
     )

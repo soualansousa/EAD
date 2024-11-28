@@ -150,7 +150,6 @@ class Gestor(models.Model):
         return self.nome
 
 class Polo(models.Model):
-    gestor = models.ForeignKey(Gestor, on_delete=models.CASCADE)
     cidade = models.CharField(max_length=100)
     longitude = models.FloatField()
     latitude = models.FloatField()

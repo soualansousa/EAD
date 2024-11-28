@@ -170,55 +170,60 @@ def criar_polo(request):
     if request.method == 'POST':
         form = PoloForm(request.POST)
         if form.is_valid():
-            polo = form.save(commit=False)
-            polo.gestor = form.cleaned_data.get('gestor') 
-            polo.save()
+            form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = PoloForm()
-        gestores = Gestor.objects.all()
-        return render(request, 'modais_polo.html', {'form': form, 'gestores': gestores})
+        return render(request, 'modais_polo.html', {'form': form})
 
 
 def excluir_polo(request, polo_id):
+    from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import GestorPolos
+
+def excluir_polo(request, polo_id):
     if request.method == 'POST':
-        polo = get_object_or_404(Polo, id=polo_id)
-        polo.delete()
+        gestor_id = request.POST.get("gestor")  
+        if not gestor_id:
+            return JsonResponse({"success": False, "message": "ID do Gestor não fornecido."})
+        gestor_polos = get_object_or_404(GestorPolos, polo_id=polo_id, gestor_id=gestor_id)
+        gestor_polos.delete() 
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
+
 def detalhar_polo(request, polo_id):
-    polo = get_object_or_404(Polo, id=polo_id)
-    gestor_polos = GestorPolos.objects.filter(polo=polo).first()
+    gestor_id = request.GET.get('gestor')
+
+    try:
+        gestor_polos = GestorPolos.objects.select_related('polo', 'gestor').get(
+            gestor_id=gestor_id,
+            polo_id=polo_id
+        )
+    except GestorPolos.DoesNotExist:
+        return JsonResponse({'error': 'Polo ou gestor não encontrados.'}, status=404)
 
     dados = {
-        'cidade': polo.cidade,
-        'latitude': polo.latitude,
-        'longitude': polo.longitude,
+        'cidade': gestor_polos.polo.cidade,
+        'latitude': gestor_polos.polo.latitude,
+        'longitude': gestor_polos.polo.longitude,
         'gestor': gestor_polos.gestor.nome if gestor_polos.gestor.nome else "Coordenador não informado",
-        'publicacao':polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Data não disponível",
-        'edicao': polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Não editado",
+        'situacao': gestor_polos.situacao,
+        'publicacao':gestor_polos.polo.publicacao.strftime('%d/%m/%Y') if gestor_polos.polo.publicacao else "Data não disponível",
+        'edicao': gestor_polos.polo.publicacao.strftime('%d/%m/%Y') if gestor_polos.polo.publicacao else "Não editado",
+        'saida': gestor_polos.saida.strftime('%d/%m/%Y') if gestor_polos.saida else "Data não disponível",
     }
     return JsonResponse(dados)
 
 
 def editar_polo(request, polo_id):
-    polo = get_object_or_404(Polo, id=polo_id)
-    gestor_polos = GestorPolos.objects.filter(polo=polo).first()
+    gestor_id = request.GET.get("gestor")
+    gestor_polos = GestorPolos.objects.filter(polo_id=polo_id, gestor_id=gestor_id).first()
 
     if request.method == 'POST':
-        logger.debug(f"Dados POST recebidos: {request.POST}")
-        
-        form_data = {
-            'cidade': request.POST.get('cidade'),
-            'latitude': request.POST.get('latitude'),
-            'longitude': request.POST.get('longitude'),
-            'gestor': request.POST.get('gestor')
-        }
-
-        
-        form = PoloForm(request.POST, instance=polo)
+        form = PoloForm(request.POST, instance=gestor_polos.polo, gestor_polos=gestor_polos)
         if form.is_valid():
             form.save()
             return JsonResponse({'success': True})
@@ -226,13 +231,13 @@ def editar_polo(request, polo_id):
     
     
     gestores = Gestor.objects.all().values('id', 'nome')
-    gestor_id = gestor_polos.gestor.id if gestor_polos else None
+    gestor_relacionado = gestor_polos.gestor.id if gestor_polos else None
 
     dados = {
-        'cidade': polo.cidade,
-        'latitude': polo.latitude,
-        'longitude': polo.longitude,
-        'gestor': gestor_id,
+        'cidade': gestor_polos.polo.cidade,
+        'latitude': gestor_polos.polo.latitude,
+        'longitude': gestor_polos.polo.longitude,
+        'gestor': gestor_relacionado,
         'gestores': list(gestores)
     }
     return JsonResponse(dados)

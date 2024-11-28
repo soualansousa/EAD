@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Noticia, NoticiaCurso, Curso, Polo, Coordenador, Documentos, Disciplina, Perguntas, Contato, Mediador, CursoPolo, Cead, CoordenadorCurso, Mediacao, GestorPolo
+from .models import Noticia, NoticiaCurso, Curso, Polo, Coordenador, Documentos, Disciplina, Perguntas, Contato, Mediador, CursoPolo, Cead, CoordenadorCurso, Mediacao, GestorPolos
 
 
 admin.site.register(Noticia),

@@ -109,7 +109,7 @@ class MediadorForm(forms.ModelForm):
 
     curso_polos = forms.ModelChoiceField(
         queryset=CursoPolo.objects.all(),
-        required=False,
+        required=True,
         label="Curso - Polo",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
@@ -126,7 +126,11 @@ class MediadorForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.mediacao = kwargs.pop('mediacao', None)
+        curso_polos_id = kwargs.pop('curso_polos_id', None)
         super().__init__(*args, **kwargs)
+
+        if curso_polos_id:
+            self.fields['curso_polos'].initial = CursoPolo.objects.get(id=curso_polos_id)
 
         if self.mediacao:
             self.fields['saida'].initial = self.mediacao.saida

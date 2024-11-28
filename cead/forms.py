@@ -44,12 +44,52 @@ class NoticiaForm(forms.ModelForm):
         return instance
 
 class PoloForm(forms.ModelForm):
+
     gestor = forms.ModelChoiceField(
         queryset=Gestor.objects.all(),
         required=False,
         label="Gestor",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+    saida = forms.DateField(
+        required=False,
+        label="Data de Saída",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Polo
+        fields = ['cidade', 'longitude', 'latitude']
+
+    def __init__(self, *args, **kwargs):
+        self.gestor_polos = kwargs.pop('gestor_polos', None)
+        super().__init__(*args, **kwargs)
+
+        if self.gestor_polos:
+            self.fields['saida'].initial = self.gestor_polos.saida
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if commit:
+            instance.save()
+
+        gestor = self.cleaned_data.get('gestor')
+        saida = self.cleaned_data.get('saida')
+
+        if self.gestor_polos:
+            self.gestor_polos.gestor = gestor
+            self.gestor_polos.saida = saida
+            self.gestor_polos.save()
+        else:
+            GestorPolos.objects.create(
+                polo=instance,
+                gestor=gestor,
+                saida=saida,
+            )
+
+        return instance
 
 class CoordenadorForm(forms.ModelForm):
     curso = forms.ModelChoiceField(

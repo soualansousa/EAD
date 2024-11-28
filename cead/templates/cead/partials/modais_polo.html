@@ -70,7 +70,7 @@
                 <div class="modal_info">
                     <h5>Gestor</h5>
                     <div class="modal_info_descricao">
-                        <p id="detalheGestorr"></p>
+                        <p id="detalheGestor"></p>
                     </div>
                 </div>
                 <div class="modal_info">
@@ -126,7 +126,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="editarGestor" class="form-label">Gestor</label>
-                        <select type="text" class="form-control" id="editarGestor" name="coordenador">
+                        <select class="form-select" class="form-control" id="editarGestor" name="gestor">
                         </select>
                     </div>
                     <div class="mb-3">
@@ -201,12 +201,12 @@
 
         $('.btn-detalhar').on('click', function() {
             let poloId = $(this).data('id');  
-            
+            console.log(poloId);
+    
             $.ajax({
                 type: 'GET',
                 url: `/detalhar_polo/${poloId}/`, 
                 success: function(response) {
-                    console.log('a');
                     $('#detalheCidade').text(response.cidade);
                     $('#detalheGestor').text(response.gestor);
                     $('#detalheLatitude').text(response.latitude);
@@ -223,36 +223,51 @@
 
 
 
+
         $('.btn-editar').on('click', function() {
-            let poloId = $(this).data('id');
-            $.ajax({
-                type: 'GET',
-                url: `/editar_polo/${poloId}/`,
-                success: function(response) {
-                    $('#editarCidade').val(response.cidade);
-                    $('#editarLatitude').val(response.latitude);
-                    $('#editarLongitude').val(response.longitude);
+    let poloId = $(this).data('id');
 
-                    $('#editarGestor').empty();
-                    response.gestores.forEach(function(gestor) {
-                        let option = $('<option></option>').val(gestor.id).text(gestor.nome);
-                        if (gestor.id === response.gestor) {
-                            option.prop('selected', true);
-                        }
-                        $('#editarGestor').append(option);
-                    });
+    if(!poloId){
+        alert("ID do polo não encontrado.");
+        return; 
+    }
+    $.ajax({
+        type: 'GET',
+        url: `/editar_polo/${poloId}/`,
+        success: function(response) {
+            // Preencher os campos do formulário com os dados
+            $('#editarCidade').val(response.cidade);
+            $('#editarLatitude').val(response.latitude);
+            $('#editarLongitude').val(response.longitude);
 
-                    $('#Editar').data('id', poloId);
-                    $('#Editar').modal('show');
-                },
-                error: function() {
-                    alert("Erro ao carregar dados do polo.");
+            // Preencher o campo de seleção de gestores
+            $('#editarGestor').empty();  // Limpar opções anteriores
+            response.gestores.forEach(function(gestor) {
+                let option = $('<option></option>').val(gestor.id).text(gestor.nome);
+                // Se o gestor for o atual, marcar como selecionado
+                if (gestor.id === response.gestor) {
+                    option.prop('selected', true);
                 }
+                $('#editarGestor').append(option);  // Adicionar a opção
             });
-        });
+
+            // Exibir o modal
+            $('#Editar').data('id', poloId);
+            $('#Editar').modal('show');
+        },
+        error: function() {
+            alert("Erro ao carregar dados do polo.");
+        }
+    });
+});
+
 
 
         $('#salvarEdicao').on('click', function() {
+            console.log("ID do Polo enviado:", poloId);
+            console.log("Dados enviados para o servidor:", formData);
+
+
             let poloId = $('#Editar').data('id');
             let formData = {
                 cidade: $('#editarCidade').val(),

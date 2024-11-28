@@ -132,8 +132,25 @@ class NoticiaCurso(models.Model):
     def __str__(self):
         return f"{self.noticia.titulo} - {self.curso.nome}"
 
+class Gestor(models.Model):
+    SITUACAO_CHOICES = [
+        ('ATIVO', 'Ativo'),
+        ('INATIVO', 'Inativo'),
+      
+        ]
+    nome = models.CharField(max_length=150)
+    email = models.EmailField(max_length=100, default="email@exemplo.com")
+    telefone = models.IntegerField(default="7499999999")
+    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
+    publicacao = models.DateField(auto_now_add=True)
+    edicao = models.DateField(auto_now=True)
+    formacao = models.TextField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
 class Polo(models.Model):
-    coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE)
+    gestor = models.ForeignKey(Gestor, on_delete=models.CASCADE)
     cidade = models.CharField(max_length=100)
     longitude = models.FloatField()
     latitude = models.FloatField()
@@ -182,33 +199,15 @@ class Mediacao(models.Model):
     def __str__(self):
         return f"{self.mediador.nome} - {self.curso_polos}"
 
-class Gestor(models.Model):
-    SITUACAO_CHOICES = [
-        ('ATIVO', 'Ativo'),
-        ('INATIVO', 'Inativo'),
-      
-        ]
-    nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.IntegerField(default="7499999999")
-    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
-    publicacao = models.DateField(auto_now_add=True)
-    edicao = models.DateField(auto_now=True)
-    formacao = models.TextField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
 class GestorPolos(models.Model):
     gestor = models.ForeignKey(Gestor, on_delete=models.CASCADE, related_name="gestor_polos")
     polo = models.ForeignKey(Polo, on_delete=models.CASCADE, related_name="gestor_polos")
-    publicacao = models.DateField(auto_now_add=True)
-    edicao = models.DateField(auto_now=True)
+    entrada = models.DateField(auto_now_add=True)
+    saida = models.DateField(blank=True, null=True)
     
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['gestor', 'polo'], name='unique_gestor_polo')
-        ]
+    @property
+    def situacao(self):
+        return 'Ativo' if not self.saida else 'Inativo'
 
     def __str__(self):
         return f"{self.gestor.nome} - {self.polo.cidade}"

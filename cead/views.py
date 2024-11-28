@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import logging 
+
+
 
 
 from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
@@ -128,37 +131,55 @@ def polos_lista(request):
     make_polo = PoloForm(request.POST)
     search_polo = SearchForm(request.GET)
     query = request.GET.get('query', '').strip()
-    
-    polos_gestores = GestorPolos.objects.select_related('polo', 'gestor').order_by('polo__cidade')
+
+    gestor_polos = GestorPolos.objects.select_related('polo', 'gestor').order_by('polo__cidade')
     
     if query.lower() == 'none':
         query = '' 
 
     if query:
-        polos_gestores = polos_gestores.filter(
+        gestor_polos = gestor_polos.filter(
             Q(polo__cidade__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
         )
-    
+
+    gestor_polos_paginada = Paginator(gestor_polos, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = gestor_polos_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = gestor_polos_paginada.page(1)
+    except EmptyPage:
+        pagina = gestor_polos_paginada.page(1)
+
     context = {
         'make_polo': make_polo,
         'search_polo': search_polo,
-        'polos_gestores': polos_gestores,
+        'gestor_polos': pagina,
         'query': query,
     }
 
+    logger = logging.getLogger(__name__)
+
+    logger.debug(f"Dados recebidos no POST: {request.POST}")
+
     return render(request, 'cead/pages/polos.html', context)
+
 
 
 def criar_polo(request):
     if request.method == 'POST':
         form = PoloForm(request.POST)
         if form.is_valid():
-            form.save()
+            polo = form.save(commit=False)
+            polo.gestor = form.cleaned_data.get('gestor') 
+            polo.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = PoloForm()
-    return render(request, 'modais_polo.html', {'form': form})
+        gestores = Gestor.objects.all()
+        return render(request, 'modais_polo.html', {'form': form, 'gestores': gestores})
+
 
 def excluir_polo(request, polo_id):
     if request.method == 'POST':
@@ -168,44 +189,55 @@ def excluir_polo(request, polo_id):
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
 def detalhar_polo(request, polo_id):
-    polos_gestores = get_object_or_404(GestorPolos, id=polo_id)
-    dados = {
-        'cidade': polos_gestores.polo.cidade,
-        'latitude': polos_gestores.polo.latitude,
-        'longitude': polos_gestores.polo.longitude,
-        'gestor': polos_gestores.gestor.nome if polos_gestores.gestor.nome else "Coordenador não informado",
-        'publicacao': polos_gestores.polo.publicacao.strftime('%d/%m/%Y') if  polos_gestores.polo.publicacao else "Data não disponível",
-        'edicao': polos_gestores.polo.publicacao.strftime('%d/%m/%Y') if  polos_gestores.polo.publicacao else "Não editado",
-    }
-    return JsonResponse(dados)
-
-    import logging
-    logger = logging.getLogger(__name__)
-
-def editar_polo(request, polo_id):
     polo = get_object_or_404(Polo, id=polo_id)
-    polos_gestores = GestorPolos.objects.filter(polo=polo).first()
-    
-    if request.method == 'POST':
-        logger.debug(f"Dados POST recebidos: {request.POST}")
-        form = PoloForm(request.POST, instance=polo, polos_gestores=polos_gestores)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'errors': form.errors})
-    
-    gestor = Gestor.objects.all().values('id', 'nome')
-    gestor_relacionamento = polos_gestores.gestor.id if polos_gestores else None
+    gestor_polos = GestorPolos.objects.filter(polo=polo).first()
 
     dados = {
         'cidade': polo.cidade,
         'latitude': polo.latitude,
         'longitude': polo.longitude,
-        'gestor': gestor_relacionamento
-        
-       
+        'gestor': gestor_polos.gestor.nome if gestor_polos.gestor.nome else "Coordenador não informado",
+        'publicacao':polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Data não disponível",
+        'edicao': polo.publicacao.strftime('%d/%m/%Y') if polo.publicacao else "Não editado",
     }
     return JsonResponse(dados)
+
+
+def editar_polo(request, polo_id):
+    polo = get_object_or_404(Polo, id=polo_id)
+    gestor_polos = GestorPolos.objects.filter(polo=polo).first()
+
+    if request.method == 'POST':
+        logger.debug(f"Dados POST recebidos: {request.POST}")
+        
+        form_data = {
+            'cidade': request.POST.get('cidade'),
+            'latitude': request.POST.get('latitude'),
+            'longitude': request.POST.get('longitude'),
+            'gestor': request.POST.get('gestor')
+        }
+
+        
+        form = PoloForm(request.POST, instance=polo)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+    
+    gestores = Gestor.objects.all().values('id', 'nome')
+    gestor_id = gestor_polos.gestor.id if gestor_polos else None
+
+    dados = {
+        'cidade': polo.cidade,
+        'latitude': polo.latitude,
+        'longitude': polo.longitude,
+        'gestor': gestor_id,
+        'gestores': list(gestores)
+    }
+    return JsonResponse(dados)
+
+
 
 # coordenador
 

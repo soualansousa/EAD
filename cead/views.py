@@ -11,7 +11,7 @@ import logging
 
 
 
-from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor
+from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm
 
 
@@ -300,8 +300,8 @@ def detalhar_coordenador(request, coordenador_id):
             coordenador_id=coordenador_id,
             curso_id=curso_id
         )
-    except NoticiaCurso.DoesNotExist:
-        return JsonResponse({'error': 'Notícia ou curso não encontrados.'}, status=404)
+    except CoordenadorCurso.DoesNotExist:
+        return JsonResponse({'error': 'Coordenador ou curso não encontrados.'}, status=404)
 
     dados = {
         'curso': coordenador_cursos.curso.nome,
@@ -353,27 +353,36 @@ def mediadores_lista(request):
     make_mediador = MediadorForm(request.POST)
     search_mediador = SearchForm(request.GET)
     query = request.GET.get('query')
-    mediadores = Mediador.objects.all()
+    mediacoes = Mediacao.objects.select_related('mediador', 'curso_polos').all()
 
     query = request.GET.get('query', '')
     if query == 'none':
         query = ''  # Corrige o valor se for "none"
 
-
     if query:
-        mediadores = mediadores.filter(
-        Q(situacao__icontains=query) |
-        Q(edicao__icontains=query) |
-        Q(publicacao__icontains=query) |
-        Q(nome__icontains=query) |
-        Q(telefone__icontains=query) |
-        Q(email__icontains=query)
+        mediacoes = mediacoes.filter(
+        Q(mediador__situacao__icontains=query) |
+        Q(mediador__edicao__icontains=query) |
+        Q(mediador__publicacao__icontains=query) |
+        Q(mediador__nome__icontains=query) |
+        Q(mediador__telefone__icontains=query) |
+        Q(mediador__email__icontains=query)
         )
     
+    mediacoes_paginada = Paginator(mediacoes, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = mediacoes_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = mediacoes_paginada.page(1)
+    except EmptyPage:
+        pagina = mediacoes_paginada.page(1)
+
+
     context = {
         'make_mediador': make_mediador,
         'search_mediador': search_mediador,
-        'mediadores': mediadores,
+        'mediacoes': pagina,
         'query': query,
     }
 
@@ -393,57 +402,66 @@ def criar_mediador(request):
 
 
 def detalhar_mediador(request, mediador_id):
-    mediador = get_object_or_404(Mediador, id=mediador_id)
+    if request.method == "GET":
+        curso_polos_id = request.GET.get("curso")
+        if not curso_polos_id:
+            return JsonResponse({"success": False, "message": "ID do CursoPolo não fornecido."})
+
+        mediacao = get_object_or_404(Mediacao, mediador_id=mediador_id, curso_polos_id=curso_polos_id)
+        
     dados = {
-        'cursoPolo': mediador.curso_polo,
-        'nome': mediador.nome,
-        'email': mediador.email,
-        'telefone': mediador.telefone,
-        'formacao': mediador.formacao,
-        'situacao': "Ativo" if mediador.situacao else "Inativo",
-        'publicacao': mediador.publicacao.strftime('%d/%m/%Y') if mediador.publicacao else "Data não disponível",
-        'edicao': mediador.edicao.strftime('%d/%m/%Y') if mediador.edicao else "Não editado",
+        'curso_polo': f"{mediacao.curso_polos.curso.nome} - {mediacao.curso_polos.polo.cidade}",
+        'nome': mediacao.mediador.nome,
+        'email': mediacao.mediador.email,
+        'telefone': mediacao.mediador.telefone,
+        'formacao': mediacao.mediador.formacao,
+        'modalidade': mediacao.modalidade,
+        'situacao': mediacao.situacao,
+        'publicacao': mediacao.mediador.publicacao.strftime('%d/%m/%Y') if mediacao.mediador.publicacao else "Data não disponível",
+        'edicao': mediacao.mediador.edicao.strftime('%d/%m/%Y') if mediacao.mediador.edicao else "Não editado",
+        'saida': mediacao.saida.strftime('%d/%m/%Y') if mediacao.saida else "Data não disponível",
     }
     return JsonResponse(dados)
- 
 
 def editar_mediador(request, mediador_id):
-    mediador = get_object_or_404(Mediador, id=mediador_id)
+    curso_polos_id = request.GET.get("curso")
+    mediacao = Mediacao.objects.filter(mediador_id=mediador_id, curso_polos_id=curso_polos_id).first()
     
+    if not mediacao:
+        return JsonResponse({'success': False, 'message': 'Mediacao não encontrada.'}, status=404)
+
     if request.method == 'POST':
-       
-        mediador.situacao = request.POST.get('situacao')
-        mediador.curso_polo = request.POST.get('nome')
-        mediador.nome = request.POST.get('nome')
-        mediador.email = request.POST.get('email')
-        mediador.telefone = request.POST.get('telefone')
-        mediador.formacao = request.POST.get('formacao')
-
-        mediador.save()
-
-
-            
-        return JsonResponse({'success': True})
+        form = MediadorForm(request.POST, instance=mediacao.mediador, mediacao=mediacao, curso_polos_id=curso_polos_id)
+        if form.is_valid():
+            mediacao_form = form.save()
+            return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
-    
-   
+
+    curso_polos = CursoPolo.objects.all()
 
     dados = {
-        'nome': mediador.nome,
-        'email': mediador.email,
-        'telefone': mediador.telefone,
-        'formacao': mediador.formacao,
-        'situacao': mediador.situacao,
-        'publicacao': mediador.publicacao.strftime('%d/%m/%Y') if mediador.publicacao else "Data não disponível",
-        'edicao': mediador.edicao.strftime('%d/%m/%Y') if mediador.edicao else "Não editado",
-        
+        'nome': mediacao.mediador.nome,
+        'email': mediacao.mediador.email,
+        'telefone': mediacao.mediador.telefone,
+        'formacao': mediacao.mediador.formacao,
+        'modalidade': mediacao.modalidade,
+        'saida': mediacao.saida.strftime('%Y-%m-%d') if mediacao and mediacao.saida else "",
+        'curso_polos': [
+            {'id': cp.id, 'nome': f"{cp.curso.nome} - {cp.polo.cidade}"}
+            for cp in curso_polos
+        ],
+        'curso_polos_selecionado': curso_polos_id,
     }
     return JsonResponse(dados)
 
-def excluir_mediador(request, coordenador_id):
+def excluir_mediador(request, mediador_id):
     if request.method == 'POST':
-        mediador = get_object_or_404(Mediador, id=mediador_id)
-        mediador.delete()
+        curso_polos_id = request.GET.get("curso")
+        if not curso_polos_id:
+            return JsonResponse({"success": False, "message": "ID do CursoPolo não fornecido."})
+        
+        mediacao = get_object_or_404(Mediacao, mediador_id=mediador_id, curso_polos_id=curso_polos_id)
+        mediacao.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 

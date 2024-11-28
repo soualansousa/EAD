@@ -153,24 +153,34 @@ class CursoPolo(models.Model):
         return f"{self.curso.nome} - {self.polo.cidade}"
 
 class Mediador(models.Model):
-    curso_polo = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="mediadores")
-    SITUACAO_CHOICES = [
-        ('ATIVO', 'Ativo'),
-        ('INATIVO', 'Inativo'),
-      
-        ]
     nome = models.CharField(max_length=150)
     email = models.EmailField(max_length=100, default="email@exemplo.com")
     telefone = models.CharField(max_length=11, default="7499999999")
     formacao = models.TextField(max_length=255)
-    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.nome
 
+class Mediacao(models.Model):
+    MODALIDADE_CHOICES = [
+        ('PRESENCIAL', 'Presencial'),
+        ('VIRTUAL', 'Virtual'),
+      
+        ]
+    mediador = models.ForeignKey(Mediador, on_delete=models.CASCADE, related_name="Mediacao")
+    curso_polos = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="Mediacao")
+    modalidade = models.CharField(max_length=10, choices=MODALIDADE_CHOICES, default="VIRTUAL")
+    entrada = models.DateField(auto_now_add=True)
+    saida = models.DateField(blank=True, null=True)
+    
+    @property
+    def situacao(self):
+        return 'Ativo' if not self.saida else 'Inativo'
 
+    def __str__(self):
+        return f"{self.mediador.nome} - {self.curso_polos}"
 
 class Gestor(models.Model):
     SITUACAO_CHOICES = [

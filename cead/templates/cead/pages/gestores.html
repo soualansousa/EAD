@@ -42,28 +42,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for gestor in gestores %}
-                        <tr class="text-center table_body" data-id="{{ mediador.id }}">
-                            <!-- <td>{{ mediador.curso_polo }}</td> -->
-                            <td>{{ gestor.nome }}</td>
-                            <td>{{ gestor.email }}</td>
-                            <td>{{ gestor.telefone }}</td>
-                            <!-- <td>{{ gestor.formacao }}</td>
-                            <td>{{ gestor.get_situacao_display }}</td>
-                            <td>{{ gestor.publicacao|date:"d/m/Y" }}</td>
-                            <td>{{ gestor.edicao|date:"d/m/Y" }}</td> -->
+                    {% for gestor_polo in gestor_polos %}
+                        <tr class="text-center table_body">
+                           
+                            <td>{{ gestor_polo.gestor.nome }}</td>
+                            <td>{{ gestor_polo.gestor.email }}</td>
+                            <td>{{ gestor_polo.gestor.telefone }}</td>
+                           
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ gestor.id }}">
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ gestor_polo.gestor.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor.id }}">
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor_polo.gestor.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor_polo.gestor.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>
@@ -79,6 +76,44 @@
                 </tbody>
               </table>
         </div>
+
+        <nav aria-label="Page navigation"></nav>
+            <ul class="pagination justify-content-center">
+            {% if gestor_polos.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?status={{ status }}&p=1">&laquo;</a>
+                    </li>
+                    <li class="page-item"> 
+                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.previous_page_number }}">Anterior</a>
+                    </li>
+            {% else  %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">&laquo;</a>
+                    </li>
+                    <li class="page-item disabled"> 
+                        <a class="page-link" href="#">Anterior</a>
+                    </li>
+            {% endif %}
+                    <li class="page-item">
+                        <a class="page-link">{{gestor_polos.number}}</a>
+                    </li>
+            {% if gestor_polos.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.next_page_number }}">Próxima</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.paginator.num_pages }}">&raquo;</a>
+                    </li>
+            {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="">Próxima</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">&raquo;</a>
+                    </li>
+            {% endif %}
+            </ul>
+        </nav>
 
         {% include "cead/partials/modais_gestores.html" %}
     </main>

@@ -540,7 +540,7 @@ def gestores_lista(request):
     make_gestor = GestorForm(request.POST)
     search_gestor = SearchForm(request.GET)
     query = request.GET.get('query')
-    gestores = Gestor.objects.all().order_by('situacao', 'nome')
+    gestor_polos = GestorPolos.objects.all()
 
 
     query = request.GET.get('query', '')
@@ -557,11 +557,20 @@ def gestores_lista(request):
         Q(telefone__icontains=query) |
         Q(email__icontains=query)
         )
+
+    gestores_paginada = Paginator(gestor_polos, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = gestores_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = gestores_paginada.page(1)
+    except EmptyPage:
+        pagina = gestores_paginada.page(1)
     
     context = {
         'make_gestor': make_gestor,
         'search_gestor': search_gestor,
-        'gestores': gestores,
+        'gestor_polos': pagina,
         'query': query,
     }
 
@@ -580,48 +589,42 @@ def criar_gestor(request):
 
 
 def detalhar_gestor(request, gestor_id):
-    gestor = get_object_or_404(Gestor, id=gestor_id)
+    gestor_polos = get_object_or_404(GestorPolos, id=gestor_id)
     dados = {
         
-        'nome': gestor.nome,
-        'email': gestor.email,
-        'telefone': gestor.telefone,
-        'formacao': gestor.formacao,
-        'situacao': "Ativo" if gestor.situacao else "Inativo",
-        'publicacao': gestor.publicacao.strftime('%d/%m/%Y') if gestor.publicacao else "Data não disponível",
-        'edicao': gestor.edicao.strftime('%d/%m/%Y') if gestor.edicao else "Não editado",
+        'nome': gestor_polos.gestor.nome,
+        'email': gestor_polos.gestor.email,
+        'telefone': gestor_polos.gestor.telefone,
+        'formacao': gestor_polos.gestor.formacao,
+        'situacao': "Ativo" if gestor_polos.gestor.situacao else "Inativo",
+        'publicacao': gestor_polos.gestor.publicacao.strftime('%d/%m/%Y') if gestor_polos.gestor.publicacao else "Data não disponível",
+        'edicao': gestor_polos.gestor.edicao.strftime('%d/%m/%Y') if gestor_polos.gestor.edicao else "Não editado",
+        'saida': gestor_polos.gestor.saida.strftime('%d/%m/%Y') if gestor_polos.gestor.saida else "Data não disponível",
     }
     return JsonResponse(dados)
  
 
 def editar_gestor(request, gestor_id):
-    gestor = get_object_or_404(Gestor, id=gestor_id)
+    gestor_polos = GestorPolos.objects.filter(gestor_id=gestor_id).first()
+
     
     if request.method == 'POST':
-       
-        gestor.situacao = request.POST.get('situacao')
-        gestor.nome = request.POST.get('nome')
-        gestor.email = request.POST.get('email')
-        gestor.telefone = request.POST.get('telefone')
-        gestor.formacao = request.POST.get('formacao')
-
-        gestor.save()
-
-
-            
-        return JsonResponse({'success': True})
+        form = GestorForm(request.POST, instance=gestor_polos.gestor)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     
    
 
     dados = {
-        'nome': gestor.nome,
-        'email': gestor.email,
-        'telefone': gestor.telefone,
-        'formacao': gestor.formacao,
-        'situacao': gestor.situacao,
-        'publicacao': gestor.publicacao.strftime('%d/%m/%Y') if gestor.publicacao else "Data não disponível",
-        'edicao': gestor.edicao.strftime('%d/%m/%Y') if gestor.edicao else "Não editado",
+        'nome': gestor_polos.gestor.nome,
+        'email': gestor_polos.gestor.email,
+        'telefone': gestor_polos.gestor.telefone,
+        'formacao': gestor_polos.gestor.formacao,
+        'publicacao': gestor_polos.gestor.publicacao.strftime('%d/%m/%Y') if gestor_polos.gestor.publicacao else "Data não disponível",
+        'edicao': gestor_polos.gestor.edicao.strftime('%d/%m/%Y') if gestor_polos.gestor.edicao else "Não editado",
+        'saida': gestor_polos.saida.strftime('%Y-%m-%d') if gestor_polos and gestor_polos.saida else "",
         
     }
     return JsonResponse(dados)

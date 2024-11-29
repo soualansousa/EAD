@@ -79,16 +79,22 @@
                     <p id="detalheFormacao" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
-                    <h5 class="mb-1">Situação</h5>
-                    <p id="detalheSituacao" class="form-control bg-light"></p>
-                </div>
-                <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
                     <p id="detalhePublicacao" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
                     <p id="detalheEdicao" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3"></div>
+                    <h5 class="mb-1">Situação</h5>
+                    <div class="modal_info_descricao">
+                        <p id="detalheSituacao"></p>
+                    </div>
+                
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Saída</h5>
+                    <p id="detalheSaida" class="form-control bg-light"></p>
                 </div>
             </div>
 
@@ -136,11 +142,8 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarSituacao" class="form-label">Situação</label>
-                        <select class="form-select" id="editarSituacao" name="situacao">
-                            <option value="ATIVO">Ativo</option>
-                            <option value="INATIVO">Inativo</option>
-                        </select>
+                        <label for="editarSaida" class="form-label">Data de saída</label>
+                        <input type="date" class="form-control" id="editarSaida" name="saida">
                     </div>
                    
                     <div class="d-flex justify-content-center">
@@ -194,6 +197,7 @@
                     success: function(response) {
                         if (response.success) {
                             $(`tr[data-id="${gestorId}"]`).remove();
+                            location.reload();
                             $('#Excluir').modal('hide');
                         } else {
                             alert("Erro ao excluir gestor.");
@@ -216,14 +220,15 @@
                 url: `/detalhar_gestor/${gestorId}/`, 
                 success: function(response) {
         
-                    // $('#detalheCursoPolo').text(response.curso_polo );
                     $('#detalheNome').text(response.nome);
                     $('#detalheEmail').text(response.email);
                     $('#detalheTelefone').text(response.telefone);
                     $('#detalheFormacao').text(response.formacao);
-                    $('#detalheSituacao').text(response.situacao);
                     $('#detalhePublicacao').text(response.publicacao);
                     $('#detalheEdicao').text(response.edicao);
+                    $('#detalheSituacao').text(response.situacao);
+                    $('#detalheSaida').text(response.saida);
+
                 },
                 error: function(xhr, status, error) {
                     alert("Erro ao carregar detalhes do gestor: " + error);
@@ -232,10 +237,8 @@
         });
 
 
-
         $('.btn-editar').on('click', function() {
-            let gestorId = $(this).data('id');
-            console.log(gestorId);
+           
 
             $.ajax({
                 type: 'GET',
@@ -245,7 +248,7 @@
                     $('#editarEmail').val(response.email);
                     $('#editarTelefone').val(response.telefone);
                     $('#editarFormacao').val(response.formacao);
-                    $('#editarSituacao').val(response.situacao);
+                    $('#editarSaida').val(response.saida);
                     $('#Editar').data('id', gestorId);  
 
                     $('#Editar').modal('show');
@@ -260,13 +263,13 @@
 
 
         $('#salvarEdicao').on('click', function() {
-            let gestorId = $('#Editar').data('id');
             let formData = {
                 nome: $('#editarNome').val(),
                 email: $('#editarEmail').val(),
                 telefone: $('#editarTelefone').val(),
                 formacao: $('#editarFormacao').val(),
-                situacao: $('#editarSituacao').val(),
+                saida: $('#editarSaida').val(),
+                
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
             

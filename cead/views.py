@@ -537,28 +537,21 @@ def detalhar_cursoPolo(request, cursoPolo_id):
 #gestor 
 
 def gestores_lista(request):
-    make_gestor = GestorForm(request.POST)
-    search_gestor = SearchForm(request.GET)
-    query = request.GET.get('query')
-    gestor_polos = GestorPolos.objects.all()
-
-
+    search_gestor = SearchForm(request.GET)  # Formulário de pesquisa
     query = request.GET.get('query', '')
-    if query == 'none':
-        query = ''  
-
-
+    
+    # Buscar gestores, incluindo a lógica de pesquisa
+    gestores = Gestor.objects.all()  # Pega todos os gestores
     if query:
         gestores = gestores.filter(
-        Q(situacao__icontains=query) |
-        Q(edicao__icontains=query) |
-        Q(publicacao__icontains=query) |
-        Q(nome__icontains=query) |
-        Q(telefone__icontains=query) |
-        Q(email__icontains=query)
+            Q(situacao__icontains=query) |
+            Q(nome__icontains=query) |
+            Q(telefone__icontains=query) |
+            Q(email__icontains=query)
         )
 
-    gestores_paginada = Paginator(gestor_polos, 10)
+    # Paginação
+    gestores_paginada = Paginator(gestores, 10)  # Página com 10 gestores por vez
     p = request.GET.get("p")
     try:
         pagina = gestores_paginada.page(p)
@@ -566,11 +559,10 @@ def gestores_lista(request):
         pagina = gestores_paginada.page(1)
     except EmptyPage:
         pagina = gestores_paginada.page(1)
-    
+
     context = {
-        'make_gestor': make_gestor,
         'search_gestor': search_gestor,
-        'gestor_polos': pagina,
+        'gestores': pagina,  # Passando a lista paginada de gestores
         'query': query,
     }
 
@@ -583,9 +575,8 @@ def criar_gestor(request):
             form.save()
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
-    else:
-        form = GestorFormorForm()
-    return render(request, 'modais_gestores.html', {'form': form})
+    return JsonResponse({'success': False, 'errors': 'Método inválido'})
+
 
 
 def detalhar_gestor(request, gestor_id):
@@ -605,18 +596,14 @@ def detalhar_gestor(request, gestor_id):
  
 
 def editar_gestor(request, gestor_id):
-    gestor_polos = GestorPolos.objects.filter(gestor_id=gestor_id).first()
+    try:
+        # Tenta obter o GestorPolos com o ID fornecido
+        gestor_polos = GestorPolos.objects.get(id=gestor_id)
+    except GestorPolos.DoesNotExist:
+        # Caso o GestorPolos não seja encontrado, retorna erro
+        return JsonResponse({'success': False, 'error': 'Gestor não encontrado'})
 
-    
-    if request.method == 'POST':
-        form = GestorForm(request.POST, instance=gestor_polos.gestor)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'errors': form.errors})
-    
-   
-
+    # Caso o gestor seja encontrado, carrega os dados
     dados = {
         'nome': gestor_polos.gestor.nome,
         'email': gestor_polos.gestor.email,
@@ -624,10 +611,11 @@ def editar_gestor(request, gestor_id):
         'formacao': gestor_polos.gestor.formacao,
         'publicacao': gestor_polos.gestor.publicacao.strftime('%d/%m/%Y') if gestor_polos.gestor.publicacao else "Data não disponível",
         'edicao': gestor_polos.gestor.edicao.strftime('%d/%m/%Y') if gestor_polos.gestor.edicao else "Não editado",
-        'saida': gestor_polos.saida.strftime('%Y-%m-%d') if gestor_polos and gestor_polos.saida else "",
-        
+        'saida': gestor_polos.saida.strftime('%Y-%m-%d') if gestor_polos.saida else "",
     }
+
     return JsonResponse(dados)
+
 
 def excluir_gestor(request, gestor_id):
     if request.method == 'POST':

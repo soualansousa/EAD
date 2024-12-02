@@ -42,25 +42,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for gestor_polo in gestor_polos %}
+                    {% for gestor in gestores %}
                         <tr class="text-center table_body">
                            
-                            <td>{{ gestor_polo.gestor.nome }}</td>
-                            <td>{{ gestor_polo.gestor.email }}</td>
-                            <td>{{ gestor_polo.gestor.telefone }}</td>
+                            <td>{{ gestor.nome }}</td>
+                            <td>{{ gestor.email }}</td>
+                            <td>{{ gestor.telefone }}</td>
                            
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ gestor.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>
@@ -79,12 +79,12 @@
 
         <nav aria-label="Page navigation"></nav>
             <ul class="pagination justify-content-center">
-            {% if gestor_polos.has_previous %}
+            {% if gestores.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?status={{ status }}&p=1">&laquo;</a>
                     </li>
                     <li class="page-item"> 
-                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.previous_page_number }}">Anterior</a>
+                        <a class="page-link" href="?status={{ status }}&p={{ gestores.previous_page_number }}">Anterior</a>
                     </li>
             {% else  %}
                     <li class="page-item disabled">
@@ -95,14 +95,14 @@
                     </li>
             {% endif %}
                     <li class="page-item">
-                        <a class="page-link">{{gestor_polos.number}}</a>
+                        <a class="page-link">{{gestores.number}}</a>
                     </li>
-            {% if gestor_polos.has_next %}
+            {% if gestores.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.next_page_number }}">Próxima</a>
+                        <a class="page-link" href="?status={{ status }}&p={{ gestores.next_page_number }}">Próxima</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.paginator.num_pages }}">&raquo;</a>
+                        <a class="page-link" href="?status={{ status }}&p={{ gestores.paginator.num_pages }}">&raquo;</a>
                     </li>
             {% else %}
                     <li class="page-item disabled">

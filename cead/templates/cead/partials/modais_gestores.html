@@ -12,7 +12,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formCriarGestor" method="post" action="{% url 'cead:gestor_lista' %}">
+                <form id="formCriarGestor" method="post" action="{% url 'cead:criar_gestor' %}">
+
                     {% csrf_token %}
                     
                     <div class="input">
@@ -164,9 +165,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
     $(document).ready(function() {
+        // Configuração global do CSRF Token
+        $.ajaxSetup({
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+        });
+
+        // Envio do formulário via AJAX
         $('#formCriarGestor').on('submit', function(e) {
             e.preventDefault();
+            
             $.ajax({
                 type: 'POST',
                 url: "{% url 'cead:criar_gestor' %}",
@@ -176,15 +185,22 @@
                         alert("Gestor criado com sucesso!");
                         location.reload();
                     } else {
-                        alert("Erro ao criar gestor: " + JSON.stringify(response.errors));
+                        let errorMessage = 'Erro ao criar gestor: \n';
+                        for (let key in response.errors) {
+                            errorMessage += `${key}: ${response.errors[key].join(', ')}\n`;
+                        }
+                        alert(errorMessage);
                     }
                 }
             });
         });
         
+        // Armazenar o ID do gestor nos botões de ação
         $('.button_icon').on('click', function() {
             gestorId = $(this).data('id');
         });
+    });
+
 
         $('#confirmarExclusao').on('click', function() {
             if (gestorId) {
@@ -212,86 +228,118 @@
             }
         });
 
-        $('.btn-detalhar').on('click', function() {
-            let gestorId = $(this).data('id');  
-            
-            $.ajax({
-                type: 'GET',
-                url: `/detalhar_gestor/${gestorId}/`, 
-                success: function(response) {
-        
-                    $('#detalheNome').text(response.nome);
-                    $('#detalheEmail').text(response.email);
-                    $('#detalheTelefone').text(response.telefone);
-                    $('#detalheFormacao').text(response.formacao);
-                    $('#detalhePublicacao').text(response.publicacao);
-                    $('#detalheEdicao').text(response.edicao);
-                    $('#detalheSituacao').text(response.situacao);
-                    $('#detalheSaida').text(response.saida);
+//         $('.btn-editar').on('click', function() {
+//     let gestorId = $(this).data('id'); 
+//     console.log(gestorId)
+//     $.ajax({
+//         type: 'GET',
+//         url: `/editar_gestor/${gestorId}/`,  // Passa o gestorId para o backend
+//         success: function(response) {
+//             $('#editarNome').val(response.nome);
+//             $('#editarEmail').val(response.email);
+//             $('#editarTelefone').val(response.telefone);
+//             $('#editarFormacao').val(response.formacao);
+//             $('#editarSaida').val(response.saida);
+//             $('#Editar').data('id', gestorId);  // Armazena o ID do gestor no modal
+//             $('#Editar').modal('show');
+//         },
+//         error: function() {
+//             alert("Erro ao carregar dados do gestor.");
+//         }
+//     });
+// });
 
-                },
-                error: function(xhr, status, error) {
-                    alert("Erro ao carregar detalhes do gestor: " + error);
-                }
-            });
-        });
+// $('#salvarEdicao').on('click', function() {
+//     let gestorId = $('#Editar').data('id');  // Recupera o ID do gestor armazenado no modal
+//     let formData = {
+//         nome: $('#editarNome').val(),
+//         email: $('#editarEmail').val(),
+//         telefone: $('#editarTelefone').val(),
+//         formacao: $('#editarFormacao').val(),
+//         saida: $('#editarSaida').val(),
+//         csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+//     };
 
+//     $.ajax({
+//         type: 'POST',
+//         url: `/editar_gestor/${gestorId}/`,  // Envia a requisição POST com o ID do gestor
+//         data: formData,
+//         success: function(response) {
+//             if (response.success) {
+//                 alert("Gestor atualizado com sucesso!");
+//                 location.reload();
+//             } else {
+//                 alert("Erro ao atualizar gestor: " + JSON.stringify(response.errors));
+//             }
+//         },
+//         error: function() {
+//             alert("Erro ao salvar as mudanças.");
+//         }
+//     });
+// });
 
-        $('.btn-editar').on('click', function() {
-           
-
-            $.ajax({
-                type: 'GET',
-                url: `/editar_gestor/${gestorId}/`,  
-                success: function(response) {
-                    $('#editarNome').val(response.nome);
-                    $('#editarEmail').val(response.email);
-                    $('#editarTelefone').val(response.telefone);
-                    $('#editarFormacao').val(response.formacao);
-                    $('#editarSaida').val(response.saida);
-                    $('#Editar').data('id', gestorId);  
-
-                    $('#Editar').modal('show');
-                },
-                error: function() {
-                    alert("Erro ao carregar dados do gestor.");
-                }
-            });
-        });
-
-
-
-
-        $('#salvarEdicao').on('click', function() {
-            let formData = {
-                nome: $('#editarNome').val(),
-                email: $('#editarEmail').val(),
-                telefone: $('#editarTelefone').val(),
-                formacao: $('#editarFormacao').val(),
-                saida: $('#editarSaida').val(),
-                
-                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-            };
-            
-
-            $.ajax({
-                type: 'POST',
-                url: `/editar_gestor/${gestorId}/`,
-                data: formData,
-                success: function(response) {
-                    if (response.success) {
-                        alert("Gestor atualizado com sucesso!");
-                        location.reload();
-                    } else {
-                        alert("Erro ao atualizar gestor: " + JSON.stringify(response.errors));
-                    }
-                },
-                error: function() {
-                    alert("Erro ao salvar as mudanças.");
-                }
-            });
-        });
+$('.btn-editar').on('click', function() {
+    let gestorId = $(this).data('id');
+    console.log(gestorId);  // Verifica o gestorId no console
+    $.ajax({
+        type: 'GET',
+        url: `/editar_gestor/${gestorId}/`,  // Passa o gestorId para o backend
+        success: function(response) {
+            console.log(response);  // Verificando a resposta do backend
+            if (response.nome && response.email && response.telefone) {
+                $('#editarNome').val(response.nome);
+                $('#editarEmail').val(response.email);
+                $('#editarTelefone').val(response.telefone);
+                $('#editarFormacao').val(response.formacao);
+                $('#editarSaida').val(response.saida);
+                $('#Editar').data('id', gestorId);  // Armazena o ID do gestor no modal
+                $('#Editar').modal('show');
+            } else {
+                alert("Dados do gestor não encontrados.");
+            }
+        },
+        error: function() {
+            alert("Erro ao carregar dados do gestor.");
+        }
     });
+});
+
+
+$('#salvarEdicao').on('click', function() {
+    let gestorId = $('#Editar').data('id');  // Recupera o ID do gestor armazenado no modal
+    let formData = {
+        nome: $('#editarNome').val(),
+        email: $('#editarEmail').val(),
+        telefone: $('#editarTelefone').val(),
+        formacao: $('#editarFormacao').val(),
+        saida: $('#editarSaida').val(),
+        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+    };
+
+    console.log(formData); // Verificando os dados antes de enviar para o backend
+
+    $.ajax({
+        type: 'POST',
+        url: `/editar_gestor/${gestorId}/`,  // Envia a requisição POST com o ID do gestor
+        data: formData,
+        success: function(response) {
+            console.log(response); // Verifica a resposta recebida do servidor
+
+            if (response.success) {
+                alert("Gestor atualizado com sucesso!");
+                location.reload();
+            } else {
+                // Logando os erros de validação
+                console.log(response.errors);
+                alert("Erro ao atualizar gestor: " + JSON.stringify(response.errors));
+            }
+        },
+        error: function() {
+            alert("Erro ao salvar as mudanças.");
+        }
+    });
+});
+
 
 
     $('#salvarEdicao').on('click', function() {

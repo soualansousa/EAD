@@ -7,22 +7,20 @@
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock style %}
 
-{% block title %} Informações | {{ cursos.nome }} {% endblock title %}
+{% block title %} Informações | {{ coordenador_cursos.0.curso.nome }} {% endblock title %}
 
 {% block content %}
     
     <main>
-        <h1 class="container d-flex justify-content-center mt-3">{{ cursos.nome }}</h1>
+        <h1 class="container d-flex justify-content-center mt-3">{{ coordenador_cursos.0.curso.nome }}</h1>
+        <p class="container d-flex justify-content-center mt-3">{{ coordenador_cursos.0.curso.sobre }}</p>
 
         <div class="container_coordenador">
             <h4 class="text-center mt-3">Coordenador:</h4>
-            {% for coordenador in coordenadores %}
+            {% for coordenador_curso in coordenador_cursos %}
                 <div class="text-center">
-                    <h5>{{ coordenador.nome }}</h5>
+                    <h5>{{ coordenador_curso.coordenador.nome }}</h5>
                 </div>
-                <tr class="text-center table_body">
-                    <td>{{ curso_polo.polo.cidade }}</td>
-                </tr>
             {% empty %}
                     <td class="text-center">Este curso não possui nenhum coordenador.</td>
             {% endfor %}

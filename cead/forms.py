@@ -94,7 +94,7 @@ class PoloForm(forms.ModelForm):
 class CoordenadorForm(forms.ModelForm):
     curso = forms.ModelChoiceField(
         queryset=Curso.objects.all(),
-        required=False,
+        required=True,
         label="Curso",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
@@ -138,9 +138,21 @@ class CoordenadorForm(forms.ModelForm):
         return instance
 
 class CursoForm(forms.ModelForm):
+    coordenador = forms.ModelChoiceField(
+        queryset=Coordenador.objects.all(),
+        required=False,
+        label="Coordenador",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = Curso
-        fields = ['coordenador', 'nome', 'sobre',]
+        fields = ['nome', 'sobre',]
+
+class CoordenadorCursoForm(forms.ModelForm):
+    class Meta:
+        model = CoordenadorCurso
+        fields = ['coordenador', 'curso', 'saida']
 
 class MediadorForm(forms.ModelForm):
     modalidade = forms.ChoiceField(

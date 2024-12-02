@@ -27,11 +27,31 @@
     </div>
 </div>
 
-<div id="menuLateral" class="menu-lateral">
-    <span class="close-btn">&times;</span>
-    <h2>Detalhes do Curso</h2>
-    <p><strong>Nome:</strong> <span id="detalheNome"></span></p>
-    <p><strong>Descrição:</strong> <span id="detalheDescricao"></span></p>
+<!-- Vincular -->
+<div class="modal fade" id="modalVincular" tabindex="-1" aria-labelledby="modalVincularLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalVincularLabel">Curso</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formVincular" method="post" action="{% url 'cead:curso_lista' %}">
+                    {% csrf_token %}
+                    
+                    <div class="input">
+                        {{ sync_curso.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -54,25 +74,23 @@
                 }
             });
         });
-        
-        $('.button_icon').on('click', function() {
-            console.log('opa');
-            cursoId = $(this).data('id');
-            
+
+        $('#formVincular').on('submit', function(e) {
+            console.log('a')
+            e.preventDefault();
             $.ajax({
-                type: 'GET',
-                url: `/detalhar_curso/${cursoId}/`, // Defina a URL para a view que retorna os detalhes do curso
+                type: 'POST',
+                url: "{% url 'cead:criar_curso' %}",
+                data: $(this).serialize(),
                 success: function(response) {
-                    // Preencher o menu com os dados do curso
-                    $('#detalheNome').text(response.nome || "Nome não disponível");
-                    $('#detalheDescricao').text(response.descricao || "Descrição não disponível");    
-                    // Exibir o menu lateral
-                    $('#menuLateral').addClass('open');
-                },
-                error: function() {
-                    alert("Erro ao carregar detalhes do curso.");
+                    if (response.success) {
+                        alert("Curso criado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar curso: " + JSON.stringify(response.errors));
+                    }
                 }
-            })
+            });
         });
 
         $('.close-btn').on('click', function() {

@@ -12,7 +12,7 @@ import logging
 
 
 from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm
 
 
 
@@ -482,21 +482,34 @@ def criar_curso(request):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     
+def vincular_curso(request):
+    if request.method == 'POST':
+        form = CoordenadorCursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
 def curso_lista(request):
     make_curso = CursoForm(request.POST)
+    sync_curso = CoordenadorCursoForm(request.POST)
     search_curso = SearchForm(request.GET)
     query = request.GET.get('query')
-    cursos = Curso.objects.all()
+    coordenador_cursos = CoordenadorCurso.objects.all()
+    cursos_vinculados_ids = coordenador_cursos.values_list('curso_id', flat=True)
+    cursos_nao_vinculados = Curso.objects.exclude(id__in=cursos_vinculados_ids)
 
     if query:
-        cursos = cursos.filter(
-            Q(nome__icontains=query) | Q(sobre__icontains=query)
+        coordenador_cursos = coordenador_cursos.filter(
+            Q(coordenador_cursos__nome__icontains=query) | Q(coordenador_cursos_sobre__icontains=query)
         )
     
     context = {
         'make_curso': make_curso,
+        'sync_curso': sync_curso,
         'search_curso': search_curso,
-        'cursos': cursos,
+        'coordenador_cursos': coordenador_cursos,
+        'cursos_nao_vinculados': cursos_nao_vinculados,
         'query': query,
     }
 
@@ -504,18 +517,18 @@ def curso_lista(request):
 
 def detalhar_curso(request, curso_id):
     cursos = get_object_or_404(Curso, id=curso_id)
-    polos = get_object_or_404(Polo, id=curso_id)
-    noticias = Noticia.objects.filter(curso=cursos)
     curso_polos = CursoPolo.objects.filter(curso=cursos)
-    coordenadores = Coordenador.objects.filter(curso=cursos)
-
-    return render(request, 'cead/pages/detalhes_curso.html', {
+    noticias_cursos = NoticiaCurso.objects.filter(curso=cursos)
+    coordenador_cursos = CoordenadorCurso.objects.filter(curso=cursos)
+    
+    context = {
         'cursos': cursos,
-        'polos': polos,
-        'noticias': noticias,
+        'noticias_cursos': noticias_cursos,
         'curso_polos': curso_polos,
-        'coordenadores': coordenadores,
-    })
+        'coordenador_cursos': coordenador_cursos,
+    }
+
+    return render(request, 'cead/pages/detalhes_curso.html', context)
 
 def excluir_cursoPolo(request, cursoPolo_id):
     if request.method == 'POST':

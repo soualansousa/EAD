@@ -8,13 +8,8 @@ from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import logging 
 
-
-
-
 from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm
-
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -48,11 +43,11 @@ def noticias_lista(request):
 
     query = request.GET.get('query', '')
     if query == 'none':
-        query = ''  # Corrige o valor se for "none"
+        query = ''
 
     if query:
         noticia_cursos = noticia_cursos.filter(
-            Q(curso__nome__icontains=query) | Q(noticia__titulo__icontains=query) | Q(noticia__descricao__icontains=query) | Q(noticia__edicao__icontains=query) | Q(noticia__publicacao__icontains=query)
+            Q(curso__nome__icontains=query) | Q(noticia__titulo__icontains=query) | Q(noticia__descricao__icontains=query)
         )
 
     noticia_cursos_paginada = Paginator(noticia_cursos, 10)
@@ -126,7 +121,6 @@ def editar_noticia(request, noticia_id):
     return JsonResponse(dados)
 
 # polo
-
 def polos_lista(request):
     make_polo = PoloForm(request.POST)
     search_polo = SearchForm(request.GET)
@@ -139,7 +133,7 @@ def polos_lista(request):
 
     if query:
         gestor_polos = gestor_polos.filter(
-            Q(polo__cidade__icontains=query) | Q(edicao__icontains=query) | Q(publicacao__icontains=query)
+            Q(polo__cidade__icontains=query) | Q(gestor__nome__icontains=query)
         )
 
     gestor_polos_paginada = Paginator(gestor_polos, 10)
@@ -158,10 +152,6 @@ def polos_lista(request):
         'query': query,
     }
 
-    logger = logging.getLogger(__name__)
-
-    logger.debug(f"Dados recebidos no POST: {request.POST}")
-
     return render(request, 'cead/pages/polos.html', context)
 
 
@@ -176,12 +166,6 @@ def criar_polo(request):
     else:
         form = PoloForm()
         return render(request, 'modais_polo.html', {'form': form})
-
-
-def excluir_polo(request, polo_id):
-    from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from .models import GestorPolos
 
 def excluir_polo(request, polo_id):
     if request.method == 'POST':
@@ -242,10 +226,7 @@ def editar_polo(request, polo_id):
     }
     return JsonResponse(dados)
 
-
-
 # coordenador
-
 def coordenadores_lista(request):
     make_coordenador = CoordenadorForm(request.POST)
     search_coordenador = SearchForm(request.GET)
@@ -254,16 +235,11 @@ def coordenadores_lista(request):
 
     query = request.GET.get('query', '')
     if query == 'none':
-        query = ''  # Corrige o valor se for "none"
+        query = ''
 
     if query:
         coordenador_cursos = coordenador_cursos.filter(
-        Q(coordenador__situacao__icontains=query) |
-        Q(coordenador__edicao__icontains=query) |
-        Q(coordenador__publicacao__icontains=query) |
-        Q(coordenador__nome__icontains=query) |
-        Q(coordenador__telefone__icontains=query) |
-        Q(coordenador__email__icontains=query)
+        Q(coordenador__nome__icontains=query) | Q(curso__nome__icontains=query) | Q(coordenador__email__icontains=query)
         )
 
     coordenador_cursos_paginada = Paginator(coordenador_cursos, 10)
@@ -284,7 +260,6 @@ def coordenadores_lista(request):
 
     return render(request, 'cead/pages/coordenadores.html', context)
 
-
 def criar_coordenador(request):
     if request.method == 'POST':
         form = CoordenadorForm(request.POST)
@@ -295,7 +270,6 @@ def criar_coordenador(request):
     else:
         form = CoordenadorForm()
     return render(request, 'modais_coordenadores.html', {'form': form})
-
 
 def detalhar_coordenador(request, coordenador_id):
     curso_id = request.GET.get('curso')
@@ -351,9 +325,7 @@ def excluir_coordenador(request, coordenador_id):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
-
 # mediador
-
 def mediadores_lista(request):
     make_mediador = MediadorForm(request.POST)
     search_mediador = SearchForm(request.GET)
@@ -362,16 +334,11 @@ def mediadores_lista(request):
 
     query = request.GET.get('query', '')
     if query == 'none':
-        query = ''  # Corrige o valor se for "none"
+        query = ''
 
     if query:
         mediacoes = mediacoes.filter(
-        Q(mediador__situacao__icontains=query) |
-        Q(mediador__edicao__icontains=query) |
-        Q(mediador__publicacao__icontains=query) |
-        Q(mediador__nome__icontains=query) |
-        Q(mediador__telefone__icontains=query) |
-        Q(mediador__email__icontains=query)
+        Q(mediador__nome__icontains=query)
         )
     
     mediacoes_paginada = Paginator(mediacoes, 10)
@@ -383,7 +350,6 @@ def mediadores_lista(request):
     except EmptyPage:
         pagina = mediacoes_paginada.page(1)
 
-
     context = {
         'make_mediador': make_mediador,
         'search_mediador': search_mediador,
@@ -392,7 +358,6 @@ def mediadores_lista(request):
     }
 
     return render(request, 'cead/pages/mediadores.html', context)
-
 
 def criar_mediador(request):
     if request.method == 'POST':
@@ -404,7 +369,6 @@ def criar_mediador(request):
     else:
         form = MediadorForm()
     return render(request, 'modais_mediadores.html', {'form': form})
-
 
 def detalhar_mediador(request, mediador_id):
     if request.method == "GET":
@@ -470,10 +434,7 @@ def excluir_mediador(request, mediador_id):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
-
-
 #Curso
-
 def criar_curso(request):
     if request.method == 'POST':
         form = CursoForm(request.POST)
@@ -548,7 +509,6 @@ def detalhar_cursoPolo(request, cursoPolo_id):
     return JsonResponse(dados)
 
 #gestor 
-
 def gestores_lista(request):
     search_gestor = SearchForm(request.GET)  # Formulário de pesquisa
     query = request.GET.get('query', '')
@@ -590,8 +550,6 @@ def criar_gestor(request):
         return JsonResponse({'success': False, 'errors': form.errors})
     return JsonResponse({'success': False, 'errors': 'Método inválido'})
 
-
-
 def detalhar_gestor(request, gestor_id):
     gestor_polos = get_object_or_404(GestorPolos, id=gestor_id)
     dados = {
@@ -606,7 +564,6 @@ def detalhar_gestor(request, gestor_id):
         'saida': gestor_polos.gestor.saida.strftime('%d/%m/%Y') if gestor_polos.gestor.saida else "Data não disponível",
     }
     return JsonResponse(dados)
- 
 
 def editar_gestor(request, gestor_id):
     print(f"ID recebido: {gestor_id}")
@@ -631,9 +588,6 @@ def editar_gestor(request, gestor_id):
     }
 
     return JsonResponse(dados)
-
-    
-
 
 def excluir_gestor(request, gestor_id):
     if request.method == 'POST':

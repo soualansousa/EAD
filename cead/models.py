@@ -173,8 +173,8 @@ class Mediacao(models.Model):
         ('VIRTUAL', 'Virtual'),
       
         ]
-    mediador = models.ForeignKey(Mediador, on_delete=models.CASCADE, related_name="Mediacao")
-    curso_polos = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="Mediacao")
+    mediador = models.ForeignKey(Mediador, on_delete=models.CASCADE, related_name="mediacao")
+    curso_polos = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="mediacao")
     modalidade = models.CharField(max_length=10, choices=MODALIDADE_CHOICES, default="VIRTUAL")
     entrada = models.DateField(auto_now_add=True)
     saida = models.DateField(blank=True, null=True)

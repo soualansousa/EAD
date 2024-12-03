@@ -596,14 +596,17 @@ def detalhar_gestor(request, gestor_id):
  
 
 def editar_gestor(request, gestor_id):
+    print(f"ID recebido: {gestor_id}")
+    gestores_existentes = GestorPolos.objects.values_list('gestor__id', flat=True)
+    print(f"IDs de Gestores relacionados em GestorPolos: {list(gestores_existentes)}")
+
     try:
-        # Tenta obter o GestorPolos com o ID fornecido
-        gestor_polos = GestorPolos.objects.get(id=gestor_id)
+        gestor_polos = GestorPolos.objects.get(gestor__id=gestor_id)  # Busca pelo ID do Gestor
     except GestorPolos.DoesNotExist:
-        # Caso o GestorPolos não seja encontrado, retorna erro
+        print(f"Gestor com ID {gestor_id} não encontrado em GestorPolos.")
         return JsonResponse({'success': False, 'error': 'Gestor não encontrado'})
 
-    # Caso o gestor seja encontrado, carrega os dados
+    # Dados encontrados
     dados = {
         'nome': gestor_polos.gestor.nome,
         'email': gestor_polos.gestor.email,
@@ -615,6 +618,8 @@ def editar_gestor(request, gestor_id):
     }
 
     return JsonResponse(dados)
+
+    
 
 
 def excluir_gestor(request, gestor_id):

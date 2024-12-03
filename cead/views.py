@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import logging 
 
 from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -123,6 +123,7 @@ def editar_noticia(request, noticia_id):
 # polo
 def polos_lista(request):
     make_polo = PoloForm(request.POST)
+    sync_curso_polo = CursoPoloForm(request.POST)
     search_polo = SearchForm(request.GET)
     query = request.GET.get('query', '').strip()
 
@@ -147,14 +148,13 @@ def polos_lista(request):
 
     context = {
         'make_polo': make_polo,
+        'sync_curso_polo': sync_curso_polo,
         'search_polo': search_polo,
         'gestor_polos': pagina,
         'query': query,
     }
 
     return render(request, 'cead/pages/polos.html', context)
-
-
 
 def criar_polo(request):
     if request.method == 'POST':
@@ -165,6 +165,17 @@ def criar_polo(request):
         return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = PoloForm()
+        return render(request, 'modais_polo.html', {'form': form})
+    
+def vincular_curso_polo(request):
+    if request.method == 'POST':
+        form = CursoPoloForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = CursoPoloForm()
         return render(request, 'modais_polo.html', {'form': form})
 
 def excluir_polo(request, polo_id):
@@ -328,6 +339,7 @@ def excluir_coordenador(request, coordenador_id):
 # mediador
 def mediadores_lista(request):
     make_mediador = MediadorForm(request.POST)
+    sync_mediacao = MediacaoForm(request.POST)
     search_mediador = SearchForm(request.GET)
     query = request.GET.get('query')
     mediacoes = Mediacao.objects.select_related('mediador', 'curso_polos').all()
@@ -352,6 +364,7 @@ def mediadores_lista(request):
 
     context = {
         'make_mediador': make_mediador,
+        'sync_mediacao': sync_mediacao,
         'search_mediador': search_mediador,
         'mediacoes': pagina,
         'query': query,
@@ -368,6 +381,17 @@ def criar_mediador(request):
         return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = MediadorForm()
+    return render(request, 'modais_mediadores.html', {'form': form})
+
+def mediacao(request):
+    if request.method == 'POST':
+        form = MediacaoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = MediacaoForm()
     return render(request, 'modais_mediadores.html', {'form': form})
 
 def detalhar_mediador(request, mediador_id):

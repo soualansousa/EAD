@@ -154,6 +154,16 @@ class CoordenadorCursoForm(forms.ModelForm):
         model = CoordenadorCurso
         fields = ['coordenador', 'curso', 'saida']
 
+class CursoPoloForm(forms.ModelForm):
+    class Meta:
+        model = CursoPolo
+        fields = ['curso', 'polo']
+
+class MediacaoForm(forms.ModelForm):
+    class Meta:
+        model = Mediacao
+        fields = ['mediador', 'curso_polos', 'modalidade', 'saida']
+
 class MediadorForm(forms.ModelForm):
     modalidade = forms.ChoiceField(
         choices=Mediacao.MODALIDADE_CHOICES,
@@ -246,5 +256,4 @@ class GestorForm(forms.ModelForm):
             self.gestor.saida = saida
             self.gestor.save()
 
-        return instance        
-    
+        return instance

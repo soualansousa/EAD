@@ -80,7 +80,7 @@
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'cead:criar_curso' %}",
+                url: "{% url 'cead:vincular_curso' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {

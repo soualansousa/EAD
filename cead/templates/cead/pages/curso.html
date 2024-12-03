@@ -47,7 +47,7 @@
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <a href="{% url 'cead:detalhar_curso' coordenador_curso.curso.id %}">
                                         <button class="button_icon btn-more" data-id="{{ coordenador_curso.curso.id }}">
-                                            <img src="{% static 'images/icons/more.svg' %}" alt="More"></img>
+                                            <img src="{% static 'images/icons/visibility.svg' %}" alt="More"></img>
                                         </button>
                                     </a>
                                 </div>
@@ -71,7 +71,7 @@
                     <tr class="text-center table_header">
                         <th>Curso</th>
                         <th>Sobre</th>
-                        <th>Ação</th>
+                        <th>Vincular um</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,11 +80,22 @@
                         <tr class="text-center table_body">
                             <td>{{ curso.nome }}</td>
                             <td>{{ curso.sobre }}</td>
-                            <td>
+                            <td class="actions">
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-more" data-id="{{ curso.id }}" data-bs-toggle="modal" data-bs-target="#modalVincular">
-                                        <img src="{% static 'images/icons/more.svg' %}" alt="More"></img>
-                                    </button>
+                                    <li class="dropdown item-table">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                            <img src="{% static 'images/icons/more.svg' %}" alt="More"></img>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{% url 'cead:coordenador_lista' %}">Coordenador novo</a>
+                                            </li>
+                                            {% comment %} <li>
+                                                <a class="dropdown-item btn-more button_icon"  data-id="{{ curso.id }}" data-bs-toggle="modal" data-bs-target="#modalVincular" href="#">Coordenador existente</a>
+                                            </li> {% endcomment %}
+                                        </ul>
+                                    </li> 
+                                    
                                 </div>
                                 
                             </td>

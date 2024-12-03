@@ -12,110 +12,153 @@
 {% block content %}
     
     <main>
-        <h1 class="container d-flex justify-content-center mt-3">{{ coordenador_cursos.0.curso.nome }}</h1>
-        <p class="container d-flex justify-content-center mt-3">{{ coordenador_cursos.0.curso.sobre }}</p>
+        <h1 class="container d-flex justify-content-center mt-3">Informações | {{ coordenador_cursos.0.curso.nome }}</h1>
 
-        <div class="container_coordenador">
-            <h4 class="text-center mt-3">Coordenador:</h4>
-            {% for coordenador_curso in coordenador_cursos %}
-                <div class="text-center">
-                    <h5>{{ coordenador_curso.coordenador.nome }}</h5>
-                </div>
-            {% empty %}
-                    <td class="text-center">Este curso não possui nenhum coordenador.</td>
-            {% endfor %}
+        <div class="table-responsive mx-4 mt-3 container-noticia">
+            <h3 class="text-center">Notícias</h3>
+            <table class="table table-hover mt-3 table_rounded">
+                <thead>
+                    <tr class="text-center table_header">
+                        <th>Curso</th>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Arquivo</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for noticia_curso in noticia_cursos %}
+                        <tr class="text-center table_body">
+                            <td>{{ noticia_curso.curso.nome }}</td>
+                            <td>{{ noticia_curso.noticia.titulo }}</td>
+                            <td>{{ noticia_curso.noticia.descricao }}</td>
+                            <td>{{ noticia_curso.noticia.arquivo }}</td>
+                            <td>
+                                <div class="icons_action d-flex justify-content-center gap-2">
+                                    <button class="button_icon btn-editar" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}" data-bs-target="#Editar">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
+                                    </button>
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" 
+                                    data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
+                                        <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
+                                    </button>
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
+                                        <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">Nenhuma notícia encontrada.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
-        <div class="container_polo">
-            <div class="table-responsive mx-4">
-                <table class="table table-hover mt-3 table_rounded">
-                    <thead>
-                        <tr class="text-center table_header">
-                            <th>Polo</th>
-                            <th>Publicação</th>
-                            <th>Edição</th>
-                            <th>Ação</th>
+        <div class="table-responsive mx-4 mt-1 container-coo">
+            <h3 class="text-center">Coordenador</h3>
+            <table class="table table-hover mt-3 table_rounded">
+                <thead>
+                    <tr class="text-center table_header">
+                        <th>Nome</th>
+                        <th>Curso</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Situação</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for coordenador_curso in coordenador_cursos %}
+                        <tr class="text-center table_body">
+                            <td>{{ coordenador_curso.coordenador.nome }}</td>
+                            <td>{{ coordenador_curso.curso.nome }}</td>
+                            <td>{{ coordenador_curso.coordenador.email }}</td>
+                            <td>{{ coordenador_curso.coordenador.telefone }}</td>
+                            <td>{{ coordenador_curso.situacao }}</td>
+                            <td>
+                                <div class="icons_action d-flex justify-content-center gap-2">
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ coordenador_curso.coordenador.id }}-{{ coordenador_curso.curso.id }}">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
+                                    </button>
+    
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ coordenador_curso.coordenador.id }}-{{ coordenador_curso.curso.id }}">
+                                        <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
+                                    </button>
+                                    
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ coordenador_curso.coordenador.id }}-{{ coordenador_curso.curso.id }}">
+                                        <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
+                                    </button>
+                                </div>
+                                
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for curso_polo in curso_polos %}
-                            <tr class="text-center table_body">
-                                <td>{{ curso_polo.polo.cidade }}</td>
-                                <td>{{ curso_polo.polo.publicacao |date:"d/m/Y" }}</td>
-                                <td>{{ curso_polo.polo.edicao |date:"d/m/Y" }}</td>
-                                <td>
-                                    <div class="icons_action d-flex justify-content-center gap-2">
-                                        <button class="button_icon btn-editar" data-id="{{ curso_polo.id }}" data-bs-target="#EditarCursoPolo">
-                                            <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
-                                        </button>
-                                        <button class="button_icon btn-detalhar btn-detalhar-cursoPolo" data-id="{{ curso_polo.id }}" id="DetalharCursoPolo" data-bs-toggle="modal" data-bs-target="#DetalharCursoPolo">
-                                            <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
-                                        </button>
-                                        <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirCursoPolo" data-id="{{ curso_polo.id }}">
-                                            <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td class="text-center" colspan="7">Este curso ainda não está relacionado a nenhum polo.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">Nenhum coordenador encontrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
-        <div class="container_noticia">
-            <h4 class="text-center mt-3">Notícias</h4>
-            <div class="table-responsive mx-4">
-                <table class="table table-hover mt-3 table_rounded">
-                    <thead>
-                        <tr class="text-center table_header">
-                            <th>Curso</th>
-                            <th>Título</th>
-                            <th>Descrição</th>
-                            <th>Publicação</th>
-                            <th>Edição</th>
-                            <th>Ação</th>
+        <div class="table-responsive mx-4 mt-1 container-mediadores">
+            <h3 class="text-center">Mediadores</h3>
+            <table class="table table-hover mt-3 table_rounded">
+                <thead>
+                    <tr class="text-center table_header">
+                        <th>Curso Polo</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Situação</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mediacao in mediacoes  %}
+                        <tr class="text-center table_body">
+                            <td>{{ mediacao.curso_polos.curso.nome }} - {{ mediacao.curso_polos.polo.cidade }}</td>
+                            <td>{{ mediacao.mediador.nome }}</td>
+                            <td>{{ mediacao.mediador.email }}</td>
+                            <td>{{ mediacao.mediador.telefone }}</td>
+                            <td>{{ mediacao.situacao }}</td>
+                            <td>
+                                <div class="icons_action d-flex justify-content-center gap-2">
+                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
+                                    </button>
+
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
+                                        <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
+                                    </button>
+                                    
+
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
+                                        <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
+                                    </button>
+                                </div>
+                                
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for noticia in noticias %}
-                            <tr class="text-center table_body" data-id="{{ noticia.id }}">
-                                <td>{{ noticia.curso }}</td>
-                                <td>{{ noticia.titulo }}</td>
-                                <td>{{ noticia.descricao }}</td>
-                                <td>{{ noticia.publicacao|date:"d/m/Y" }}</td>
-                                <td>{{ noticia.edicao|date:"d/m/Y" }}</td>
-                                <td>
-                                    <div class="icons_action d-flex justify-content-center gap-2">
-                                        <button class="button_icon btn-editar" data-id="{{ noticia.id }}" data-bs-target="#Editar">
-                                            <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
-                                        </button>
-                                        <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" 
-                                        data-id="{{ noticia.id }}">
-                                            <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
-                                        </button>
-                                        <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia.id }}">
-                                            <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">Nenhum mediador encontrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         
-                        {% empty %}
-                            <tr>
-                                <td colspan="6">Nenhuma notícia encontrada.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        {% include "cead/partials/modais_cursoPolo.html" %}
+        {% include "cead/partials/modais_noticia.html" %}
+        {% include "cead/partials/modais_coordenadores.html" %}
+        {% include "cead/partials/modais_mediadores.html" %}
+        
     </main>
 
 {% endblock content %}

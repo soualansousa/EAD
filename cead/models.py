@@ -39,7 +39,7 @@ class Curso(models.Model):
     
 class CoordenadorCurso(models.Model):
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, related_name="coordenador_curso")
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name="coordenador_curso")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name="coordenador_curso", null=True, blank=True)
     entrada = models.DateField(auto_now_add=True)
     saida = models.DateField(blank=True, null=True)
     

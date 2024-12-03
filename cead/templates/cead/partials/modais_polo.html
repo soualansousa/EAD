@@ -27,6 +27,32 @@
     </div>
 </div>
 
+<!-- Vincular -->
+<div class="modal fade" id="modalVincular" tabindex="-1" aria-labelledby="modalVincularLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalVincularLabel">Curso - Polo</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formVincular" method="post" action="{% url 'cead:polo_lista' %}">
+                    {% csrf_token %}
+                    <div class="input">
+                        {{ sync_curso_polo.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Excluir -->
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
@@ -173,6 +199,23 @@
             $.ajax({
                 type: 'POST',
                 url: "{% url 'cead:criar_polo' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Polo criado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar polo: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+
+        $('#formVincular').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:vincular_polo' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {

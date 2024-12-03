@@ -16,10 +16,6 @@ urlpatterns = [
     path('excluir_gestor/<int:gestor_id>/', views.excluir_gestor, name='excluir_gestor'),
     path('detalhar_gestor/<int:gestor_id>/', views.detalhar_gestor, name='detalhar_gestor'),
     path('editar_gestor/<int:gestor_id>/', views.editar_gestor, name='editar_gestor'),
-    
-    
-
-   
 
 #notícias
     path('noticias/',views.noticias_lista, name="noticia_lista"),
@@ -31,10 +27,10 @@ urlpatterns = [
 #polos
     path('polos/',views.polos_lista, name="polo_lista"),
     path('criar_polo/', views.criar_polo, name='criar_polo'),
+    path('vincular_polo/', views.vincular_curso_polo, name='vincular_polo'),
     path('excluir_polo/<int:polo_id>/', views.excluir_polo, name='excluir_polo'),
     path('detalhar_polo/<int:polo_id>/', views.detalhar_polo, name='detalhar_polo'),
     path('editar_polo/<int:polo_id>/', views.editar_polo, name='editar_polo'),
-
 
 #coordenadores
     path('coordenadores/',views.coordenadores_lista, name="coordenador_lista"),
@@ -46,6 +42,7 @@ urlpatterns = [
 #mediadores
     path('mediadores/',views.mediadores_lista, name="mediador_lista"),
     path('criar_mediador/', views.criar_mediador, name='criar_mediador'),
+    path('vincular_mediador/', views.mediacao, name='vincular_mediador'),
     path('excluir_mediador/<int:mediador_id>/', views.excluir_mediador, name='excluir_mediador'),
     path('detalhar_mediador/<int:mediador_id>/', views.detalhar_mediador, name='detalhar_mediador'),
     path('editar_mediador/<int:mediador_id>/', views.editar_mediador, name='editar_mediador'),

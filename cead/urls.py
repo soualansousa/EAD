@@ -35,6 +35,7 @@ urlpatterns = [
 #coordenadores
     path('coordenadores/',views.coordenadores_lista, name="coordenador_lista"),
     path('criar_coordenador/', views.criar_coordenador, name='criar_coordenador'),
+    path('vincular_coordenador/', views.vincular_curso_coordenador, name='vincular_coordenador'),
     path('excluir_coordenador/<int:coordenador_id>/', views.excluir_coordenador, name='excluir_coordenador'),
     path('detalhar_coordenador/<int:coordenador_id>/', views.detalhar_coordenador, name='detalhar_coordenador'),
     path('editar_coordenador/<int:coordenador_id>/', views.editar_coordenador, name='editar_coordenador'),

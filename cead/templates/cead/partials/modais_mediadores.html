@@ -235,7 +235,7 @@
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Mediador criado com sucesso!");
+                        alert("Mediador vinculado com sucesso!");
                         location.reload();
                     } else {
                         alert("Erro ao criar mediador: " + JSON.stringify(response.errors));

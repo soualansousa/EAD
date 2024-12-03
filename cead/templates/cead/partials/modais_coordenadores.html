@@ -27,6 +27,32 @@
     </div>
 </div>
 
+<!-- Vincular -->
+<div class="modal fade" id="modalVincular" tabindex="-1" aria-labelledby="modalVincularLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalVincularLabel">Coordenador - Curso</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formVincular" method="post" action="{% url 'cead:coordenador_lista' %}">
+                    {% csrf_token %}
+                    <div class="input">
+                        {{ sync_coordenador.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Excluir -->
 <div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
@@ -181,6 +207,23 @@
                 }
             });
         });
+
+        $('#formVincular').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:vincular_coordenador' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Coordenador vinculado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar coordenador: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
         
         $('.button_icon').on('click', function() {
             dataId = $(this).data('id');
@@ -188,16 +231,16 @@
         });
 
         $('#confirmarExclusao').on('click', function() {
-            if (coordenadorId) {
+            if (coordenadorId && cursoId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_coordenador/${coordenadorId}/`, 
+                    url: `/excluir_coordenador/${coordenadorId}/?curso=${cursoId}`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function(response) {
                         if (response.success) {
-                            $(`tr[data-id="${coordenadorId}"]`).remove();
+                            $(`tr[data-id="${coordenadorId}-${cursoId}"]`).remove();
                             $('#Excluir').modal('hide');
                             location.reload();
                         } else {

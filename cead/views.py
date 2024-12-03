@@ -240,6 +240,7 @@ def editar_polo(request, polo_id):
 # coordenador
 def coordenadores_lista(request):
     make_coordenador = CoordenadorForm(request.POST)
+    sync_coordenador = CoordenadorCursoForm(request.POST)
     search_coordenador = SearchForm(request.GET)
     query = request.GET.get('query')
     coordenador_cursos = CoordenadorCurso.objects.select_related('coordenador', 'curso').all()
@@ -264,6 +265,7 @@ def coordenadores_lista(request):
 
     context = {
         'make_coordenador': make_coordenador,
+        'sync_coordenador': sync_coordenador,
         'search_coordenador': search_coordenador,
         'coordenador_cursos': pagina,
         'query': query,
@@ -280,6 +282,17 @@ def criar_coordenador(request):
         return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = CoordenadorForm()
+    return render(request, 'modais_coordenadores.html', {'form': form})
+
+def vincular_curso_coordenador(request):
+    if request.method == 'POST':
+        form = CoordenadorCursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = CoordenadorCursoForm()
     return render(request, 'modais_coordenadores.html', {'form': form})
 
 def detalhar_coordenador(request, coordenador_id):
@@ -331,8 +344,12 @@ def editar_coordenador(request, coordenador_id):
 
 def excluir_coordenador(request, coordenador_id):
     if request.method == 'POST':
-        coordenador = get_object_or_404(Coordenador, id=coordenador_id)
-        coordenador.delete()
+        curso_id = request.GET.get("curso")
+        if not curso_id:
+            return JsonResponse({"success": False, "message": "ID do Curso não fornecido."})
+        
+        coordenador_cursos = get_object_or_404(CoordenadorCurso, coordenador_id=coordenador_id, curso_id=curso_id)
+        coordenador_cursos.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 

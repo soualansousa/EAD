@@ -219,7 +219,7 @@
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Polo criado com sucesso!");
+                        alert("Polo vinculado com sucesso!");
                         location.reload();
                     } else {
                         alert("Erro ao criar polo: " + JSON.stringify(response.errors));

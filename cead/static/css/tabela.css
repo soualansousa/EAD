@@ -63,6 +63,22 @@ td {
     border-bottom-right-radius: 10px;
 }
 
+.dropdown {
+    list-style: none;
+}
+
+.item-table a::after {
+    display: none;
+}
+
+.actions {
+    overflow: visible;
+}
+
+.dropdown-item:active {
+    background-color: white;
+}
+
 @media (max-width: 650px) {
     .search_input input {
         width: 10rem;

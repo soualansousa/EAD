@@ -347,7 +347,7 @@ def excluir_coordenador(request, coordenador_id):
         curso_id = request.GET.get("curso")
         if not curso_id:
             return JsonResponse({"success": False, "message": "ID do Curso não fornecido."})
-        
+         
         coordenador_cursos = get_object_or_404(CoordenadorCurso, coordenador_id=coordenador_id, curso_id=curso_id)
         coordenador_cursos.delete()
         return JsonResponse({'success': True})

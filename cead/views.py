@@ -520,14 +520,16 @@ def curso_lista(request):
 def detalhar_curso(request, curso_id):
     cursos = get_object_or_404(Curso, id=curso_id)
     curso_polos = CursoPolo.objects.filter(curso=cursos)
-    noticias_cursos = NoticiaCurso.objects.filter(curso=cursos)
+    noticia_cursos = NoticiaCurso.objects.filter(curso=cursos)
     coordenador_cursos = CoordenadorCurso.objects.filter(curso=cursos)
-    
+    mediacoes = Mediacao.objects.filter(curso_polos__curso=cursos)
+
     context = {
         'cursos': cursos,
-        'noticias_cursos': noticias_cursos,
+        'noticia_cursos': noticia_cursos,
         'curso_polos': curso_polos,
         'coordenador_cursos': coordenador_cursos,
+        'mediacoes': mediacoes,
     }
 
     return render(request, 'cead/pages/detalhes_curso.html', context)

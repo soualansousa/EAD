@@ -551,11 +551,11 @@ def detalhar_cursoPolo(request, cursoPolo_id):
 
 #gestor 
 def gestores_lista(request):
-    search_gestor = SearchForm(request.GET)  # Formulário de pesquisa
+    make_gestor = GestorForm(request.GET)
+    search_gestor = SearchForm(request.GET)
     query = request.GET.get('query', '')
     
-    # Buscar gestores, incluindo a lógica de pesquisa
-    gestores = Gestor.objects.all()  # Pega todos os gestores
+    gestores = Gestor.objects.all()
     if query:
         gestores = gestores.filter(
             Q(situacao__icontains=query) |
@@ -564,8 +564,7 @@ def gestores_lista(request):
             Q(email__icontains=query)
         )
 
-    # Paginação
-    gestores_paginada = Paginator(gestores, 10)  # Página com 10 gestores por vez
+    gestores_paginada = Paginator(gestores, 10)
     p = request.GET.get("p")
     try:
         pagina = gestores_paginada.page(p)
@@ -575,8 +574,9 @@ def gestores_lista(request):
         pagina = gestores_paginada.page(1)
 
     context = {
+        'make_gestor': make_gestor,
         'search_gestor': search_gestor,
-        'gestores': pagina,  # Passando a lista paginada de gestores
+        'gestores': pagina,
         'query': query,
     }
 
@@ -592,42 +592,35 @@ def criar_gestor(request):
     return JsonResponse({'success': False, 'errors': 'Método inválido'})
 
 def detalhar_gestor(request, gestor_id):
-    gestor_polos = get_object_or_404(GestorPolos, id=gestor_id)
+    gestores = get_object_or_404(Gestor, id=gestor_id)
     dados = {
-        
-        'nome': gestor_polos.gestor.nome,
-        'email': gestor_polos.gestor.email,
-        'telefone': gestor_polos.gestor.telefone,
-        'formacao': gestor_polos.gestor.formacao,
-        'situacao': "Ativo" if gestor_polos.gestor.situacao else "Inativo",
-        'publicacao': gestor_polos.gestor.publicacao.strftime('%d/%m/%Y') if gestor_polos.gestor.publicacao else "Data não disponível",
-        'edicao': gestor_polos.gestor.edicao.strftime('%d/%m/%Y') if gestor_polos.gestor.edicao else "Não editado",
-        'saida': gestor_polos.gestor.saida.strftime('%d/%m/%Y') if gestor_polos.gestor.saida else "Data não disponível",
+        'nome': gestores.nome,
+        'email': gestores.email,
+        'telefone': gestores.telefone,
+        'formacao': gestores.formacao,
+        'publicacao': gestores.publicacao.strftime('%d/%m/%Y') if gestores.publicacao else "Data não disponível",
+        'edicao': gestores.edicao.strftime('%d/%m/%Y') if gestores.edicao else "Não editado",
     }
     return JsonResponse(dados)
 
 def editar_gestor(request, gestor_id):
-    print(f"ID recebido: {gestor_id}")
-    gestores_existentes = GestorPolos.objects.values_list('gestor__id', flat=True)
-    print(f"IDs de Gestores relacionados em GestorPolos: {list(gestores_existentes)}")
+    gestores = Gestor.objects.filter(id=gestor_id).first()
 
-    try:
-        gestor_polos = GestorPolos.objects.get(gestor__id=gestor_id)  # Busca pelo ID do Gestor
-    except GestorPolos.DoesNotExist:
-        print(f"Gestor com ID {gestor_id} não encontrado em GestorPolos.")
-        return JsonResponse({'success': False, 'error': 'Gestor não encontrado'})
+    if request.method == 'POST':
+        form = GestorForm(request.POST, instance=gestores)
+        if form.is_valid():
+            gestor = form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
 
-    # Dados encontrados
     dados = {
-        'nome': gestor_polos.gestor.nome,
-        'email': gestor_polos.gestor.email,
-        'telefone': gestor_polos.gestor.telefone,
-        'formacao': gestor_polos.gestor.formacao,
-        'publicacao': gestor_polos.gestor.publicacao.strftime('%d/%m/%Y') if gestor_polos.gestor.publicacao else "Data não disponível",
-        'edicao': gestor_polos.gestor.edicao.strftime('%d/%m/%Y') if gestor_polos.gestor.edicao else "Não editado",
-        'saida': gestor_polos.saida.strftime('%Y-%m-%d') if gestor_polos.saida else "",
+        'nome': gestores.nome,
+        'email': gestores.email,
+        'telefone': gestores.telefone,
+        'formacao': gestores.formacao,
+        'publicacao': gestores.publicacao.strftime('%d/%m/%Y') if gestores.publicacao else "Data não disponível",
+        'edicao': gestores.edicao.strftime('%d/%m/%Y') if gestores.edicao else "Não editado",
     }
-
     return JsonResponse(dados)
 
 def excluir_gestor(request, gestor_id):

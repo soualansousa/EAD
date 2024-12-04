@@ -30,37 +30,29 @@
             <table class="table table-hover mt-3 table_rounded">
                 <thead>
                     <tr class="text-center table_header">
-                        <!-- <th>Curso Polo</th> -->
                         <th>Nome</th>
                         <th>E-mail</th>
                         <th>Telefone</th>
-                        <!-- <th>Formação</th>
-                        <th>Situação</th>
-                        <th>Data de Publicação</th>
-                        <th>Data de Edição</th> -->
                         <th>Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for gestor in gestores %}
                         <tr class="text-center table_body">
-                           
                             <td>{{ gestor.nome }}</td>
                             <td>{{ gestor.email }}</td>
                             <td>{{ gestor.telefone }}</td>
-                           
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
                                     <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ gestor.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor_polos.gestor.id }}">
+                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
-                                    
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor_polos.gestor.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>

@@ -282,8 +282,6 @@
             });
         });
 
-
-
         $('.btn-editar').on('click', function() {
             $.ajax({
                 type: 'GET',
@@ -344,10 +342,9 @@
 
     $('#salvarEdicao').on('click', function() {
     let spinner = $(this).find('.spinner-border');
-    spinner.removeClass('d-none'); // Mostrar spinner
-    // Processar salvamento...
+    spinner.removeClass('d-none');
     setTimeout(function() {
-        spinner.addClass('d-none'); // Ocultar spinner após o processamento
-    }, 2000); // Simulação do tempo de processamento
+        spinner.addClass('d-none');
+    }, 2000);
 });
 </script>

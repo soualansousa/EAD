@@ -227,33 +227,19 @@ class MediadorForm(forms.ModelForm):
         return instance
 
 class GestorForm(forms.ModelForm):
-    saida = forms.DateField(
-        required=False,
-        label="Data de Saída",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-    )
-
     class Meta:
         model = Gestor
-        fields = ['nome', 'email', 'telefone', 'formacao', 'situacao']
-
-    def __init__(self, *args, **kwargs):
-        self.gestor = kwargs.pop('gestor', None)
-        super().__init__(*args, **kwargs)
-
-        if self.gestor:
-            self.fields['saida'].initial = self.gestor.saida
-
+        fields = ['nome', 'email', 'telefone', 'formacao']
+    
     def save(self, commit=True):
         instance = super().save(commit=False)
 
         if commit:
             instance.save()
 
-        # Trata o campo 'saida' separadamente
-        saida = self.cleaned_data.get('saida')
-        if self.gestor:
-            self.gestor.saida = saida
-            self.gestor.save()
+        else:
+            Gestor.objects.create(
+                gestores=instance,
+            )
 
         return instance

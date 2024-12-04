@@ -54,7 +54,7 @@
 </div>
 
 <!-- Excluir -->
-<div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+<div class="modal fade" id="ExcluirPolo" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -69,14 +69,14 @@
             </div>
             <div class="modal-footer justify-content-center gap-5">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
+                <button type="button" id="excluir-polo" class="btn btn-danger">Excluir</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Detalhar -->
-<div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+<div class="modal fade" id="DetalharPolo" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -142,7 +142,7 @@
 </div>
 
 <!-- Editar -->
-<div id="Editar" class="modal fade" tabindex="-1">
+<div id="EditarPolo" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -179,7 +179,7 @@
                         <input type="date" class="form-control" id="editarSaida" name="saida">
                     </div>
                     <div class="d-flex justify-content-center">
-                       <button type="button" class="btn btn-primary" id="salvarEdicao">
+                       <button type="button" class="btn btn-primary" id="salvar-polo">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             Salvar
                         </button>
@@ -233,7 +233,7 @@
             [poloId, gestorId] = dataId.split('-');
         });
 
-        $('#confirmarExclusao').on('click', function() {
+        $('#excluir-polo').on('click', function() {
             if (poloId && gestorId) {
                 $.ajax({
                     type: 'POST',
@@ -261,7 +261,7 @@
         });
 
 
-        $('.btn-detalhar').on('click', function() {
+        $('.detalhar-polo').on('click', function() {
             if (!dataId || !dataId.includes('-')) {
                 console.error("Formato inválido para data-id:", dataId);
                 alert("Erro: botão configurado incorretamente.");
@@ -288,14 +288,8 @@
             });
         });
 
-
-
-
-
-    $('.btn-editar').on('click', function() {
+    $('.editar-polo').on('click', function() {
    
-
-    
     $.ajax({
         type: 'GET',
         url: `/editar_polo/${poloId}/?gestor=${gestorId}`,
@@ -312,12 +306,11 @@
                 if (gestor.id === response.gestor) {
                     option.prop('selected', true);
                 }
-                $('#editarGestor').append(option);  // Adicionar a opção
+                $('#editarGestor').append(option);
             });
 
-            // Exibir o modal
-            $('#Editar').data('id', `${poloId}-${gestorId}`);
-            $('#Editar').modal('show');
+            $('#EditarPolo').data('id', `${poloId}-${gestorId}`);
+            $('#EditarPolo').modal('show');
         },
         error: function() {
             alert("Erro ao carregar dados do polo.");
@@ -325,9 +318,7 @@
     });
 });
 
-
-
-        $('#salvarEdicao').on('click', function() {
+        $('#salvar-polo').on('click', function() {
             let formData = {
                 cidade: $('#editarCidade').val(),
                 gestor: $('#editarGestor').val(),
@@ -359,10 +350,9 @@
 
     $('#salvarEdicao').on('click', function() {
     let spinner = $(this).find('.spinner-border');
-    spinner.removeClass('d-none'); // Mostrar spinner
-    // Processar salvamento...
+    spinner.removeClass('d-none'); 
     setTimeout(function() {
-        spinner.addClass('d-none'); // Ocultar spinner após o processamento
-    }, 2000); // Simulação do tempo de processamento
+        spinner.addClass('d-none');
+    }, 2000);
 });
 </script>

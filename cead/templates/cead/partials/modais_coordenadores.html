@@ -54,7 +54,7 @@
 </div>
 
 <!-- Excluir -->
-<div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+<div class="modal fade" id="ExcluirCoordenador" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -69,14 +69,14 @@
             </div>
             <div class="modal-footer justify-content-center gap-5">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
+                <button type="button" id="excluir-coordenador" class="btn btn-danger">Excluir</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Detalhar -->
-<div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+<div class="modal fade" id="DetalharCoordenador" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -141,7 +141,7 @@
 </div>
 
 <!-- Editar -->
-<div id="Editar" class="modal fade" tabindex="-1">
+<div id="EditarCoordenador" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-center position-relative">
@@ -175,7 +175,7 @@
                         <input type="date" class="form-control" id="editarSaida" name="saida">
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary" id="salvarEdicao">
+                        <button type="button" class="btn btn-primary" id="salvar-coordenador">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             Salvar
                         </button>
@@ -230,7 +230,7 @@
             [coordenadorId, cursoId] = dataId.split('-');
         });
 
-        $('#confirmarExclusao').on('click', function() {
+        $('#excluir-coordenador').on('click', function() {
             if (coordenadorId && cursoId) {
                 $.ajax({
                     type: 'POST',
@@ -256,7 +256,7 @@
             }
         });
 
-        $('.btn-detalhar').on('click', function() {            
+        $('.detalhar-coordenador').on('click', function() {            
             if (!dataId || !dataId.includes('-')) {
                 console.error("Formato inválido para data-id:", dataId);
                 alert("Erro: botão configurado incorretamente.");
@@ -282,7 +282,7 @@
             });
         });
 
-        $('.btn-editar').on('click', function() {
+        $('.editar-coordenador').on('click', function() {
             $.ajax({
                 type: 'GET',
                 url: `/editar_coordenador/${coordenadorId}/?curso=${cursoId}`,  
@@ -301,8 +301,8 @@
                         $('#editarCurso').append(option);
                     });
 
-                    $('#Editar').data('id', `${coordenadorId}-${cursoId}`);
-                    $('#Editar').modal('show');
+                    $('#EditarCoordenador').data('id', `${coordenadorId}-${cursoId}`);
+                    $('#EditarCoordenador').modal('show');
                 },
                 error: function() {
                     alert("Erro ao carregar dados do coordenador.");
@@ -311,7 +311,7 @@
         });
 
 
-        $('#salvarEdicao').on('click', function() {
+        $('#salvar-coordenador').on('click', function() {
             let formData = {
                 nome: $('#editarNome').val(),
                 curso: $('#editarCurso').val(),

@@ -87,12 +87,12 @@ def detalhar_noticia(request, noticia_id):
         return JsonResponse({'error': 'Notícia ou curso não encontrados.'}, status=404)
 
     dados = {
-        'titulo': noticia_curso.noticia.titulo,
-        'descricao': noticia_curso.noticia.descricao,
-        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
-        'curso': noticia_curso.curso.nome if noticia_curso.curso else "Curso não informado",
-        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
-        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
+        'titulo': noticia.titulo,
+        'descricao': noticia.descricao,
+        'arquivo': noticia.arquivo,
+        'curso': noticia.curso.nome if noticia.curso else "Curso não informado",
+        'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
+        'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
     }
     return JsonResponse(dados)
 
@@ -110,12 +110,12 @@ def editar_noticia(request, noticia_id):
     cursos = Curso.objects.all().values('id', 'nome')
     curso_relacionado = noticia_curso.curso.id if noticia_curso else None
     dados = {
-        'titulo': noticia_curso.noticia.titulo,
-        'descricao': noticia_curso.noticia.descricao,
-        'arquivo': noticia_curso.noticia.arquivo.url if noticia_curso.noticia.arquivo else None,
-        'publicacao': noticia_curso.noticia.publicacao.strftime('%d/%m/%Y') if noticia_curso.noticia.publicacao else "Data não disponível",
-        'edicao': noticia_curso.noticia.edicao.strftime('%d/%m/%Y') if noticia_curso.noticia.edicao else "Não editado",
-        'curso': curso_relacionado,
+        'titulo': noticia.titulo,
+        'descricao': noticia.descricao,
+        'arquivo': noticia.arquivo,
+        'curso': noticia.curso.id if noticia.curso else None,
+        'publicacao': noticia.publicacao.strftime('%d/%m/%Y') if noticia.publicacao else "Data não disponível",
+        'edicao': noticia.edicao.strftime('%d/%m/%Y') if noticia.edicao else "Não editado",
         'cursos': list(cursos)
     }
     return JsonResponse(dados)

@@ -45,14 +45,14 @@
                             <td>{{ noticia_curso.noticia.arquivo }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon editar-noticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}" data-bs-target="#Editar">
+                                    <button class="button_icon editar-noticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}" data-bs-target="#EditarNoticia">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt=""></img>
                                     </button>
-                                    <button class="button_icon detalhar-noticia" data-bs-toggle="modal" data-bs-target="#Detalhar" 
+                                    <button class="button_icon detalhar-noticia" data-bs-toggle="modal" data-bs-target="#DetalharNoticia" 
                                     data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt=""></img>
                                     </button>
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirNoticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt=""></img>
                                     </button>
                                 </div>

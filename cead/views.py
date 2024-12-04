@@ -518,6 +518,8 @@ def curso_lista(request):
     return render(request, 'cead/pages/curso.html', context)
 
 def detalhar_curso(request, curso_id):
+    a = request.GET.get('curso')
+    print(a)
     cursos = get_object_or_404(Curso, id=curso_id)
     curso_polos = CursoPolo.objects.filter(curso=cursos)
     noticia_cursos = NoticiaCurso.objects.filter(curso=cursos)

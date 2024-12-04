@@ -51,16 +51,16 @@
                             <td>{{ mediacao.situacao }}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
+                                    <button class="button_icon editar-mediador" data-bs-toggle="modal" data-bs-target="#EditarMediador" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
+                                    <button class="button_icon detalhar-mediador" data-bs-toggle="modal" data-bs-target="#DetalharMediador" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirMediador" data-id="{{ mediacao.mediador.id }}-{{ mediacao.curso_polos.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>

@@ -44,16 +44,16 @@
                             <td>{{ gestor_polo.gestor.nome}}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon btn-editar" data-bs-toggle="modal" data-bs-target="#Editar" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon editar-polo" data-bs-toggle="modal" data-bs-target="#EditarPolo" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon btn-detalhar" data-bs-toggle="modal" data-bs-target="#Detalhar" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon detalhar-polo" data-bs-toggle="modal" data-bs-target="#DetalharPolo" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#Excluir" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirPolo" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>

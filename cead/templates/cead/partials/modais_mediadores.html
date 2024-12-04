@@ -55,7 +55,7 @@
 </div>
 
 <!-- Excluir -->
-<div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+<div class="modal fade" id="ExcluirMediador" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -70,14 +70,14 @@
             </div>
             <div class="modal-footer justify-content-center gap-5">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="confirmarExclusao" class="btn btn-danger">Excluir</button>
+                <button type="button" id="excluir-mediador" class="btn btn-danger">Excluir</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Detalhar -->
-<div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+<div class="modal fade" id="DetalharMediador" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
     
     <div class="modal-dialog">
         <div class="modal-content">
@@ -140,7 +140,7 @@
 
 
 <!-- Editar -->
-<div id="Editar" class="modal fade" tabindex="-1">
+<div id="EditarMediador" class="modal fade" tabindex="-1">
     <div class="modal-dialog"> 
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -193,7 +193,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary" id="salvarEdicao">
+                        <button type="button" class="btn btn-primary" id="salvar-mediador">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             Salvar
                         </button>
@@ -249,7 +249,7 @@
             [mediadorId, cursoPolosId] = dataId.split('-');
         });
 
-        $('#confirmarExclusao').on('click', function() {
+        $('#excluir-mediador').on('click', function() {
             if (mediadorId && cursoPolosId) {
                 $.ajax({
                     type: 'POST',
@@ -275,7 +275,7 @@
             }
         });
 
-        $('.btn-detalhar').on('click', function() {
+        $('.detalhar-mediador').on('click', function() {
             if (!dataId || !dataId.includes('-')) {
                 console.error("Formato inválido para data-id:", dataId);
                 alert("Erro: botão configurado incorretamente.");
@@ -303,7 +303,7 @@
             });
         });
 
-        $('.btn-editar').on('click', function() {
+        $('.editar-mediador').on('click', function() {
             $.ajax({
                 type: 'GET',
                 url: `/editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
@@ -328,8 +328,8 @@
                         $('#editarCursoPolo').append(option);
                     });
         
-                    $('#Editar').data('id', `${mediadorId}-${cursoPolosId}`);  
-                    $('#Editar').modal('show');
+                    $('#EditarMediador').data('id', `${mediadorId}-${cursoPolosId}`);  
+                    $('#EditarMediador').modal('show');
                 },
                 error: function() {
                     alert("Erro ao carregar dados do mediador.");
@@ -338,7 +338,7 @@
         });
 
 
-        $('#salvarEdicao').on('click', function() {
+        $('#salvar-mediador').on('click', function() {
             let formData = {
                 nome: $('#editarNome').val(),
                 email: $('#editarEmail').val(),

@@ -28,7 +28,7 @@
 </div>
 
 <!-- Excluir -->
-<div class="modal fade" id="Excluir" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+<div class="modal fade" id="ExcluirNoticia" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -43,14 +43,14 @@
             </div>
             <div class="modal-footer justify-content-center gap-5">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                <button type="button" id="confirmarExclusao" class="btn btn-danger">Sim</button>
+                <button type="button" id="excluir-noticia" class="btn btn-danger">Sim</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Detalhar -->
-<div class="modal fade" id="Detalhar" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+<div class="modal fade" id="DetalharNoticia" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -96,7 +96,7 @@
 </div>
 
 <!-- Editar -->
-<div id="Editar" class="modal" tabindex="-1">
+<div id="EditarNoticia" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-between">
@@ -126,7 +126,7 @@
                         <input type="text" class="form-control" id="editarArquivo" name="arquivo" value="{{ arquivo }}" readonly>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvarEdicao" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
+                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvar-noticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                     </div>
                 </form>
@@ -160,7 +160,7 @@
             [noticiaId, cursoId] = dataId.split('-');
         });
 
-        $('#confirmarExclusao').on('click', function() {
+        $('#excluir-noticia').on('click', function() {
 
             $.ajax({
                 type: 'POST',
@@ -225,8 +225,8 @@
                         $('#editarCurso').append(option);
                     });
 
-                    $('#Editar').data('id', `${noticiaId}-${cursoId}`);
-                    $('#Editar').modal('show'); 
+                    $('#EditarNoticia').data('id', `${noticiaId}-${cursoId}`);
+                    $('#EditarNoticia').modal('show'); 
                 },
                 error: function() {
                     alert("Erro ao carregar dados da notícia.");
@@ -234,7 +234,7 @@
             });
         });
 
-        $('#salvarEdicao').on('click', function() {
+        $('#salvar-noticia').on('click', function() {
             let formData = {
                 curso: $('#editarCurso').val(),
                 titulo: $('#editarTitulo').val(),

@@ -183,7 +183,7 @@
             });
         });
 
-        $('.btn-detalhar').on('click', function() {
+        $('.detalhar-noticia').on('click', function() {
 
             if (!dataId || !dataId.includes('-')) {
                 console.error("Formato inválido para data-id:", dataId);
@@ -208,7 +208,7 @@
             });
         });
 
-        $('.btn-editar').on('click', function() {
+        $('.editar-noticia').on('click', function() {
             $.ajax({
                 type: 'GET',
                 url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,

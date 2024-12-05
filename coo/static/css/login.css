@@ -1,0 +1,36 @@
+.login_form {
+    background-color: var(--nav-color);
+    max-width: 30rem;
+    max-height: 40rem;
+    border-radius: 1rem;
+}
+
+.btn {
+    background-color: var(--detail-color);
+    max-width: fit-content;
+    margin-top: 1rem;
+}
+.btn:hover {
+    background-color: var(--detail-color);
+    opacity: 0.8;
+}
+
+.info input {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    border-radius: var(--bs-border-radius);
+    border: var(--detail-color), 0.1rem, solid;
+}
+
+.info input:focus {
+    border-color: var(--detail-color);
+    box-shadow: 0 0 0 .25rem rgba(255, 41, 0, 0.25);
+}
+
+.info input:focus-visible {
+    border-color: var(--detail-color);
+    box-shadow: 0 0 0 .25rem rgba(255, 41, 0, 0.25);
+}

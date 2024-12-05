@@ -1,0 +1,385 @@
+{% load static %}
+
+<!-- Criar -->
+<div class="modal fade" id="modalCriarMediador" tabindex="-1" aria-labelledby="modalCriarMediadorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalCriarMediadorLabel">Mediador</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarMediador" method="post" action="{% url 'cead:mediador_lista' %}">
+                    {% csrf_token %}
+                    
+                    <div class="input">
+                        {{ make_mediador.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vincular -->
+<div class="modal fade" id="modalVincular" tabindex="-1" aria-labelledby="modalVincularLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalVincularLabel">Mediação</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formVincular" method="post" action="{% url 'cead:mediador_lista' %}">
+                    {% csrf_token %}
+                    
+                    <div class="input">
+                        {{ sync_mediacao.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Excluir -->
+<div class="modal fade" id="ExcluirMediador" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header d-flex justify-content-center position-relative">
+                
+                <h5 class="modal-title text-center" id="Excluir">Confirmação de Exclusão</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center gap-5">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="excluir-mediador" class="btn btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detalhar -->
+<div class="modal fade" id="DetalharMediador" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+    
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header d-flex justify-content-center position-relative">
+                <h5 class="modal-title" id="DetalharLabel">Detalhes do Mediador</h5>
+
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h5 class="mb-1">Curso Polo</h5>
+                    <p id="detalheCursoPolo" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Nome</h5>
+                    <p id="detalheNome" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">E-mail</h5>
+                    <p id="detalheEmail" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Telefone</h5>
+                    <p id="detalheTelefone" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Formação</h5>
+                    <p id="detalheFormacao" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Modalidade</h5>
+                    <p id="detalheModalidade" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Situação</h5>
+                    <p id="detalheSituacao" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Publicação</h5>
+                    <p id="detalhePublicacao" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Edição</h5>
+                    <p id="detalheEdicao" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Saída</h5>
+                    <p id="detalheSaida" class="form-control bg-light"></p>
+                </div>
+            </div>
+
+            
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Editar -->
+<div id="EditarMediador" class="modal fade" tabindex="-1">
+    <div class="modal-dialog"> 
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center position-relative">
+
+                <h5 class="modal-title">Editar Mediador</h5>
+                <button type="button" class="button_close p-0 position-absolute end-0 top-0 me-3 mt-2" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action" style="width: 30px; height: 30px;"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editarMediadorForm" method="POST">
+                    
+                    <div class="mb-3">
+                        <label for="editarCursoPolo" class="form-label">Curso Polo</label>
+                        <select class="form-select" id="editarCursoPolo" name="curso_polos">
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="editarNome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNome" name="nome" placeholder="Digite o nome">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="editarEmail" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="editarEmail" name="email" placeholder="Digite o e-mail">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="editarTelefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="editarTelefone" name="telefone" placeholder="Digite o telefone">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="editarFormacao" class="form-label">Formação</label>
+                        <input type="text" class="form-control" id="editarFormacao" name="formacao" placeholder="Digite a formação">
+                    </div>
+                   
+                    <div class="mb-3">
+                        <label for="editarModalidade" class="form-label">Modalidade</label>
+                        <select class="form-select" id="editarModalidade" name="modalidade">
+                            <option value="PRESENCIAL">Presencial</option>
+                            <option value="VIRTUAL">Virtual</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editarSaida" class="form-label">Data de saída</label>
+                        <input type="date" class="form-control" id="editarSaida" name="saida">
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary" id="salvar-mediador">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Salvar
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#formCriarMediador').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:criar_mediador' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Mediador criado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar mediador: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+
+        $('#formVincular').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:vincular_mediador' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Mediador vinculado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar mediador: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+        
+        $('.button_icon').on('click', function() {
+            dataId = $(this).data('id');
+            [mediadorId, cursoPolosId] = dataId.split('-');
+        });
+
+        $('#excluir-mediador').on('click', function() {
+            if (mediadorId && cursoPolosId) {
+                $.ajax({
+                    type: 'POST',
+                    url: `/excluir_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $(`tr[data-id="${mediadorId}-${cursoPolosId}"]`).remove();
+                            $('#Excluir').modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Erro ao excluir mediador.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Erro na requisição de exclusão: " + error);
+                    }
+                });
+            } else {
+                alert("Erro: ID do mediador não encontrado.");
+            }
+        });
+
+        $('.detalhar-mediador').on('click', function() {
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: `/detalhar_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
+                success: function(response) {
+                    $('#detalheCursoPolo').text(response.curso_polo );
+                    $('#detalheNome').text(response.nome);
+                    $('#detalheEmail').text(response.email);
+                    $('#detalheTelefone').text(response.telefone);
+                    $('#detalheFormacao').text(response.formacao);
+                    $('#detalheModalidade').text(response.modalidade);
+                    $('#detalheSituacao').text(response.situacao);
+                    $('#detalhePublicacao').text(response.publicacao);
+                    $('#detalheEdicao').text(response.edicao);
+                    $('#detalheSaida').text(response.saida);
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes do mediador: " + error);
+                }
+            });
+        });
+
+        $('.editar-mediador').on('click', function() {
+            $.ajax({
+                type: 'GET',
+                url: `/editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
+                success: function(response) {
+                    $('#editarNome').val(response.nome);
+                    $('#editarEmail').val(response.email);
+                    $('#editarTelefone').val(response.telefone);
+                    $('#editarFormacao').val(response.formacao);
+                    $('#editarModalidade').val(response.modalidade);
+                    $('#editarSituacao').val(response.situacao);
+                    $('#editarSaida').val(response.saida);
+        
+                    $('#editarCursoPolo').empty();
+                    response.curso_polos.forEach(function(curso_polo) {
+                        let option = $('<option></option>')
+                            .val(curso_polo.id)
+                            .text(curso_polo.nome);
+        
+                        if (curso_polo.id == response.curso_polos_selecionado) {
+                            option.prop('selected', true);
+                        }
+                        $('#editarCursoPolo').append(option);
+                    });
+        
+                    $('#EditarMediador').data('id', `${mediadorId}-${cursoPolosId}`);  
+                    $('#EditarMediador').modal('show');
+                },
+                error: function() {
+                    alert("Erro ao carregar dados do mediador.");
+                }
+            });
+        });
+
+
+        $('#salvar-mediador').on('click', function() {
+            let formData = {
+                nome: $('#editarNome').val(),
+                email: $('#editarEmail').val(),
+                telefone: $('#editarTelefone').val(),
+                formacao: $('#editarFormacao').val(),
+                modalidade: $('#editarModalidade').val(),
+                situacao: $('#editarSituacao').val(),
+                saida: $('#editarSaida').val(),
+                curso_polos: $('#editarCursoPolo').val(),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            };
+            
+            $.ajax({
+                type: 'POST',
+                url: `/editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert("Mediador atualizado com sucesso!");
+                        location.reload();
+                    } else {
+                        console.log($('#editarCursoPolo').val())
+                        console.log(cursoPolosId)
+                        alert("Erro ao atualizar mediador: " + JSON.stringify(response.errors));
+                    }
+                },
+                error: function() {
+                    alert("Erro ao salvar as mudanças.");
+                }
+            });
+        });
+    });
+
+
+    $('#salvarEdicao').on('click', function() {
+    let spinner = $(this).find('.spinner-border');
+    spinner.removeClass('d-none'); // Mostrar spinner
+    // Processar salvamento...
+    setTimeout(function() {
+        spinner.addClass('d-none'); // Ocultar spinner após o processamento
+    }, 2000); // Simulação do tempo de processamento
+});
+
+</script>

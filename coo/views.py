@@ -5,8 +5,6 @@ from django.contrib.auth.decorators import login_required
 def coordenacao(request):
     return render(request, "coo/pages/home.html")
 
-
-
 def noticias_lista(request):
     make_noticia = NoticiaForm(request.POST)
     search_noticia = SearchForm(request.GET)

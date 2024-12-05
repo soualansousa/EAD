@@ -57,9 +57,22 @@ footer {
     animation: pulse 1.5s infinite;
 }
 
+.dropdown-menu {
+    min-width: 7rem;
+}
+
 .dropdown-item:hover {
     color: var(--detail-color);
     transition: color, 200ms;
+}
+
+.btn-close-rmodal {
+    border: none;
+    background: transparent;
+}
+
+.btn-close-rmodal:hover {
+    transform: scale(1.1);
 }
 
 .footer-content p {
@@ -68,58 +81,6 @@ footer {
     font-weight: bold;
     text-align: center;
 }
-
-
-/* .social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.social-icons {
-    display: inline-flex;
-}
-
-.social-icons img {
-    width: 30px;
-    height: 30px;
-    transition: transform 0.3s;
-}
-
-.social-icon img:hover {
-    transform: scale(1.1);
-
-} */
-
-/* Ícone do Facebook
-.facebook-icon svg {
-    fill: #1877f2;
-    transition: fill 0.3s;
-}
-
-.facebook-icon:hover svg {
-    fill: #0e51a7;
-}
-
-
-.twitter-icon svg {
-    fill: #1da1f2;
-    transition: fill 0.3s;
-} 
-
-.twitter-icon:hover svg {
-    fill: #0d8dd9;
-}
-
-
-.instagram-icon svg {
-    fill: #c32aa3; 
-    transition: fill 0.3s;
-}
-
-/* .instagram-icon:hover svg {
-    fill: #e1306c; 
-} */
 
 .formigueiro-tecnologico {
     width: 5rem;

@@ -299,7 +299,7 @@ def detalhar_coordenador(request, coordenador_id):
     curso_id = request.GET.get('curso')
     
     try:
-        coordenador_cursos = CoordenadorCurso.objects.select_related('coordenador', 'curso').get(
+        coordenador_curso = CoordenadorCurso.objects.select_related('coordenador', 'curso').get(
             coordenador_id=coordenador_id,
             curso_id=curso_id
         )
@@ -307,14 +307,14 @@ def detalhar_coordenador(request, coordenador_id):
         return JsonResponse({'error': 'Coordenador ou curso não encontrados.'}, status=404)
 
     dados = {
-        'curso': coordenador_cursos.curso.nome,
-        'nome': coordenador_cursos.coordenador.nome,
-        'email': coordenador_cursos.coordenador.email,
-        'telefone': coordenador_cursos.coordenador.telefone,
-        'situacao': coordenador_cursos.situacao,
-        'publicacao': coordenador_cursos.coordenador.publicacao.strftime('%d/%m/%Y') if coordenador_cursos.coordenador.publicacao else "Data não disponível",
-        'edicao': coordenador_cursos.coordenador.edicao.strftime('%d/%m/%Y') if coordenador_cursos.coordenador.edicao else "Não editado",
-        'saida': coordenador_cursos.saida.strftime('%d/%m/%Y') if coordenador_cursos.saida else "Data não disponível",
+        'curso': coordenador_curso.curso.nome if coordenador_curso.curso else "Curso não informado",
+        'nome': coordenador_curso.coordenador.nome,
+        'email': coordenador_curso.coordenador.email,
+        'telefone': coordenador_curso.coordenador.telefone,
+        'situacao': coordenador_curso.situacao,
+        'publicacao': coordenador_curso.coordenador.publicacao.strftime('%d/%m/%Y') if coordenador_curso.coordenador.publicacao else "Data não disponível",
+        'edicao': coordenador_curso.coordenador.edicao.strftime('%d/%m/%Y') if coordenador_curso.coordenador.edicao else "Não editado",
+        'saida': coordenador_curso.saida.strftime('%d/%m/%Y') if coordenador_curso.saida else "Data não disponível",
     }
     return JsonResponse(dados)
 
@@ -517,9 +517,7 @@ def curso_lista(request):
 
     return render(request, 'cead/pages/curso.html', context)
 
-def detalhar_curso(request, curso_id):
-    a = request.GET.get('curso')
-    print(a)
+def detalhar_curso(request, curso_id, coordenador_id):
     cursos = get_object_or_404(Curso, id=curso_id)
     curso_polos = CursoPolo.objects.filter(curso=cursos)
     noticia_cursos = NoticiaCurso.objects.filter(curso=cursos)

@@ -63,27 +63,27 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 class="mb-1">Nome</h5>
-                    <p id="detalheNome" class="form-control bg-light"></p>
+                    <p id="detalheNomeGestor" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">E-mail</h5>
-                    <p id="detalheEmail" class="form-control bg-light"></p>
+                    <p id="detalheEmailGestor" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Telefone</h5>
-                    <p id="detalheTelefone" class="form-control bg-light"></p>
+                    <p id="detalheTelefoneGestor" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Formação</h5>
-                    <p id="detalheFormacao" class="form-control bg-light"></p>
+                    <p id="detalheFormacaoGestor" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
-                    <p id="detalhePublicacao" class="form-control bg-light"></p>
+                    <p id="detalhePublicacaoGestor" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
-                    <p id="detalheEdicao" class="form-control bg-light"></p>
+                    <p id="detalheEdicaoGestor" class="form-control bg-light"></p>
                 </div>
             </div>
 
@@ -111,23 +111,23 @@
                 <form id="editarGestorForm" method="post">
                     
                     <div class="mb-3">
-                        <label for="editarNome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="editarNome" name="nome" placeholder="Digite o nome">
+                        <label for="editarNomeGestor" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNomeGestor" name="nome" placeholder="Digite o nome">
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarEmail" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="editarEmail" name="email" placeholder="Digite o e-mail">
+                        <label for="editarEmailGestor" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="editarEmailGestor" name="email" placeholder="Digite o e-mail">
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarTelefone" class="form-label">Telefone</label>
-                        <input type="text" class="form-control" id="editarTelefone" name="telefone" placeholder="Digite o telefone">
+                        <label for="editarTelefoneGestor" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="editarTelefoneGestor" name="telefone" placeholder="Digite o telefone">
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarFormacao" class="form-label">Formação</label>
-                        <input type="text" class="form-control" id="editarFormacao" name="formacao" placeholder="Digite a formação">
+                        <label for="editarFormacaoGestor" class="form-label">Formação</label>
+                        <input type="text" class="form-control" id="editarFormacaoGestor" name="formacao" placeholder="Digite a formação">
                     </div>
                    
                     <div class="d-flex justify-content-center">
@@ -210,12 +210,12 @@
                 type: 'GET',
                 url: `/detalhar_gestor/${gestorId}/`, 
                 success: function(response) {
-                    $('#detalheNome').text(response.nome);
-                    $('#detalheEmail').text(response.email);
-                    $('#detalheTelefone').text(response.telefone);
-                    $('#detalheFormacao').text(response.formacao);
-                    $('#detalhePublicacao').text(response.publicacao);
-                    $('#detalheEdicao').text(response.edicao);
+                    $('#detalheNomeGestor').text(response.nome);
+                    $('#detalheEmailGestor').text(response.email);
+                    $('#detalheTelefoneGestor').text(response.telefone);
+                    $('#detalheFormacaoGestor').text(response.formacao);
+                    $('#detalhePublicacaoGestor').text(response.publicacao);
+                    $('#detalheEdicaoGestor').text(response.edicao);
                 },
                 error: function(xhr, status, error) {
                     alert("Erro ao carregar detalhes do coordenador: " + error);
@@ -228,10 +228,10 @@
                 type: 'GET',
                 url: `/editar_gestor/${gestorId}/`,
                 success: function(response) {
-                    $('#editarNome').val(response.nome);
-                    $('#editarEmail').val(response.email);
-                    $('#editarTelefone').val(response.telefone);
-                    $('#editarFormacao').val(response.formacao);
+                    $('#editarNomeGestor').val(response.nome);
+                    $('#editarEmailGestor').val(response.email);
+                    $('#editarTelefoneGestor').val(response.telefone);
+                    $('#editarFormacaoGestor').val(response.formacao);
                     $('#EditarGestor').data('id', gestorId);
                     $('#EditarGestor').modal('show');
                 },
@@ -243,10 +243,10 @@
     
         $('#salvar-gestor').on('click', function() {
             let formData = {
-                nome: $('#editarNome').val(),
-                email: $('#editarEmail').val(),
-                telefone: $('#editarTelefone').val(),
-                formacao: $('#editarFormacao').val(),
+                nome: $('#editarNomeGestor').val(),
+                email: $('#editarEmailGestor').val(),
+                telefone: $('#editarTelefoneGestor').val(),
+                formacao: $('#editarFormacaoGestor').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
             $.ajax({

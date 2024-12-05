@@ -76,7 +76,6 @@
         });
 
         $('#formVincular').on('submit', function(e) {
-            console.log('a')
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -84,7 +83,7 @@
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Curso criado com sucesso!");
+                        alert("Curso vinculado com sucesso!");
                         location.reload();
                     } else {
                         alert("Erro ao criar curso: " + JSON.stringify(response.errors));

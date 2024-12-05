@@ -87,49 +87,49 @@
                 <div class="mb-3">
                     <h5 class="mb-1">Curso</h5>
                     <div>
-                        <p id="detalheCurso" class="form-control bg-light"></p>
+                        <p id="detalheCursoCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Nome</h5>
                     <div>
-                        <p id="detalheNome" class="form-control bg-light"></p>
+                        <p id="detalheNomeCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">E-mail</h5>
                     <div>
-                        <p id="detalheEmail" class="form-control bg-light"></p>
+                        <p id="detalheEmailCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Telefone</h5>
                     <div>
-                        <p id="detalheTelefone" class="form-control bg-light"></p>
+                        <p id="detalheTelefoneCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Situação</h5>
                     <div>
-                        <p id="detalheSituacao" class="form-control bg-light"></p>
+                        <p id="detalheSituacaoCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
                     <div>
-                        <p id="detalhePublicacao" class="form-control bg-light"></p>
+                        <p id="detalhePublicacaoCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
                     <div>
-                        <p id="detalheEdicao" class="form-control bg-light"></p>
+                        <p id="detalheEdicaoCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Saída</h5>
                     <div>
-                        <p id="detalheSaida" class="form-control bg-light"></p>
+                        <p id="detalheSaidaCoordenador" class="form-control bg-light"></p>
                     </div>
                 </div>
             </div>
@@ -154,25 +154,25 @@
             <div class="modal-body">
                 <form id="editarCoordenadorForm">
                     <div class="mb-3">
-                        <label for="editarCurso" class="form-label">Curso</label>
-                        <select id="editarCurso" name="curso" class="form-select">
+                        <label for="editarCursoCoordenador" class="form-label">Curso</label>
+                        <select id="editarCursoCoordenador" name="curso" class="form-select">
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editarNome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="editarNome" name="nome">
+                        <label for="editarNomeCoordenador" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNomeCoordenador" name="nome">
                     </div>
                     <div class="mb-3">
-                        <label for="editarEmail" class="form-label">E-mail</label>
-                        <textarea class="form-control" id="editarEmail" name="email"></textarea>
+                        <label for="editarEmailCoordenador" class="form-label">E-mail</label>
+                        <textarea class="form-control" id="editarEmailCoordenador" name="email"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="editarTelefone" class="form-label">Telefone</label>
-                        <textarea class="form-control" id="editarTelefone" name="telefone"></textarea>
+                        <label for="editarTelefoneCoordenador" class="form-label">Telefone</label>
+                        <textarea class="form-control" id="editarTelefoneCoordenador" name="telefone"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="editarSaida" class="form-label">Data de saída</label>
-                        <input type="date" class="form-control" id="editarSaida" name="saida">
+                        <label for="editarSaidaCoordenador" class="form-label">Data de saída</label>
+                        <input type="date" class="form-control" id="editarSaidaCoordenador" name="saida">
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary" id="salvar-coordenador">
@@ -256,7 +256,8 @@
             }
         });
 
-        $('.detalhar-coordenador').on('click', function() {            
+        $('.detalhar-coordenador').on('click', function() {  
+
             if (!dataId || !dataId.includes('-')) {
                 console.error("Formato inválido para data-id:", dataId);
                 alert("Erro: botão configurado incorretamente.");
@@ -267,14 +268,16 @@
                 type: 'GET',
                 url: `/detalhar_coordenador/${coordenadorId}/?curso=${cursoId}`, 
                 success: function(response) {
-                    $('#detalheCurso').text(response.curso);
-                    $('#detalheNome').text(response.nome);
-                    $('#detalheEmail').text(response.email);
-                    $('#detalheTelefone').text(response.telefone);
-                    $('#detalheSituacao').text(response.situacao);
-                    $('#detalhePublicacao').text(response.publicacao);
-                    $('#detalheEdicao').text(response.edicao);
-                    $('#detalheSaida').text(response.saida);
+                    console.log(response)
+                    console.log(response)
+                    $('#detalheCursoCoordenador').text(response.curso);
+                    $('#detalheNomeCoordenador').text(response.nome);
+                    $('#detalheEmailCoordenador').text(response.email);
+                    $('#detalheTelefoneCoordenador').text(response.telefone);
+                    $('#detalheSituacaoCoordenador').text(response.situacao);
+                    $('#detalhePublicacaoCoordenador').text(response.publicacao);
+                    $('#detalheEdicaoCoordenador').text(response.edicao);
+                    $('#detalheSaidaCoordenador').text(response.saida);
                 },
                 error: function(xhr, status, error) {
                     alert("Erro ao carregar detalhes do coordenador: " + error);
@@ -287,18 +290,18 @@
                 type: 'GET',
                 url: `/editar_coordenador/${coordenadorId}/?curso=${cursoId}`,  
                 success: function(response) {
-                    $('#editarNome').val(response.nome);
-                    $('#editarEmail').val(response.email);
-                    $('#editarTelefone').val(response.telefone);
-                    $('#editarSituacao').val(response.situacao);
-                    $('#editarSaida').val(response.saida);
-                    $('#editarCurso').empty();
+                    $('#editarNomeCoordenador').val(response.nome);
+                    $('#editarEmailCoordenador').val(response.email);
+                    $('#editarTelefoneCoordenador').val(response.telefone);
+                    $('#editarSituacaoCoordenador').val(response.situacao);
+                    $('#editarSaidaCoordenador').val(response.saida);
+                    $('#editarCursoCoordenador').empty();
                     response.cursos.forEach(function(curso) {
                         let option = $('<option></option>').val(curso.id).text(curso.nome);
                         if (curso.id === response.curso) {
                             option.prop('selected', true);
                         }
-                        $('#editarCurso').append(option);
+                        $('#editarCursoCoordenador').append(option);
                     });
 
                     $('#EditarCoordenador').data('id', `${coordenadorId}-${cursoId}`);
@@ -313,11 +316,11 @@
 
         $('#salvar-coordenador').on('click', function() {
             let formData = {
-                nome: $('#editarNome').val(),
-                curso: $('#editarCurso').val(),
-                email: $('#editarEmail').val(),
-                telefone: $('#editarTelefone').val(),
-                saida: $('#editarSaida').val(),
+                nome: $('#editarNomeCoordenador').val(),
+                curso: $('#editarCursoCoordenador').val(),
+                email: $('#editarEmailCoordenador').val(),
+                telefone: $('#editarTelefoneCoordenador').val(),
+                saida: $('#editarSaidaCoordenador').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
 
@@ -340,7 +343,7 @@
         });
     });
 
-    $('#salvarEdicao').on('click', function() {
+    $('#salvar-coordenador').on('click', function() {
     let spinner = $(this).find('.spinner-border');
     spinner.removeClass('d-none');
     setTimeout(function() {

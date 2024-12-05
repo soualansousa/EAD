@@ -59,31 +59,31 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 class="mb-1">Curso</h5>
-                        <p id="detalheCurso" class="form-control bg-light"></p>
+                        <p id="detalheCursoNoticia" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Título</h5>
-                    <p id="detalheTitulo" class="form-control bg-light"></p>
+                    <p id="detalheTituloNoticia" class="form-control bg-light"></p>
                 </div>
 
                 <div class="mb-3">
                     <h5 class="mb-1">Descrição</h5>
-                    <p id="detalheDescricao" class="form-control bg-light"></p>
+                    <p id="detalheDescricaoNoticia" class="form-control bg-light"></p>
                 </div>
 
                 <div class="mb-3">
                     <h5 class="mb-1">Arquivo</h5>
-                    <p id="detalheArquivo" class="form-control bg-light"></p>
+                    <p id="detalheArquivoNoticia" class="form-control bg-light"></p>
                 </div>
 
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
-                    <p id="detalhePublicacao" class="form-control bg-light"></p>
+                    <p id="detalhePublicacaoNoticia" class="form-control bg-light"></p>
                 </div>
 
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
-                    <p id="detalheEdicao" class="form-control bg-light"></p>
+                    <p id="detalheEdicaoNoticia" class="form-control bg-light"></p>
                 </div>
             
                 <div class="modal-footer d-flex justify-content-center">
@@ -109,21 +109,21 @@
             <div class="modal-body">
                 <form id="editarNoticiaForm">
                     <div class="mb-3">
-                        <label for="editarCurso" class="form-label">Curso</label>
-                        <select id="editarCurso" name="curso" class="form-select">
+                        <label for="editarCursoNoticia" class="form-label">Curso</label>
+                        <select id="editarCursoNoticia" name="curso" class="form-select">
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editarTitulo" class="form-label">Título</label>
-                        <input type="text" class="form-control" id="editarTitulo" name="titulo">
+                        <label for="editarTituloNoticia" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="editarTituloNoticia" name="titulo">
                     </div>
                     <div class="mb-3">
-                        <label for="editarDescricao" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
+                        <label for="editarDescricaoNoticia" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="editarDescricaoNoticia" name="descricao"></textarea>
                     </div>
                     <div class="mb-3"></div>
                         <label for="editaArquivo" class="form-label">Arquivo</label>
-                        <input type="text" class="form-control" id="editarArquivo" name="arquivo" value="{{ arquivo }}" readonly>
+                        <input type="text" class="form-control" id="editarArquivoNoticia" name="arquivo" value="{{ arquivo }}" readonly>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvar-noticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
@@ -195,12 +195,12 @@
                 type: 'GET',
                 url: `/detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
-                    $('#detalheCurso').text(response.curso);
-                    $('#detalheTitulo').text(response.titulo);
-                    $('#detalheDescricao').text(response.descricao);
-                    $('#detalheArquivo').text(response.arquivo);
-                    $('#detalhePublicacao').text(response.publicacao);
-                    $('#detalheEdicao').text(response.edicao);
+                    $('#detalheCursoNoticia').text(response.curso);
+                    $('#detalheTituloNoticia').text(response.titulo);
+                    $('#detalheDescricaoNoticia').text(response.descricao);
+                    $('#detalheArquivoNoticia').text(response.arquivo);
+                    $('#detalhePublicacaoNoticia').text(response.publicacao);
+                    $('#detalheEdicaoNoticia').text(response.edicao);
                 },
                 error: function(xhr, status, error) {
                     alert("Erro ao carregar detalhes da notícia: " + error);
@@ -213,16 +213,16 @@
                 type: 'GET',
                 url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
-                    $('#editarTitulo').val(response.titulo);
-                    $('#editarDescricao').val(response.descricao);
-                    $('#editarArquivo').val(response.arquivo);
-                    $('#editarCurso').empty();
+                    $('#editarTituloNoticia').val(response.titulo);
+                    $('#editarDescricaoNoticia').val(response.descricao);
+                    $('#editarArquivoNoticia').val(response.arquivo);
+                    $('#editarCursoNoticia').empty();
                     response.cursos.forEach(function(curso) {
                         let option = $('<option></option>').val(curso.id).text(curso.nome);
                         if (curso.id === response.curso) {
                             option.prop('selected', true);
                         }
-                        $('#editarCurso').append(option);
+                        $('#editarCursoNoticia').append(option);
                     });
 
                     $('#EditarNoticia').data('id', `${noticiaId}-${cursoId}`);
@@ -236,10 +236,10 @@
 
         $('#salvar-noticia').on('click', function() {
             let formData = {
-                curso: $('#editarCurso').val(),
-                titulo: $('#editarTitulo').val(),
-                descricao: $('#editarDescricao').val(),
-                arquivo: $('#editarArquivo').val(),
+                curso: $('#editarCursoNoticia').val(),
+                titulo: $('#editarTituloNoticia').val(),
+                descricao: $('#editarDescricaoNoticia').val(),
+                arquivo: $('#editarArquivoNoticia').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
 

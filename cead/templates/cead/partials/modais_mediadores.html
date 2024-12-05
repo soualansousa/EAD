@@ -90,43 +90,43 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 class="mb-1">Curso Polo</h5>
-                    <p id="detalheCursoPolo" class="form-control bg-light"></p>
+                    <p id="detalheCursoPoloMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Nome</h5>
-                    <p id="detalheNome" class="form-control bg-light"></p>
+                    <p id="detalheNomeMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">E-mail</h5>
-                    <p id="detalheEmail" class="form-control bg-light"></p>
+                    <p id="detalheEmailMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Telefone</h5>
-                    <p id="detalheTelefone" class="form-control bg-light"></p>
+                    <p id="detalheTelefoneMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Formação</h5>
-                    <p id="detalheFormacao" class="form-control bg-light"></p>
+                    <p id="detalheFormacaoMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Modalidade</h5>
-                    <p id="detalheModalidade" class="form-control bg-light"></p>
+                    <p id="detalheModalidadeMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Situação</h5>
-                    <p id="detalheSituacao" class="form-control bg-light"></p>
+                    <p id="detalheSituacaoMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
-                    <p id="detalhePublicacao" class="form-control bg-light"></p>
+                    <p id="detalhePublicacaoMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
-                    <p id="detalheEdicao" class="form-control bg-light"></p>
+                    <p id="detalheEdicaoMediador" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Saída</h5>
-                    <p id="detalheSaida" class="form-control bg-light"></p>
+                    <p id="detalheSaidaMediador" class="form-control bg-light"></p>
                 </div>
             </div>
 
@@ -154,42 +154,42 @@
                 <form id="editarMediadorForm" method="POST">
                     
                     <div class="mb-3">
-                        <label for="editarCursoPolo" class="form-label">Curso Polo</label>
-                        <select class="form-select" id="editarCursoPolo" name="curso_polos">
+                        <label for="editarCursoPoloMediador" class="form-label">Curso Polo</label>
+                        <select class="form-select" id="editarCursoPoloMediador" name="curso_polos">
                         </select>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarNome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="editarNome" name="nome" placeholder="Digite o nome">
+                        <label for="editarNomeMediador" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNomeMediador" name="nome" placeholder="Digite o nome">
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarEmail" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="editarEmail" name="email" placeholder="Digite o e-mail">
+                        <label for="editarEmailMediador" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="editarEmailMediador" name="email" placeholder="Digite o e-mail">
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarTelefone" class="form-label">Telefone</label>
-                        <input type="text" class="form-control" id="editarTelefone" name="telefone" placeholder="Digite o telefone">
+                        <label for="editarTelefoneMediador" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="editarTelefoneMediador" name="telefone" placeholder="Digite o telefone">
                     </div>
                     
                     <div class="mb-3">
-                        <label for="editarFormacao" class="form-label">Formação</label>
-                        <input type="text" class="form-control" id="editarFormacao" name="formacao" placeholder="Digite a formação">
+                        <label for="editarFormacaoMediador" class="form-label">Formação</label>
+                        <input type="text" class="form-control" id="editarFormacaoMediador" name="formacao" placeholder="Digite a formação">
                     </div>
                    
                     <div class="mb-3">
-                        <label for="editarModalidade" class="form-label">Modalidade</label>
-                        <select class="form-select" id="editarModalidade" name="modalidade">
+                        <label for="editarModalidadeMediador" class="form-label">Modalidade</label>
+                        <select class="form-select" id="editarModalidadeMediador" name="modalidade">
                             <option value="PRESENCIAL">Presencial</option>
                             <option value="VIRTUAL">Virtual</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="editarSaida" class="form-label">Data de saída</label>
-                        <input type="date" class="form-control" id="editarSaida" name="saida">
+                        <label for="editarSaidaMediador" class="form-label">Data de saída</label>
+                        <input type="date" class="form-control" id="editarSaidaMediador" name="saida">
                     </div>
 
                     <div class="d-flex justify-content-center">
@@ -286,16 +286,16 @@
                 type: 'GET',
                 url: `/detalhar_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
                 success: function(response) {
-                    $('#detalheCursoPolo').text(response.curso_polo );
-                    $('#detalheNome').text(response.nome);
-                    $('#detalheEmail').text(response.email);
-                    $('#detalheTelefone').text(response.telefone);
-                    $('#detalheFormacao').text(response.formacao);
-                    $('#detalheModalidade').text(response.modalidade);
-                    $('#detalheSituacao').text(response.situacao);
-                    $('#detalhePublicacao').text(response.publicacao);
-                    $('#detalheEdicao').text(response.edicao);
-                    $('#detalheSaida').text(response.saida);
+                    $('#detalheCursoPoloMediador').text(response.curso_polo );
+                    $('#detalheNomeMediador').text(response.nome);
+                    $('#detalheEmailMediador').text(response.email);
+                    $('#detalheTelefoneMediador').text(response.telefone);
+                    $('#detalheFormacaoMediador').text(response.formacao);
+                    $('#detalheModalidadeMediador').text(response.modalidade);
+                    $('#detalheSituacaoMediador').text(response.situacao);
+                    $('#detalhePublicacaoMediador').text(response.publicacao);
+                    $('#detalheEdicaoMediador').text(response.edicao);
+                    $('#detalheSaidaMediador').text(response.saida);
                 },
                 error: function(xhr, status, error) {
                     alert("Erro ao carregar detalhes do mediador: " + error);
@@ -308,15 +308,15 @@
                 type: 'GET',
                 url: `/editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
                 success: function(response) {
-                    $('#editarNome').val(response.nome);
-                    $('#editarEmail').val(response.email);
-                    $('#editarTelefone').val(response.telefone);
-                    $('#editarFormacao').val(response.formacao);
-                    $('#editarModalidade').val(response.modalidade);
-                    $('#editarSituacao').val(response.situacao);
-                    $('#editarSaida').val(response.saida);
+                    $('#editarNomeMediador').val(response.nome);
+                    $('#editarEmailMediador').val(response.email);
+                    $('#editarTelefoneMediador').val(response.telefone);
+                    $('#editarFormacaoMediador').val(response.formacao);
+                    $('#editarModalidadeMediador').val(response.modalidade);
+                    $('#editarSituacaoMediador').val(response.situacao);
+                    $('#editarSaidaMediador').val(response.saida);
         
-                    $('#editarCursoPolo').empty();
+                    $('#editarCursoPoloMediador').empty();
                     response.curso_polos.forEach(function(curso_polo) {
                         let option = $('<option></option>')
                             .val(curso_polo.id)
@@ -325,7 +325,7 @@
                         if (curso_polo.id == response.curso_polos_selecionado) {
                             option.prop('selected', true);
                         }
-                        $('#editarCursoPolo').append(option);
+                        $('#editarCursoPoloMediador').append(option);
                     });
         
                     $('#EditarMediador').data('id', `${mediadorId}-${cursoPolosId}`);  
@@ -340,14 +340,14 @@
 
         $('#salvar-mediador').on('click', function() {
             let formData = {
-                nome: $('#editarNome').val(),
-                email: $('#editarEmail').val(),
-                telefone: $('#editarTelefone').val(),
-                formacao: $('#editarFormacao').val(),
-                modalidade: $('#editarModalidade').val(),
-                situacao: $('#editarSituacao').val(),
-                saida: $('#editarSaida').val(),
-                curso_polos: $('#editarCursoPolo').val(),
+                nome: $('#editarNomeMediador').val(),
+                email: $('#editarEmailMediador').val(),
+                telefone: $('#editarTelefoneMediador').val(),
+                formacao: $('#editarFormacaoMediador').val(),
+                modalidade: $('#editarModalidadeMediador').val(),
+                situacao: $('#editarSituacaoMediador').val(),
+                saida: $('#editarSaidaMediador').val(),
+                curso_polos: $('#editarCursoPoloMediador').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
             
@@ -360,8 +360,6 @@
                         alert("Mediador atualizado com sucesso!");
                         location.reload();
                     } else {
-                        console.log($('#editarCursoPolo').val())
-                        console.log(cursoPolosId)
                         alert("Erro ao atualizar mediador: " + JSON.stringify(response.errors));
                     }
                 },
@@ -370,16 +368,14 @@
                 }
             });
         });
+        $('#salvar-mediador').on('click', function() {
+            let spinner = $(this).find('.spinner-border');
+            spinner.removeClass('d-none');
+            setTimeout(function() {
+                spinner.addClass('d-none');
+            }, 2000);
+            
+        });
     });
-
-
-    $('#salvarEdicao').on('click', function() {
-    let spinner = $(this).find('.spinner-border');
-    spinner.removeClass('d-none'); // Mostrar spinner
-    // Processar salvamento...
-    setTimeout(function() {
-        spinner.addClass('d-none'); // Ocultar spinner após o processamento
-    }, 2000); // Simulação do tempo de processamento
-});
 
 </script>

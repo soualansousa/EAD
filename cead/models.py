@@ -111,7 +111,7 @@ class Contato(models.Model):
 class Noticia(models.Model):
     titulo = models.CharField(max_length=100)
     descricao = models.TextField(max_length=900)
-    arquivo = models.FileField(upload_to='uploads/')
+    arquivo = models.FileField(upload_to='uploads/', blank=True)
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
 

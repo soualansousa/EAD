@@ -53,7 +53,7 @@ urlpatterns = [
     path('curso/',views.curso_lista, name="curso_lista"),
     path('criar_curso/', views.criar_curso, name='criar_curso'),
     path('vincular_curso/', views.vincular_curso, name='vincular_curso'),
-    path('detalhar_curso/<int:curso_id>/', views.detalhar_curso, name='detalhar_curso'),
+    path('detalhar_curso/<int:coordenador_id>/<int:curso_id>/', views.detalhar_curso, name='detalhar_curso'),
     path('excluir_cursoPolo/<int:cursoPolo_id>/', views.excluir_cursoPolo, name='excluir_cursoPolo'),
     path('detalhar_cursoPolo/<int:cursoPolo_id>/', views.detalhar_cursoPolo, name='detalhar_cursoPolo'),
 ]

@@ -156,27 +156,27 @@
                 <form id="editarPoloForm">
 
                     <div class="mb-3">
-                        <label for="editarCidade" class="form-label">Cidade</label>
-                        <input class="form-control" id="editarCidade" name="cidade">
+                        <label for="editarCidadePolo" class="form-label">Cidade</label>
+                        <input class="form-control" id="editarCidadePolo" name="cidade">
                     </input>
                     </div>
                     <div class="mb-3">
-                        <label for="editarGestor" class="form-label">Gestor</label>
-                        <select class="form-select" class="form-control" id="editarGestor" name="gestor">
+                        <label for="editarGestorPolo" class="form-label">Gestor</label>
+                        <select class="form-select" class="form-control" id="editarGestorPolo" name="gestor">
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editarLatitude" class="form-label">Latitude</label>
-                        <textarea class="form-control" id="editarLatitude" name="latitude"></textarea>
+                        <label for="editarLatitudePolo" class="form-label">Latitude</label>
+                        <textarea class="form-control" id="editarLatitudePolo" name="latitude"></textarea>
                     </div>
                     <div class="mb-3"></div>
-                        <label for="editarLongitude" class="form-label">Longitude</label>
-                        <textarea class="form-control" id="editarLongitude" name="longitude"></textarea>
+                        <label for="editarLongitudePolo" class="form-label">Longitude</label>
+                        <textarea class="form-control" id="editarLongitudePolo" name="longitude"></textarea>
                    
 
                     <div class="mb-3">
-                        <label for="editarSaida" class="form-label">Data de saída</label>
-                        <input type="date" class="form-control" id="editarSaida" name="saida">
+                        <label for="editarSaidaPolo" class="form-label">Data de saída</label>
+                        <input type="date" class="form-control" id="editarSaidaPolo" name="saida">
                     </div>
                     <div class="d-flex justify-content-center">
                        <button type="button" class="btn btn-primary" id="salvar-polo">
@@ -294,19 +294,19 @@
         type: 'GET',
         url: `/editar_polo/${poloId}/?gestor=${gestorId}`,
         success: function(response) {
-            $('#editarCidade').val(response.cidade);
-            $('#editarLatitude').val(response.latitude);
-            $('#editarLongitude').val(response.longitude);
-            $('#editarSaida').val(response.saida);
+            $('#editarCidadePolo').val(response.cidade);
+            $('#editarLatitudePolo').val(response.latitude);
+            $('#editarLongitudePolo').val(response.longitude);
+            $('#editarSaidaPolo').val(response.saida);
 
             
-            $('#editarGestor').empty(); 
+            $('#editarGestorPolo').empty(); 
             response.gestores.forEach(function(gestor) {
                 let option = $('<option></option>').val(gestor.id).text(gestor.nome);
                 if (gestor.id === response.gestor) {
                     option.prop('selected', true);
                 }
-                $('#editarGestor').append(option);
+                $('#editarGestorPolo').append(option);
             });
 
             $('#EditarPolo').data('id', `${poloId}-${gestorId}`);
@@ -320,11 +320,11 @@
 
         $('#salvar-polo').on('click', function() {
             let formData = {
-                cidade: $('#editarCidade').val(),
-                gestor: $('#editarGestor').val(),
-                latitude: $('#editarLatitude').val(),
-                longitude: $('#editarLongitude').val(),
-                saida: $('#editarSaida').val(),
+                cidade: $('#editarCidadePolo').val(),
+                gestor: $('#editarGestorPolo').val(),
+                latitude: $('#editarLatitudePolo').val(),
+                longitude: $('#editarLongitudePolo').val(),
+                saida: $('#editarSaidaPolo').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
 

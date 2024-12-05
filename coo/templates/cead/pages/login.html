@@ -1,0 +1,30 @@
+{% extends "cead/partials/base.html" %}
+
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock style %}
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+    
+    <main>
+        <div class="container mt-5 p-4 login_form">
+            <form method="POST" action="/">
+                    {% csrf_token %}
+                        {% for field in form %}
+                        <div class="info text-white">
+                            {{field.label_tag}}
+                            {{field}}
+                        </div>
+                        {% endfor %}
+
+                    <div class="text-center">
+                        <button class="btn text-white" type="submit">Entrar</button>
+                    </div>
+            </form>
+        </div>
+    </main>
+
+{% endblock content %}

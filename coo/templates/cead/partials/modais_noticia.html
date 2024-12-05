@@ -1,0 +1,264 @@
+{% load static %}
+
+<!-- Criar -->
+<div class="modal fade" id="modalCriarNoticia" tabindex="-1" aria-labelledby="modalCriarNoticiaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalCriarNoticiaLabel">Notícia</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarNoticia" method="post" action="{% url 'cead:noticia_lista' %}">
+                    {% csrf_token %}
+                    
+                    <div class="input">
+                        {{ make_noticia.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Excluir -->
+<div class="modal fade" id="ExcluirNoticia" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header d-flex justify-content-center position-relative">
+                <span></span>
+                <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center gap-5">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="excluir-noticia" class="btn btn-danger">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detalhar -->
+<div class="modal fade" id="DetalharNoticia" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center position-relative">
+                <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h5 class="mb-1">Curso</h5>
+                        <p id="detalheCurso" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Título</h5>
+                    <p id="detalheTitulo" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Descrição</h5>
+                    <p id="detalheDescricao" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Arquivo</h5>
+                    <p id="detalheArquivo" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Publicação</h5>
+                    <p id="detalhePublicacao" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Edição</h5>
+                    <p id="detalheEdicao" class="form-control bg-light"></p>
+                </div>
+            
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Editar -->
+<div id="EditarNoticia" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title">Editar Notícia</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editarNoticiaForm">
+                    <div class="mb-3">
+                        <label for="editarCurso" class="form-label">Curso</label>
+                        <select id="editarCurso" name="curso" class="form-select">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarTitulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="editarTitulo" name="titulo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarDescricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="editarDescricao" name="descricao"></textarea>
+                    </div>
+                    <div class="mb-3"></div>
+                        <label for="editaArquivo" class="form-label">Arquivo</label>
+                        <input type="text" class="form-control" id="editarArquivo" name="arquivo" value="{{ arquivo }}" readonly>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvar-noticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#formCriarNoticia').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cead:criar_noticia' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Notícia criada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar notícia: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+        
+        $('.button_icon').on('click', function() {
+            dataId = $(this).data('id');
+            [noticiaId, cursoId] = dataId.split('-');
+        });
+
+        $('#excluir-noticia').on('click', function() {
+
+            $.ajax({
+                type: 'POST',
+                url: `/excluir_noticia/${noticiaId}/`, 
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $(`tr[data-id="${noticiaId}"]`).remove();
+                        $('#Excluir').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir notícia.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro na requisição de exclusão: " + error);
+                }
+            });
+        });
+
+        $('.detalhar-noticia').on('click', function() {
+
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+            
+            $.ajax({
+                type: 'GET',
+                url: `/detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
+                success: function(response) {
+                    $('#detalheCurso').text(response.curso);
+                    $('#detalheTitulo').text(response.titulo);
+                    $('#detalheDescricao').text(response.descricao);
+                    $('#detalheArquivo').text(response.arquivo);
+                    $('#detalhePublicacao').text(response.publicacao);
+                    $('#detalheEdicao').text(response.edicao);
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes da notícia: " + error);
+                }
+            });
+        });
+
+        $('.editar-noticia').on('click', function() {
+            $.ajax({
+                type: 'GET',
+                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
+                success: function(response) {
+                    $('#editarTitulo').val(response.titulo);
+                    $('#editarDescricao').val(response.descricao);
+                    $('#editarArquivo').val(response.arquivo);
+                    $('#editarCurso').empty();
+                    response.cursos.forEach(function(curso) {
+                        let option = $('<option></option>').val(curso.id).text(curso.nome);
+                        if (curso.id === response.curso) {
+                            option.prop('selected', true);
+                        }
+                        $('#editarCurso').append(option);
+                    });
+
+                    $('#EditarNoticia').data('id', `${noticiaId}-${cursoId}`);
+                    $('#EditarNoticia').modal('show'); 
+                },
+                error: function() {
+                    alert("Erro ao carregar dados da notícia.");
+                }
+            });
+        });
+
+        $('#salvar-noticia').on('click', function() {
+            let formData = {
+                curso: $('#editarCurso').val(),
+                titulo: $('#editarTitulo').val(),
+                descricao: $('#editarDescricao').val(),
+                arquivo: $('#editarArquivo').val(),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert("Notícia atualizada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao atualizar notícia: " + JSON.stringify(response.errors));
+                    }
+                },
+                error: function() {
+                    alert("Erro ao salvar as mudanças.");
+                }
+            });
+        });
+    });
+</script>

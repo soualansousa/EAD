@@ -20,6 +20,9 @@
             </div>
         </header>
 
+
+    <!-- login CEAD -->
+
     {% elif request.resolver_match.app_name == 'cead' %}
         <header class="dark px-5 text-white">
             <div class="container d-flex justify-content-center enable">
@@ -64,13 +67,17 @@
                         </a>
                         <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="#">Minhas informações</a></li>
+                            <a class="dropdown-item" href="#">Minhas informações</a>
+                        </li>
                         <li>
-                            <a class="dropdown-item" href="/">Sair</a></li>
+                            <a class="dropdown-item" href="/">Sair</a>
+                        </li>
                         </ul>
                     </li> 
                 </ul>
             </nav>
+
+            <!-- Responsividade -->
 
             <nav class="navMob navbar navbar_offcanvas text-white disable">
                 <div>
@@ -96,16 +103,39 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'cead:polo_lista' %}">Polos</a>
                             </li>
-                        
+
                             <li class="nav-item">
-        
+                                <a class="nav-link" href="{% url 'cead:gestor_lista' %}">Gestores</a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'cead:coordenador_lista' %}">Coordenadores</a>
         
+                            </li>
+
+                            <li class="nav-item"></li>
+                                <a class="nav-link" href="{% url 'cead:mediador_lista' %}">Mediadores</a>
                             </li>
                         
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'cead:curso_lista' %}">Cursos</a>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    {% if request.user.is_authenticated %}
+                                        {{ request.user.first_name|default:request.user.username }}
+                                    {% endif %}
+                                </a>
+                                <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="#">Minhas informações</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/">Sair</a>
+                                </li>
+                                </ul>
+                            </li> 
                         </ul>
                       
                     </div>
@@ -115,34 +145,102 @@
         </header>
 
     {% else %}
-        <header class="dark px-5 text-white">
-            <div class="container d-flex justify-content-center">
-                <img src="{% static 'images/logos/logo_ead.png' %}" alt="" class="logo"></img>
-            </div>
-            <nav class="navbar navbar-expand-sm justify-content-center">
-                <ul class="navbar-nav container px-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/coordenacao/">Home</a>
-                    </li>
+    <header class="dark px-5 text-white">
+        <div class="container d-flex justify-content-center enable">
+            <img src="{% static 'images/logos/logo_ead.png' %}" alt="" class="logo"></img>
+        </div>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/noticias/">Notícias</a>
-                    </li>
+        <nav class="navDesktop navbar navbar-expand-sm justify-content-center">
+            <ul class="navbar-nav container px-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coordenacao:coordenacao' %}">Home</a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/polos/">Polos</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coo:noticia_lista' %}">Notícias</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Mediadores</a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'coo:curso_lista' %}">Cursos</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        {% if request.user.is_authenticated %}
+                            {{ request.user.first_name|default:request.user.username }}
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#">Minhas informações</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/">Sair</a>
+                        </li>
+                    </ul>
+                </li> 
+            </ul>
+        </nav>
+
+             <!-- Responsividade -->
+        
+        <nav class="navMob navbar navbar_offcanvas text-white disable">
+            <div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+                    <img src="{% static 'images/icons/menu.svg' %}" alt="" class="menu_offcanvas"></img>
+                </button>
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+                <div class="offcanvas-header">
+                  <button type="button" class="button_close" data-bs-dismiss="offcanvas" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav container px-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'coordenacao:coordenacao' %}">Home</a>
+                        </li>
+    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'coo:noticia_lista' %}">Notícias</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Mediadores</a>
+                        </li>
+                    
+    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'coo:curso_lista' %}">Cursos</a>
+                        </li>
+                    </ul>
+
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Nome usuário</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            {% if request.user.is_authenticated %}
+                                {{ request.user.first_name|default:request.user.username }}
+                            {% endif %}
+                        </a>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#">Minhas informações</a></li>
-                          <li><a class="dropdown-item" href="/">Sair</a></li>
+                            <li>
+                                <a class="dropdown-item" href="#">Minhas informações</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/">Sair</a>
+                            </li>
                         </ul>
                     </li> 
-                </ul>
-            </nav>
-        </header>
+                  
+                </div>
+              </div>
+            </div>
+        </nav>
+    </header>
     {% endif %}
 
     {% block content %}

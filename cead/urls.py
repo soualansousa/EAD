@@ -6,6 +6,7 @@ app_name= 'cead'
 
 urlpatterns = [
     path('',views.user_login, name="login"),
+    path('',views.user_logout, name="logout"),
     path('cead/',views.cead, name="cead"),
     
 

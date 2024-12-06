@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mediador',
             name='curso',
-            field=models.ForeignKey(default='teste', on_delete=django.db.models.deletion.CASCADE, to='cead.curso'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cead.curso'),
         ),
         migrations.AddField(
             model_name='polo',

@@ -66,7 +66,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="/">Sair</a>
+                                <a class="dropdown-item" href="{% url 'coo:mediador_lista' %}">Sair</a>
                             </li>
                         </ul>
                     </li> 
@@ -116,7 +116,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="/">Sair</a>
+                                <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Sair</a>
                             </li>
                         </ul>
                       
@@ -139,15 +139,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="">Cursos</a>
+                    <a class="nav-link" href="{% url 'coo:curso_lista_coo' %}">Cursos</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="">Notícias</a>
+                    <a class="nav-link" href="{% url 'coo:noticia_lista' %}">Notícias</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="">Mediadores</a>
+                    <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Mediadores</a>
                 </li>
             
                 
@@ -186,15 +186,15 @@
                         </li>
     
                         <li class="nav-item">
-                            <a class="nav-link" href="">Cursos</a>
+                            <a class="nav-link" href="{% url 'coo:curso_lista_coo' %}">Cursos</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="">Notícias</a>
+                            <a class="nav-link" href="{% url 'coo:noticia_lista' %}">Notícias</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="">Mediadores</a>
+                            <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Mediadores</a>
                         </li>
                     </ul>
 
@@ -206,9 +206,6 @@
                             {% endif %}
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="#">Minhas informações</a>
-                            </li>
                             <li>
                                 <a class="dropdown-item" href="/">Sair</a>
                             </li>

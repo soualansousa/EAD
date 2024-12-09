@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import logging 
 
-from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
+from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas, Contato
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm
 
 @login_required
@@ -320,5 +320,86 @@ def excluir_mediador(request, mediador_id):
         mediacao.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+
+#disciplina
+def criar_disciplina(request):
+    if request.method == 'POST':
+        form = CursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+def vincular_disciplina(request):
+    if request.method == 'POST':
+        form = CoordenadorCursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
+def disciplina_lista(request):
+    make_curso = CursoForm(request.POST)
+    sync_curso = CoordenadorCursoForm(request.POST)
+    search_curso = SearchForm(request.GET)
+    query = request.GET.get('query')
+    coordenador_cursos = CoordenadorCurso.objects.all()
+    cursos_vinculados_ids = coordenador_cursos.values_list('curso_id', flat=True)
+    cursos_nao_vinculados = Curso.objects.exclude(id__in=cursos_vinculados_ids)
+
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''
+
+    if query:
+        coordenador_cursos = coordenador_cursos.filter(
+            Q(coordenador_cursos__nome__icontains=query) | Q(coordenador_cursos_sobre__icontains=query)
+        )
+    
+    context = {
+        'make_curso': make_curso,
+        'sync_curso': sync_curso,
+        'search_curso': search_curso,
+        'coordenador_cursos': coordenador_cursos,
+        'cursos_nao_vinculados': cursos_nao_vinculados,
+        'query': query,
+    }
+
+    return render(request, 'coo/pages/disciplina.html', context)
+
+def detalhar_disciplina(request, curso_id, coordenador_id):
+    cursos = get_object_or_404(Curso, id=curso_id)
+    curso_polos = CursoPolo.objects.filter(curso=cursos)
+    noticia_cursos = NoticiaCurso.objects.filter(curso=cursos)
+    coordenador_cursos = CoordenadorCurso.objects.filter(curso=cursos)
+    mediacoes = Mediacao.objects.filter(curso_polos__curso=cursos)
+
+    context = {
+        'cursos': cursos,
+        'noticia_cursos': noticia_cursos,
+        'curso_polos': curso_polos,
+        'coordenador_cursos': coordenador_cursos,
+        'mediacoes': mediacoes,
+    }
+
+    return render(request, 'coo/pages/detalhes_curso.html', context)
+
+def excluir_disciplina(request, cursoPolo_id):
+    if request.method == 'POST':
+        cursoPolo = get_object_or_404(CursoPolo, id=cursoPolo_id)
+        cursoPolo.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método não permitido'})
+
+def detalhar_disciplina(request, cursoPolo_id):
+    curso_polos = get_object_or_404(CursoPolo, id=cursoPolo_id)
+    dados = {
+        'curso': curso_polos.curso.nome,
+        'polo': curso_polos.polo.cidade,
+        'publicacao': curso_polos.publicacao.strftime('%d/%m/%Y') if curso_polos.publicacao else "Data não disponível",
+        'edicao': curso_polos.edicao.strftime('%d/%m/%Y') if curso_polos.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
 
 

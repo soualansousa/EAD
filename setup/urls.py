@@ -17,10 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from cead import views as cead_views 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('cead/', include('cead.urls', namespace='cead')),
     path('coo/', include('coo.urls', namespace='coo')),
-
+    path('',cead_views.user_login, name="login"),
 ]

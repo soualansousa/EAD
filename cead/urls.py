@@ -52,6 +52,14 @@ urlpatterns = [
     path('detalhar_curso/<int:coordenador_id>/<int:curso_id>/', views.detalhar_curso, name='detalhar_curso'),
     path('excluir_cursoPolo/<int:cursoPolo_id>/', views.excluir_cursoPolo, name='excluir_cursoPolo'),
     path('detalhar_cursoPolo/<int:cursoPolo_id>/', views.detalhar_cursoPolo, name='detalhar_cursoPolo'),
+
+#disciplina
+    path('disciplina/',views.disciplina_lista, name="disciplina_lista"),
+    path('criar_disciplina/', views.criar_disciplina, name='criar_disciplina'),
+    path('vincular_disciplina/', views.vincular_disciplina, name='vincular_disciplina'),
+    path('detalhar_disciplina/<int:curso_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
+    path('excluir_disciplina/<int:disciplina_id>/', views.excluir_disciplina, name='excluir_disciplina'),
+    path('detalhar_disciplina/<int:disciplina_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
 ]
 
 if settings.DEBUG:

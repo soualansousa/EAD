@@ -29,6 +29,8 @@
             <table class="table table-hover mt-3 table_rounded">
                 <thead>
                     <tr class="text-center table_header">
+                        <th>ID curso</th>
+                        <th>ID noticia</th>
                         <th>Curso</th>
                         <th>Título</th>
                         <th>Descrição</th>
@@ -39,6 +41,8 @@
                 <tbody>
                     {% for noticia_curso in noticia_cursos %}
                         <tr class="text-center table_body">
+                            <td>{{ noticia_curso.curso.id }}</td>
+                            <td>{{ noticia_curso.noticia.id }}</td>
                             <td>{{ noticia_curso.curso.nome }}</td>
                             <td>{{ noticia_curso.noticia.titulo }}</td>
                             <td>{{ noticia_curso.noticia.descricao }}</td>
@@ -106,6 +110,6 @@
 
         </div>
 
-        {% include "cead/partials/modais_noticia.html" %}
+        {% include "coo/partials/modais_noticia.html" %}
     </main>
 {% endblock content %}

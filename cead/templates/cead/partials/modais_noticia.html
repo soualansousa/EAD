@@ -164,7 +164,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/excluir_noticia/${noticiaId}/`, 
+                url: `excluir_noticia/${noticiaId}/`, 
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
@@ -193,7 +193,7 @@
             
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
+                url: `detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
                     $('#detalheCursoNoticia').text(response.curso);
                     $('#detalheTituloNoticia').text(response.titulo);
@@ -211,7 +211,7 @@
         $('.editar-noticia').on('click', function() {
             $.ajax({
                 type: 'GET',
-                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
+                url: `editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 success: function(response) {
                     $('#editarTituloNoticia').val(response.titulo);
                     $('#editarDescricaoNoticia').val(response.descricao);
@@ -245,7 +245,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_noticia/${noticiaId}/?curso=${cursoId}`,
+                url: `editar_noticia/${noticiaId}/?curso=${cursoId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

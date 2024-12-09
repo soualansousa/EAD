@@ -20,7 +20,13 @@ def user_login(request):
             if user.groups.filter(name='cead').exists():
                 return redirect("cead:cead")
             elif user.groups.filter(name='coordenador').exists():
-                return redirect("coo:coordenacao")
+                coordenador = Coordenador.objects.filter(user=user).first()
+                if coordenador:
+                    coordenador_curso = CoordenadorCurso.objects.filter(coordenador=coordenador).first()
+                    if coordenador_curso:
+                        request.session['coordenador_curso_id'] = coordenador_curso.curso.id
+                        return redirect("coo:coordenacao")
+                return redirect("cead:cead")
     else:
         form = AuthenticationForm()
     return render(request, 'cead/pages/login.html', {'form': form})

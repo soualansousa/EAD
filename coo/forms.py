@@ -1,27 +1,18 @@
 from django import forms
 
-from .models import Noticia, Polo, Coordenador, Curso, Mediador, Gestor
-
-from .models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, GestorPolos
+from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos
 
 
 class SearchForm(forms.Form):
     query = forms.CharField(label="Buscar", max_length=100, required=False)
 
 class NoticiaForm(forms.ModelForm):
-    curso = forms.ModelChoiceField(
-        queryset=Curso.objects.all(),
-        required=False,
-        label="Curso",
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-
     class Meta:
         model = Noticia
         fields = ['titulo', 'descricao', 'arquivo']
 
     def __init__(self, *args, **kwargs):
-        self.noticia_curso = kwargs.pop('noticia_curso', None)
+        self.coordenador_curso_id = kwargs.pop('coordenador_curso_id', None)
         super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
@@ -30,12 +21,9 @@ class NoticiaForm(forms.ModelForm):
         if commit:
             instance.save()
 
-        curso = self.cleaned_data.get('curso')
-
-        if self.noticia_curso:
-            self.noticia_curso.curso = curso
-            self.noticia_curso.save()
-        else:
+        if self.coordenador_curso_id:
+            print(self.coordenador_curso_id)
+            curso = Curso.objects.get(id=self.coordenador_curso_id)
             NoticiaCurso.objects.create(
                 noticia=instance,
                 curso=curso,

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import Group
 
 from .models import Noticia, Polo, Coordenador, Curso, Mediador, Gestor
 
@@ -120,20 +121,6 @@ class CoordenadorForm(forms.ModelForm):
 
         if commit:
             instance.save()
-
-        curso = self.cleaned_data.get('curso')
-        saida = self.cleaned_data.get('saida')
-
-        if self.coordenador_curso:
-            self.coordenador_curso.curso = curso
-            self.coordenador_curso.saida = saida
-            self.coordenador_curso.save()
-        else:
-            CoordenadorCurso.objects.create(
-                coordenador=instance,
-                curso=curso,
-                saida=saida,
-            )
 
         return instance
 

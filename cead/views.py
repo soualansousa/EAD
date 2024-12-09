@@ -1,12 +1,11 @@
-from datetime import datetime
+from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-import logging 
 
 from .models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm
@@ -15,13 +14,19 @@ def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            login(request, form.get_user())
-            if form.get_user().is_superuser:
+            user = form.get_user()
+            login(request, user)
+            
+            if user.groups.filter(name='cead').exists():
                 return redirect("cead:cead")
-            return redirect("coo:coordenacao")
+            elif user.groups.filter(name='coordenador').exists():
+                return redirect("coo:coordenacao")
     else:
         form = AuthenticationForm()
     return render(request, 'cead/pages/login.html', {'form': form})
+
+def user_logout(request):
+    logout(request)
 
 @login_required
 def cead(request):
@@ -277,11 +282,37 @@ def criar_coordenador(request):
     if request.method == 'POST':
         form = CoordenadorForm(request.POST)
         if form.is_valid():
-            form.save()
+            coordenador = form.save(commit=False)
+
+            user = User.objects.create_user(
+                first_name=coordenador.nome,
+                username=coordenador.email,
+                email=coordenador.email,
+                password='cooteste',
+            )
+            
+            coordenador.user = user
+            coordenador.save()
+
+            curso = form.cleaned_data.get('curso')
+            saida = form.cleaned_data.get('saida')
+
+            CoordenadorCurso.objects.create(
+                coordenador=coordenador,
+                curso=curso,
+                saida=saida
+            )
+
+            coordenador_group = Group.objects.get(name='coordenador')
+            user.groups.add(coordenador_group)
+
             return JsonResponse({'success': True})
+
         return JsonResponse({'success': False, 'errors': form.errors})
+
     else:
         form = CoordenadorForm()
+
     return render(request, 'modais_coordenadores.html', {'form': form})
 
 def vincular_curso_coordenador(request):

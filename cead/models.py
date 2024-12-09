@@ -1,17 +1,12 @@
 from django.db import models
 from datetime import date
 from django.utils.safestring import mark_safe
+from django.contrib.auth.models import User
 
 class Cead(models.Model):
-    SITUACAO_CHOICES = [
-        ('ATIVO', 'Ativo'),
-        ('INATIVO', 'Inativo'),
-      
-        ]
     nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.IntegerField(default="7499999999")
-    situacao = models.CharField(max_length=10, choices=SITUACAO_CHOICES, default='ATIVO')
+    email = models.EmailField(max_length=100)
+    telefone = models.CharField(max_length=15, default="7499999999")
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
 
@@ -20,10 +15,11 @@ class Cead(models.Model):
 
 class Coordenador(models.Model):
     nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.IntegerField(default="7499999999")
+    email = models.EmailField(max_length=100)
+    telefone = models.CharField(max_length=15, default="7499999999")
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nome
@@ -98,7 +94,7 @@ class Contato(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     nome = models.CharField(max_length=150)
     email = models.EmailField(max_length=100)
-    telefone = models.CharField(max_length=11)
+    telefone = models.CharField(max_length=15, default="7499999999")
     matricula = models.CharField(max_length=50)
     assunto = models.CharField(max_length=255)
     mensagem = models.TextField()
@@ -127,8 +123,8 @@ class NoticiaCurso(models.Model):
 
 class Gestor(models.Model):
     nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.IntegerField(default="7499999999")
+    email = models.EmailField(max_length=100)
+    telefone = models.CharField(max_length=15, default="7499999999")
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
     formacao = models.TextField(max_length=255)
@@ -157,8 +153,8 @@ class CursoPolo(models.Model):
 
 class Mediador(models.Model):
     nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100, default="email@exemplo.com")
-    telefone = models.CharField(max_length=11, default="7499999999")
+    email = models.EmailField(max_length=100)
+    telefone = models.CharField(max_length=15, default="7499999999")
     formacao = models.TextField(max_length=255)
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
@@ -174,7 +170,7 @@ class Mediacao(models.Model):
         ]
     mediador = models.ForeignKey(Mediador, on_delete=models.CASCADE, related_name="mediacao")
     curso_polos = models.ForeignKey(CursoPolo, on_delete=models.CASCADE, related_name="mediacao")
-    modalidade = models.CharField(max_length=10, choices=MODALIDADE_CHOICES, default="VIRTUAL")
+    modalidade = models.CharField(max_length=10, choices=MODALIDADE_CHOICES)
     entrada = models.DateField(auto_now_add=True)
     saida = models.DateField(blank=True, null=True)
     

@@ -17,9 +17,9 @@ urlpatterns = [
 #notícias
     path('noticias/',views.noticias_lista, name="noticia_lista"),
     path('criar_noticia/', views.criar_noticia, name='criar_noticia'),
-    path('excluir_noticia/<int:noticia_id>/', views.excluir_noticia, name='excluir_noticia'),
-    path('detalhar_noticia/<int:noticia_id>/', views.detalhar_noticia, name='detalhar_noticia'),
-    path('editar_noticia/<int:noticia_id>/', views.editar_noticia, name='editar_noticia'),
+    path('noticias/excluir_noticia/<int:noticia_id>/', views.excluir_noticia, name='excluir_noticia'),
+    path('noticias/detalhar_noticia/<int:noticia_id>/', views.detalhar_noticia, name='detalhar_noticia'),
+    path('noticias/editar_noticia/<int:noticia_id>/', views.editar_noticia, name='editar_noticia'),
 
 #polos
     path('polos/',views.polos_lista, name="polo_lista"),

@@ -132,7 +132,7 @@
             if (cursoPoloId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_cursoPolo/${cursoPoloId}/`, 
+                    url: `excluir_cursoPolo/${cursoPoloId}/`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
@@ -158,7 +158,7 @@
             let cursoPoloId = $(this).data('id');  
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_cursoPolo/${cursoPoloId}/`, 
+                url: `detalhar_cursoPolo/${cursoPoloId}/`, 
                 success: function(response) {
                     $('#detalheCurso').text(response.curso);
                     $('#detalhePolo').text(response.polo);
@@ -175,7 +175,7 @@
         $('.btn-editar').on('click', function() {
             $.ajax({
                 type: 'GET',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `editar_noticia/${noticiaId}/`,
                 success: function(response) {
                     $('#editarTitulo').val(response.titulo);
                     $('#editarDescricao').val(response.descricao);
@@ -208,7 +208,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_noticia/${noticiaId}/`,
+                url: `editar_noticia/${noticiaId}/`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

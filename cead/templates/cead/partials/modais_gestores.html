@@ -183,7 +183,7 @@
             if (gestorId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_gestor/${gestorId}/`, 
+                    url: `excluir_gestor/${gestorId}/`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
@@ -208,7 +208,7 @@
         $('.detalhar-gestor').on('click', function() {            
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_gestor/${gestorId}/`, 
+                url: `detalhar_gestor/${gestorId}/`, 
                 success: function(response) {
                     $('#detalheNomeGestor').text(response.nome);
                     $('#detalheEmailGestor').text(response.email);
@@ -226,7 +226,7 @@
         $('.editar-gestor').on('click', function() {
             $.ajax({
                 type: 'GET',
-                url: `/editar_gestor/${gestorId}/`,
+                url: `editar_gestor/${gestorId}/`,
                 success: function(response) {
                     $('#editarNomeGestor').val(response.nome);
                     $('#editarEmailGestor').val(response.email);
@@ -251,7 +251,7 @@
             };
             $.ajax({
                 type: 'POST',
-                url: `/editar_gestor/${gestorId}/`,
+                url: `editar_gestor/${gestorId}/`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

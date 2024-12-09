@@ -234,7 +234,7 @@
             if (coordenadorId && cursoId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_coordenador/${coordenadorId}/?curso=${cursoId}`, 
+                    url: `excluir_coordenador/${coordenadorId}/?curso=${cursoId}`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
@@ -266,7 +266,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_coordenador/${coordenadorId}/?curso=${cursoId}`, 
+                url: `detalhar_coordenador/${coordenadorId}/?curso=${cursoId}`, 
                 success: function(response) {
                     console.log(response)
                     console.log(response)
@@ -288,7 +288,7 @@
         $('.editar-coordenador').on('click', function() {
             $.ajax({
                 type: 'GET',
-                url: `/editar_coordenador/${coordenadorId}/?curso=${cursoId}`,  
+                url: `editar_coordenador/${coordenadorId}/?curso=${cursoId}`,  
                 success: function(response) {
                     $('#editarNomeCoordenador').val(response.nome);
                     $('#editarEmailCoordenador').val(response.email);
@@ -326,7 +326,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_coordenador/${coordenadorId}/?curso=${cursoId}`,
+                url: `editar_coordenador/${coordenadorId}/?curso=${cursoId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

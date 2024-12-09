@@ -21,9 +21,17 @@ urlpatterns = [
     path('mediadores/',views.mediadores_lista, name="mediador_lista"),
     path('criar_mediador/', views.criar_mediador, name='criar_mediador'),
     path('vincular_mediador/', views.mediacao, name='vincular_mediador'),
-    path('excluir_mediador/<int:mediador_id>/', views.excluir_mediador, name='excluir_mediador'),
-    path('detalhar_mediador/<int:mediador_id>/', views.detalhar_mediador, name='detalhar_mediador'),
-    path('editar_mediador/<int:mediador_id>/', views.editar_mediador, name='editar_mediador'),
+    path('mediadores/excluir_mediador/<int:mediador_id>/', views.excluir_mediador, name='excluir_mediador'),
+    path('mediadores/detalhar_mediador/<int:mediador_id>/', views.detalhar_mediador, name='detalhar_mediador'),
+    path('mediadores/editar_mediador/<int:mediador_id>/', views.editar_mediador, name='editar_mediador'),
+
+#disciplina
+    # path('disciplina/',views.disciplina_lista, name="disciplina_lista"),
+    # path('criar_disciplina/', views.criar_disciplina, name='criar_disciplina'),
+    # path('disciplina/detalhar_disciplina/<int:disciplina_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
+    # path('disciplina/excluir_disciplina/<int:disciplina_id>/', views.excluir_disciplina, name='excluir_disciplina'),
+    # path('disciplina/detalhar_disciplina/<int:disciplina_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
+
 ]
 
 if settings.DEBUG:

@@ -237,7 +237,7 @@
             if (poloId && gestorId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_polo/${poloId}/`, 
+                    url: `excluir_polo/${poloId}/`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         gestor: gestorId  
@@ -270,7 +270,7 @@
     
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_polo/${poloId}/?gestor=${gestorId}`, 
+                url: `detalhar_polo/${poloId}/?gestor=${gestorId}`, 
 
                 success: function(response) {
                     $('#detalheCidade').text(response.cidade);
@@ -292,7 +292,7 @@
    
     $.ajax({
         type: 'GET',
-        url: `/editar_polo/${poloId}/?gestor=${gestorId}`,
+        url: `editar_polo/${poloId}/?gestor=${gestorId}`,
         success: function(response) {
             $('#editarCidadePolo').val(response.cidade);
             $('#editarLatitudePolo').val(response.latitude);
@@ -330,7 +330,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: `/editar_polo/${poloId}/?gestor=${gestorId}`,
+                url: `editar_polo/${poloId}/?gestor=${gestorId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {

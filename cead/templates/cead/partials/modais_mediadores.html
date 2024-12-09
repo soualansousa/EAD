@@ -253,7 +253,7 @@
             if (mediadorId && cursoPolosId) {
                 $.ajax({
                     type: 'POST',
-                    url: `/excluir_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
+                    url: `excluir_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
@@ -284,7 +284,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/detalhar_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
+                url: `detalhar_mediador/${mediadorId}/?curso=${cursoPolosId}`, 
                 success: function(response) {
                     $('#detalheCursoPoloMediador').text(response.curso_polo );
                     $('#detalheNomeMediador').text(response.nome);
@@ -306,7 +306,7 @@
         $('.editar-mediador').on('click', function() {
             $.ajax({
                 type: 'GET',
-                url: `/editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
+                url: `editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
                 success: function(response) {
                     $('#editarNomeMediador').val(response.nome);
                     $('#editarEmailMediador').val(response.email);
@@ -353,7 +353,7 @@
             
             $.ajax({
                 type: 'POST',
-                url: `/editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
+                url: `editar_mediador/${mediadorId}/?curso=${cursoPolosId}`,  
                 data: formData,
                 success: function(response) {
                     if (response.success) {

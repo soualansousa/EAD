@@ -5,12 +5,7 @@ from django.conf.urls.static import static
 app_name= 'cead'
 
 urlpatterns = [
-    path('',views.user_login, name="login"),
-    path('',views.user_logout, name="logout"),
-    path('cead/',views.cead, name="cead"),
-    
-
-
+    path('',views.cead, name="cead"),
 
 #gestores
     path('gestores/', views.gestores_lista, name="gestor_lista"), 

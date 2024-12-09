@@ -25,9 +25,6 @@ def user_login(request):
         form = AuthenticationForm()
     return render(request, 'cead/pages/login.html', {'form': form})
 
-def user_logout(request):
-    logout(request)
-
 @login_required
 def cead(request):
     return render(request, "cead/pages/home.html")

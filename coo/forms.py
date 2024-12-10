@@ -22,7 +22,6 @@ class NoticiaForm(forms.ModelForm):
             instance.save()
 
         if self.coordenador_curso_id:
-            print(self.coordenador_curso_id)
             curso = Curso.objects.get(id=self.coordenador_curso_id)
             NoticiaCurso.objects.create(
                 noticia=instance,
@@ -161,7 +160,7 @@ class MediadorForm(forms.ModelForm):
     )
 
     curso_polos = forms.ModelChoiceField(
-        queryset=CursoPolo.objects.all(),
+        queryset=CursoPolo.objects.none(),
         required=True,
         label="Curso - Polo",
         widget=forms.Select(attrs={'class': 'form-control'})
@@ -178,12 +177,17 @@ class MediadorForm(forms.ModelForm):
         fields = ['nome', 'email', 'telefone', 'formacao']
 
     def __init__(self, *args, **kwargs):
+        self.coordenador_curso_id = kwargs.pop('coordenador_curso_id', None)
         self.mediacao = kwargs.pop('mediacao', None)
-        curso_polos_id = kwargs.pop('curso_polos_id', None)
         super().__init__(*args, **kwargs)
 
-        if curso_polos_id:
-            self.fields['curso_polos'].initial = CursoPolo.objects.get(id=curso_polos_id)
+        if self.coordenador_curso_id:
+            self.fields['curso_polos'].queryset = CursoPolo.objects.filter(
+                curso_id=self.coordenador_curso_id
+            )
+        else:
+            self.fields['curso_polos'].queryset = CursoPolo.objects.none()
+
 
         if self.mediacao:
             self.fields['saida'].initial = self.mediacao.saida

@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import logging 
 
 from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas, Contato
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm
 
 @login_required
 def coordenacao(request):
@@ -284,45 +284,59 @@ def excluir_mediador(request, mediador_id):
 
 #disciplina
 def criar_disciplina(request):
+    # if request.method == 'POST':
+    #     form = DisciplinaForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return JsonResponse({'success': True})
+    #     return JsonResponse({'success': False, 'errors': form.errors})
+    coordenador_curso_id = request.session.get('coordenador_curso_id')
+
     if request.method == 'POST':
-        form = CursoForm(request.POST)
+        form = DisciplinaForm(request.POST, coordenador_curso_id=coordenador_curso_id)
         if form.is_valid():
-            form.save()
+            disciplina = form.save()
+
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
+
     
-def vincular_disciplina(request):
-    if request.method == 'POST':
-        form = CoordenadorCursoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'errors': form.errors})
+# def vincular_disciplina(request):
+#     if request.method == 'POST':
+#         form = CoordenadorCursoForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return JsonResponse({'success': True})
+#         return JsonResponse({'success': False, 'errors': form.errors})
     
 def disciplina_lista(request):
-    make_curso = CursoForm(request.POST)
-    sync_curso = CoordenadorCursoForm(request.POST)
-    search_curso = SearchForm(request.GET)
+    make_disciplina = DisciplinaForm(request.POST)
+    search_disciplina = SearchForm(request.GET)
     query = request.GET.get('query')
-    coordenador_cursos = CoordenadorCurso.objects.all()
-    cursos_vinculados_ids = coordenador_cursos.values_list('curso_id', flat=True)
-    cursos_nao_vinculados = Curso.objects.exclude(id__in=cursos_vinculados_ids)
+    disciplina_cursos = Disciplina.objects.select_related('curso').all()
 
     query = request.GET.get('query', '')
     if query == 'none':
         query = ''
 
     if query:
-        coordenador_cursos = coordenador_cursos.filter(
-            Q(coordenador_cursos__nome__icontains=query) | Q(coordenador_cursos_sobre__icontains=query)
+        disciplina_cursos = disciplina_cursos.filter(
+            Q(curso__nome__icontains=query) | Q(nome_icontains=query) | Q(modulo__icontains=query)
         )
-    
+
+    disciplina_cursos_paginada = Paginator(disciplina_cursos, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = disciplina_cursos_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = disciplina_cursos_paginada.page(1)
+    except EmptyPage:
+        pagina = disciplina_cursos_paginada.page(1)
+
     context = {
-        'make_curso': make_curso,
-        'sync_curso': sync_curso,
-        'search_curso': search_curso,
-        'coordenador_cursos': coordenador_cursos,
-        'cursos_nao_vinculados': cursos_nao_vinculados,
+        'make_disciplina': make_disciplina,
+        'search_disciplina': search_disciplina,
+        'disciplina_cursos': pagina,
         'query': query,
     }
 

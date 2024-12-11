@@ -1,6 +1,6 @@
 from django import forms
 
-from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos
+from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos, Disciplina
 
 
 class SearchForm(forms.Form):
@@ -237,5 +237,40 @@ class GestorForm(forms.ModelForm):
             Gestor.objects.create(
                 gestores=instance,
             )
+
+        return instance
+
+
+class DisciplinaForm(forms.ModelForm):
+    curso = forms.ModelChoiceField(
+        queryset=Curso.objects.all(),
+        required=False,
+        label="Curso",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Disciplina
+        fields = ['nome', 'ementa', 'modulo', 'ch']
+
+    def __init__(self, *args, **kwargs):
+        self.disciplina_curso = kwargs.pop('disciplina_curso', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if commit:
+            instance.save()
+
+        curso = self.cleaned_data.get('curso')
+
+        # Verifique se disciplina_curso já existe ou crie um novo registro
+        if self.disciplina_curso:
+            self.disciplina_curso.curso = curso
+            self.disciplina_curso.save()
+        else:
+            instance.curso = curso  # Associe o curso diretamente à instância
+            instance.save()
 
         return instance

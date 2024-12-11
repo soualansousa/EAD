@@ -38,22 +38,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- {% for gestor_polo in gestor_polos %} -->
+                    {% for disciplina_curso in disciplina_cursos %}
                         <tr class="text-center table_body">
-                            <!-- <td>{{ gestor_polo.polo.cidade }}</td>
-                            <td>{{ gestor_polo.gestor.nome}}</td> -->
+                            <td>{{ disciplina_curso.nome }}</td>
+                            <td>{{ disciplina_curso.modulo}}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon editar-disciplina" data-bs-toggle="modal" data-bs-target="#EditarDisciplina" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon editar-disciplina" data-bs-toggle="modal" data-bs-target="#EditarDisciplina" data-id="{{ disciplina_cursos.id }}">
                                         <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
                                     </button>
 
-                                    <button class="button_icon detalhar-disciplina" data-bs-toggle="modal" data-bs-target="#DetalharDisciplina" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon detalhar-disciplina" data-bs-toggle="modal" data-bs-target="#DetalharDisciplina" data-id="{{ disciplina_cursos.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDisciplina" data-id="{{ gestor_polo.polo.id }}-{{ gestor_polo.gestor.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDisciplina" data-id="{{ disciplina_cursos.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>
@@ -73,12 +73,12 @@
 
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
-            {% if disciplina_curso.has_previous %}
+            {% if disciplina_cursos.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?status={{ status }}&p=1">&laquo;</a>
                     </li>
                     <li class="page-item"> 
-                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.previous_page_number }}">Anterior</a>
+                        <a class="page-link" href="?status={{ status }}&p={{ disciplina_cursos.previous_page_number }}">Anterior</a>
                     </li>
             {% else  %}
                     <li class="page-item disabled">
@@ -89,14 +89,14 @@
                     </li>
             {% endif %}
                     <li class="page-item">
-                        <a class="page-link">{{disciplina_curso.number}}</a>
+                        <a class="page-link">{{disciplina_cursos.number}}</a>
                     </li>
-            {% if disciplina_curso.has_next %}
+            {% if disciplina_cursos.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.next_page_number }}">Próxima</a>
+                        <a class="page-link" href="?status={{ status }}&p={{ disciplina_cursos.next_page_number }}">Próxima</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?status={{ status }}&p={{ gestor_polos.paginator.num_pages }}">&raquo;</a>
+                        <a class="page-link" href="?status={{ status }}&p={{ disciplina_cursos.paginator.num_pages }}">&raquo;</a>
                     </li>
             {% else %}
                     <li class="page-item disabled">

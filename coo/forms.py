@@ -254,23 +254,37 @@ class DisciplinaForm(forms.ModelForm):
         fields = ['nome', 'ementa', 'modulo', 'ch']
 
     def __init__(self, *args, **kwargs):
-        self.disciplina_curso = kwargs.pop('disciplina_curso', None)
+        # Recebe coordenador_curso_id do kwargs
+        self.coordenador_curso_id = kwargs.pop('coordenador_curso_id', None)
         super().__init__(*args, **kwargs)
 
+        # Filtra o queryset de curso com base no coordenador_curso_id, se disponível
+        if self.coordenador_curso_id:
+            self.fields['curso'].queryset = Curso.objects.filter(coordenador_curso=self.coordenador_curso_id)
+
     def save(self, commit=True):
+        # Salva a instância base da disciplina sem ainda relacioná-la ao curso
         instance = super().save(commit=False)
 
+        # Associa o curso selecionado à disciplina, se houver um curso no formulário
+        curso = self.cleaned_data.get('curso')
+        if curso:
+            instance.curso = curso
+
+        # Salva a instância da disciplina
         if commit:
             instance.save()
 
-        curso = self.cleaned_data.get('curso')
-
-        # Verifique se disciplina_curso já existe ou crie um novo registro
-        if self.disciplina_curso:
-            self.disciplina_curso.curso = curso
-            self.disciplina_curso.save()
-        else:
-            instance.curso = curso  # Associe o curso diretamente à instância
-            instance.save()
+        # Lógica adicional (se necessário) para criar relações
+        if self.coordenador_curso_id:
+            try:
+                coordenador = Coordenador.objects.get(id=self.coordenador_curso_id)
+                # Lógica específica para salvar outras relações, se aplicável
+                # Por exemplo, criar outra instância de modelo que relacione Disciplina e Coordenador
+            except Coordenador.DoesNotExist:
+                raise ValueError("Coordenador não encontrado para o ID fornecido.")
 
         return instance
+
+
+

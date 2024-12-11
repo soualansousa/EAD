@@ -28,7 +28,7 @@
 </div>
 
 <!-- Excluir -->
-<div class="modal fade" id="ExcluirNoticia" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+<div class="modal fade" id="ExcluirDisciplina" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -96,37 +96,37 @@
 </div>
 
 <!-- Editar -->
-<div id="EditarNoticia" class="modal" tabindex="-1">
+<div id="EditarDisciplina" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <span></span>
-                <h5 class="modal-title">Editar Notícia</h5>
+                <h5 class="modal-title">Editar Disciplina</h5>
                 <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editarNoticiaForm">
+                <form id="editarDiscipĺinaForm">
                     <div class="mb-3">
-                        <label for="editarCursoNoticia" class="form-label">Curso</label>
-                        <select id="editarCursoNoticia" name="curso" class="form-select">
+                        <label for="editarCursoDisciplina" class="form-label">Curso</label>
+                        <select id="editarCursoDisciplina" name="curso" class="form-select">
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editarTituloNoticia" class="form-label">Título</label>
-                        <input type="text" class="form-control" id="editarTituloNoticia" name="titulo">
+                        <label for="editarNomeDisciplina" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNomeDisciplina" name="nome">
                     </div>
                     <div class="mb-3">
-                        <label for="editarDescricaoNoticia" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="editarDescricaoNoticia" name="descricao"></textarea>
+                        <label for="editarEmentaDisciplina" class="form-label">Ementa</label>
+                        <textarea class="form-control" id="editarEmentaDisciplina" name="ementa"></textarea>
                     </div>
                     <div class="mb-3"></div>
-                        <label for="editaArquivo" class="form-label">Arquivo</label>
-                        <input type="text" class="form-control" id="editarArquivoNoticia" name="arquivo" value="{{ arquivo }}" readonly>
+                        <label for="editaChDisciplina" class="form-label">Carga Horária</label>
+                        <input type="text" class="form-control" id="editaChDisciplina" name="ch">
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvar-noticia" data-id="{{ noticia_curso.noticia.id }}-{{ noticia_curso.curso.id }}">Salvar</button>
+                        <button type="button" class="btn btn-primary d-flex justify-content-center mb-3" id="salvar-disciplina" data-id="{{ disciplina_cursos.id }}">Salvar</button>
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                     </div>
                 </form>
@@ -209,51 +209,49 @@
             });
         });
 
-        $('.editar-noticia').on('click', function() {
+        $('.editar-disciplina').on('click', function() {
+            const disciplinaId = $(this).data('id'); // Obtenha o ID do botão clicado
             $.ajax({
                 type: 'GET',
-                url: `editar_noticia/${noticiaId}/?curso=${cursoId}`,
+                url: `/editar_disciplina/${disciplinaId}/`,
                 success: function(response) {
-                    $('#editarTituloNoticia').val(response.titulo);
-                    $('#editarDescricaoNoticia').val(response.descricao);
-                    $('#editarArquivoNoticia').val(response.arquivo);
-                    $('#editarCursoNoticia').empty();
+                    $('#editarCursoDisciplina').empty(); // Limpa opções existentes
                     response.cursos.forEach(function(curso) {
-                        let option = $('<option></option>').val(curso.id).text(curso.nome);
-                        if (curso.id === response.curso) {
-                            option.prop('selected', true);
-                        }
-                        $('#editarCursoNoticia').append(option);
+                        const selected = curso.id === response.curso ? 'selected' : '';
+                        $('#editarCursoDisciplina').append(`<option value="${curso.id}" ${selected}>${curso.nome}</option>`);
                     });
-
-                    $('#EditarNoticia').data('id', `${noticiaId}-${cursoId}`);
-                    $('#EditarNoticia').modal('show'); 
+                    $('#editarNomeDisciplina').val(response.nome);
+                    $('#editarEmentaDisciplina').val(response.ementa);
+                    $('#editaChDisciplina').val(response.ch);
+                    $('#EditarDisciplina').data('id', disciplinaId); // Salva o ID no modal
+                    $('#EditarDisciplina').modal('show');
                 },
                 error: function() {
-                    alert("Erro ao carregar dados da notícia.");
+                    alert("Erro ao carregar dados da disciplina.");
                 }
             });
         });
 
-        $('#salvar-noticia').on('click', function() {
+
+        $('#salvar-disciplina').on('click', function() {
             let formData = {
-                curso: $('#editarCursoNoticia').val(),
-                titulo: $('#editarTituloNoticia').val(),
-                descricao: $('#editarDescricaoNoticia').val(),
-                arquivo: $('#editarArquivoNoticia').val(),
+                curso: $('#editarCursoDisciplina').val(),
+                nome: $('#editarNomeDisciplina').val(),
+                ementa: $('#editarEmentaDisciplina').val(),
+                ch: $('#editaChDisciplina').val(),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             };
 
             $.ajax({
                 type: 'POST',
-                url: `editar_noticia/${noticiaId}/?curso=${cursoId}`,
+                url: `editar_disciplina/${disciplinaId}/?curso=${cursoId}`,
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert("Notícia atualizada com sucesso!");
+                        alert("Disciplina atualizada com sucesso!");
                         location.reload();
                     } else {
-                        alert("Erro ao atualizar notícia: " + JSON.stringify(response.errors));
+                        alert("Erro ao atualizar disciplina: " + JSON.stringify(response.errors));
                     }
                 },
                 error: function() {

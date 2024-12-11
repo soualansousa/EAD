@@ -342,22 +342,36 @@ def disciplina_lista(request):
 
     return render(request, 'coo/pages/disciplina.html', context)
 
-def detalhar_disciplina(request, curso_id, coordenador_id):
-    cursos = get_object_or_404(Curso, id=curso_id)
-    curso_polos = CursoPolo.objects.filter(curso=cursos)
-    noticia_cursos = NoticiaCurso.objects.filter(curso=cursos)
-    coordenador_cursos = CoordenadorCurso.objects.filter(curso=cursos)
-    mediacoes = Mediacao.objects.filter(curso_polos__curso=cursos)
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Disciplina, Curso
 
-    context = {
-        'cursos': cursos,
-        'noticia_cursos': noticia_cursos,
-        'curso_polos': curso_polos,
-        'coordenador_cursos': coordenador_cursos,
-        'mediacoes': mediacoes,
-    }
+def editar_disciplina(request, disciplina_id):
+    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
 
-    return render(request, 'coo/pages/detalhes_curso.html', context)
+    if request.method == 'GET':
+        cursos = Curso.objects.all()  # Obtenha todos os cursos para popular o dropdown
+        cursos_data = [{'id': curso.id, 'nome': curso.nome} for curso in cursos]
+        data = {
+            'curso': disciplina.curso.id,
+            'nome': disciplina.nome,
+            'ementa': disciplina.ementa,
+            'ch': disciplina.carga_horaria,
+            'cursos': cursos_data
+        }
+        return JsonResponse(data)
+
+    elif request.method == 'POST':
+        try:
+            disciplina.curso_id = request.POST.get('curso')
+            disciplina.nome = request.POST.get('nome')
+            disciplina.ementa = request.POST.get('ementa')
+            disciplina.carga_horaria = request.POST.get('ch')
+            disciplina.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'errors': str(e)})
+
 
 def excluir_disciplina(request, cursoPolo_id):
     if request.method == 'POST':

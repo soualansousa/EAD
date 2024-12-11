@@ -152,19 +152,19 @@
                     <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Mediadores</a>
                 </li>
 
-                <li class="nav-item"></li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'coo:disciplina_lista' %}">Disciplinas</a>
                 </li>
 
-                <li class="nav-item"></li>
+                <li class="nav-item">
                     <a class="nav-link" href="">Contatos</a>
                 </li>
 
-                <li class="nav-item"></li>
+                <li class="nav-item">
                     <a class="nav-link" href="">Documentos</a>
                 </li>
 
-                <li class="nav-item"></li>
+                <li class="nav-item">
                     <a class="nav-link" href="">Perguntas</a>
                 </li>
                 
@@ -244,56 +244,6 @@
                         </ul>
                     </li> 
                 </ul>
-            </nav>
-
-            <!-- Responsividade -->
-            <nav class="navMob navbar navbar_offcanvas text-white disable">
-                <div>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-                        <img src="{% static 'images/icons/menu.svg' %}" alt="" class="menu_offcanvas"></img>
-                    </button>
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-                    <div class="offcanvas-header">
-                    <button type="button" class="button_close" data-bs-dismiss="offcanvas" aria-label="Close">
-                        <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
-                    </button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav container px-0">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'coo:coordenacao' %}">Home</a>
-                            </li>
-        
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Cursos</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Notícias</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Mediadores</a>
-                            </li>
-                        </ul>
-
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                {% if request.user.is_authenticated %}
-                                    {{ request.user.first_name|default:request.user.username }}
-                                {% endif %}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/">Sair</a>
-                                </li>
-                            </ul>
-                        </li> 
-                    
-                    </div>
-                </div>
-                </div>
             </nav>
         </header>
     {% endif %}

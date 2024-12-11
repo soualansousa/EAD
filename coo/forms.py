@@ -22,7 +22,6 @@ class NoticiaForm(forms.ModelForm):
             instance.save()
 
         if self.coordenador_curso_id:
-            print(self.coordenador_curso_id)
             curso = Curso.objects.get(id=self.coordenador_curso_id)
             NoticiaCurso.objects.create(
                 noticia=instance,
@@ -178,12 +177,20 @@ class MediadorForm(forms.ModelForm):
         fields = ['nome', 'email', 'telefone', 'formacao']
 
     def __init__(self, *args, **kwargs):
+        self.coordenador_curso_id = kwargs.pop('coordenador_curso_id', None)
         self.mediacao = kwargs.pop('mediacao', None)
-        curso_polos_id = kwargs.pop('curso_polos_id', None)
         super().__init__(*args, **kwargs)
 
-        if curso_polos_id:
-            self.fields['curso_polos'].initial = CursoPolo.objects.get(id=curso_polos_id)
+        print(f"Coordenador Curso ID no forms: {self.coordenador_curso_id}")
+        if self.coordenador_curso_id:
+            try:
+                self.coordenador_curso_id = int(self.coordenador_curso_id)
+                self.fields['curso_polos'].queryset = CursoPolo.objects.filter(curso_id=self.coordenador_curso_id)
+            except ValueError:
+                self.fields['curso_polos'].queryset = CursoPolo.objects.none()
+        else:
+            self.fields['curso_polos'].queryset = CursoPolo.objects.none()
+
 
         if self.mediacao:
             self.fields['saida'].initial = self.mediacao.saida
@@ -205,6 +212,7 @@ class MediadorForm(forms.ModelForm):
             self.mediacao.modalidade = modalidade
             self.mediacao.save()
         else:
+            # Caso contrário, crie uma nova mediacao
             Mediacao.objects.create(
                 mediador=instance,
                 curso_polos=curso_polos,

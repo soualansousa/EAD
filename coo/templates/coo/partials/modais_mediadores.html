@@ -12,7 +12,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formCriarMediador" method="post" action="{% url 'cead:mediador_lista' %}">
+                <form id="formCriarMediador" method="post" action="{% url 'coo:mediador_lista' %}">
                     {% csrf_token %}
                     
                     <div class="input">
@@ -39,7 +39,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formVincular" method="post" action="{% url 'cead:mediador_lista' %}">
+                <form id="formVincular" method="post" action="{% url 'coo:mediador_lista' %}">
                     {% csrf_token %}
                     
                     <div class="input">
@@ -214,7 +214,7 @@
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'cead:criar_mediador' %}",
+                url: "{% url 'coo:criar_mediador' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
@@ -231,7 +231,7 @@
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'cead:vincular_mediador' %}",
+                url: "{% url 'coo:vincular_mediador' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {

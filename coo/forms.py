@@ -160,7 +160,7 @@ class MediadorForm(forms.ModelForm):
     )
 
     curso_polos = forms.ModelChoiceField(
-        queryset=CursoPolo.objects.none(),
+        queryset=CursoPolo.objects.all(),
         required=True,
         label="Curso - Polo",
         widget=forms.Select(attrs={'class': 'form-control'})
@@ -181,10 +181,13 @@ class MediadorForm(forms.ModelForm):
         self.mediacao = kwargs.pop('mediacao', None)
         super().__init__(*args, **kwargs)
 
+        print(f"Coordenador Curso ID no forms: {self.coordenador_curso_id}")
         if self.coordenador_curso_id:
-            self.fields['curso_polos'].queryset = CursoPolo.objects.filter(
-                curso_id=self.coordenador_curso_id
-            )
+            try:
+                self.coordenador_curso_id = int(self.coordenador_curso_id)
+                self.fields['curso_polos'].queryset = CursoPolo.objects.filter(curso_id=self.coordenador_curso_id)
+            except ValueError:
+                self.fields['curso_polos'].queryset = CursoPolo.objects.none()
         else:
             self.fields['curso_polos'].queryset = CursoPolo.objects.none()
 
@@ -209,6 +212,7 @@ class MediadorForm(forms.ModelForm):
             self.mediacao.modalidade = modalidade
             self.mediacao.save()
         else:
+            # Caso contrário, crie uma nova mediacao
             Mediacao.objects.create(
                 mediador=instance,
                 curso_polos=curso_polos,

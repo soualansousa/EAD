@@ -157,7 +157,9 @@ def editar_noticia(request, noticia_id):
 # mediador
 def mediadores_lista(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')
-    make_mediador = MediadorForm(request.POST)
+    print(f"Coordenador Curso ID na view mediadores_lista: {coordenador_curso_id}")
+
+    make_mediador = MediadorForm(request.POST, coordenador_curso_id=coordenador_curso_id)
     sync_mediacao = MediacaoForm(request.POST)
     search_mediador = SearchForm(request.GET)
     query = request.GET.get('query')
@@ -191,27 +193,16 @@ def mediadores_lista(request):
 
     return render(request, 'coo/pages/mediadores.html', context)
 
-def criar_mediador(request, mediador_id=None):
-    mediador = None
-    mediacao = None
-
+def criar_mediador(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')
+    print(f"Coordenador Curso ID no view: {coordenador_curso_id}")
 
-    if mediador_id:
-        mediador = Mediador.objects.get(id=mediador_id)
-        mediacao = Mediacao.objects.get(mediador=mediador)
-
-    form = MediadorForm(
-        request.POST or None,
-        instance=mediador,
-        coordenador_curso_id=coordenador_curso_id,
-        mediacao=mediacao
-    )
-
-    if form.is_valid():
-        form.save()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'errors': form.errors})
+    if request.method == 'POST':
+        form = MediadorForm(request.POST, coordenador_curso_id=coordenador_curso_id)
+        if form.is_valid():
+            mediador = form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
 
 
 def mediacao(request):

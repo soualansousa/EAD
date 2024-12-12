@@ -28,9 +28,9 @@ urlpatterns = [
 #disciplina
     path('disciplina/',views.disciplina_lista, name="disciplina_lista"),
     path('criar_disciplina/', views.criar_disciplina, name='criar_disciplina'),
-    path('disciplina/editar_disciplina/<int:disciplina_id>/', views.editar_disciplina, name='editar_disciplina'),
-    # path('disciplina/excluir_disciplina/<int:disciplina_id>/', views.excluir_disciplina, name='excluir_disciplina'),
-    # path('disciplina/detalhar_disciplina/<int:disciplina_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
+    path('editar_disciplina/<int:disciplina_id>/', views.editar_disciplina, name='editar_disciplina'),
+    path('excluir_disciplina/<int:disciplina_id>/', views.excluir_disciplina, name='excluir_disciplina'),
+    path('detalhar_disciplina/<int:disciplina_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
 
 ]
 

@@ -161,21 +161,21 @@
             [disciplinaId] = dataId.split('-');
         });
 
-        $('#excluir-noticia').on('click', function() {
+        $('#excluir-disciplina').on('click', function() {
 
             $.ajax({
                 type: 'POST',
-                url: `excluir_noticia/${noticiaId}/`, 
+                url: `excluir_disciplina/${disciplinaId}/`, 
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function(response) {
                     if (response.success) {
-                        $(`tr[data-id="${noticiaId}"]`).remove();
+                        $(`tr[data-id="${disciplinaId}"]`).remove();
                         $('#Excluir').modal('hide');
                         location.reload();
                     } else {
-                        alert("Erro ao excluir notícia.");
+                        alert("Erro ao excluir disciplina.");
                     }
                 },
                 error: function(xhr, status, error) {
@@ -210,11 +210,13 @@
         });
 
         $('.editar-disciplina').on('click', function() {
-            const disciplinaId = $(this).data('id'); // Obtenha o ID do botão clicado
+            const disciplinaId = $(this).data('id');  // Captura o ID da disciplina
+            console.log(disciplinaId);  // Verifique se o ID está correto
             $.ajax({
                 type: 'GET',
-                url: `/editar_disciplina/${disciplinaId}/`,
+                url: `/editar_disciplina/${disciplinaId}/`,  // URL com o ID da disciplina
                 success: function(response) {
+                    console.log(response);  // Verifique o que está sendo retornado
                     $('#editarCursoDisciplina').empty(); // Limpa opções existentes
                     response.cursos.forEach(function(curso) {
                         const selected = curso.id === response.curso ? 'selected' : '';
@@ -223,7 +225,6 @@
                     $('#editarNomeDisciplina').val(response.nome);
                     $('#editarEmentaDisciplina').val(response.ementa);
                     $('#editaChDisciplina').val(response.ch);
-                    $('#EditarDisciplina').data('id', disciplinaId); // Salva o ID no modal
                     $('#EditarDisciplina').modal('show');
                 },
                 error: function() {
@@ -231,6 +232,9 @@
                 }
             });
         });
+
+
+
 
 
         $('#salvar-disciplina').on('click', function() {

@@ -320,7 +320,7 @@ def disciplina_lista(request):
 
     if query:
         disciplina_cursos = disciplina_cursos.filter(
-            Q(curso__nome__icontains=query) | Q(nome_icontains=query) | Q(modulo__icontains=query)
+            Q(curso__nome__icontains=query) | Q(nome__icontains=query) | Q(modulo__icontains=query)
         )
 
     disciplina_cursos_paginada = Paginator(disciplina_cursos, 10)
@@ -341,9 +341,7 @@ def disciplina_lista(request):
 
     return render(request, 'coo/pages/disciplina.html', context)
 
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from .models import Disciplina, Curso
+
 
 def editar_disciplina(request, disciplina_id):
     disciplina = get_object_or_404(Disciplina, id=disciplina_id)
@@ -372,12 +370,15 @@ def editar_disciplina(request, disciplina_id):
             return JsonResponse({'success': False, 'errors': str(e)})
 
 
-def excluir_disciplina(request, cursoPolo_id):
+
+def excluir_disciplina(request, disciplina_id):
     if request.method == 'POST':
-        cursoPolo = get_object_or_404(CursoPolo, id=cursoPolo_id)
-        cursoPolo.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'error': 'Método não permitido'})
+        disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+        try:
+            disciplina.delete()  # Exclui a disciplina
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
 def detalhar_disciplina(request, cursoPolo_id):
     curso_polos = get_object_or_404(CursoPolo, id=cursoPolo_id)

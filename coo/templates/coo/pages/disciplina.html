@@ -34,6 +34,7 @@
                     <tr class="text-center table_header">
                         <th>Nome</th>
                         <th>Modulo</th>
+                        <th>Carga horária</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -42,18 +43,18 @@
                         <tr class="text-center table_body">
                             <td>{{ disciplina_curso.nome }}</td>
                             <td>{{ disciplina_curso.modulo}}</td>
+                            <td>{{ disciplina_curso.ch}}</td>
                             <td>
                                 <div class="icons_action d-flex justify-content-center gap-2">
-                                    <button class="button_icon editar-disciplina" data-bs-toggle="modal" data-bs-target="#EditarDisciplina" data-id="{{ disciplina_cursos.id }}">
-                                        <img src="{% static 'images/icons/edit.svg' %}" alt="Edit"></img>
+                                    <button class="button_icon editar-disciplina" data-bs-toggle="modal" data-bs-target="#EditarDisciplina" data-id="{{ disciplina.id }}">
+                                        <img src="{% static 'images/icons/edit.svg' %}" alt="Edit">
                                     </button>
-
-                                    <button class="button_icon detalhar-disciplina" data-bs-toggle="modal" data-bs-target="#DetalharDisciplina" data-id="{{ disciplina_cursos.id }}">
+                                    <button class="button_icon detalhar-disciplina" data-bs-toggle="modal" data-bs-target="#DetalharDisciplina" data-id="{{ disciplina.id }}">
                                         <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
                                     </button>
                                     
 
-                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDisciplina" data-id="{{ disciplina_cursos.id }}">
+                                    <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDisciplina" data-id="{{ disciplina.id }}">
                                         <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                     </button>
                                 </div>

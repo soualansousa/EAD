@@ -12,6 +12,17 @@
 {% block content %}
     
     <main>
+
+        <nav aria-label="breadcrumb" style="color: #FF2900;">
+            <ol class="breadcrumb" style="color: #FF2900;">
+                {% for crumb in breadcrumbs %}
+                    <li class="breadcrumb-item" style="color: #FF2900;">
+                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </nav>
+        
         <h1 class="container d-flex justify-content-center mt-3">Disciplinas</h1>
         
         <div class="d-flex mx-4 gap-3 jus">

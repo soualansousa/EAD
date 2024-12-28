@@ -12,6 +12,18 @@
 {% block content %}
     
     <main>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                {% for crumb in breadcrumbs %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </nav>
+        
+
         {% if curso %}
             <h2>Curso Relacionado: {{ curso.nome }}</h2>
             <p>Descrição: {{ curso.sobre }}</p>

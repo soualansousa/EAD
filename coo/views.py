@@ -7,13 +7,17 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import logging 
+from django.urls import resolve
 
 from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas, Contato
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm
 
+
+
 @login_required
 def coordenacao(request):
     return render(request, "coo/pages/home.html")
+
     
 def curso_lista_coo(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')

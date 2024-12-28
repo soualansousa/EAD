@@ -26,6 +26,21 @@
         {% endif %}
       </div>
   </div>
+
+  <nav aria-label="breadcrumb" style="color: #FF2900;">
+    <ol class="breadcrumb" style="color: #FF2900;">
+        {% for crumb in breadcrumbs %}
+            <li class="breadcrumb-item" style="color: #FF2900;">
+                <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+            </li>
+        {% endfor %}
+    </ol>
+  </nav>
+
+
+  
+  
+  
 </main>
 
 

@@ -33,3 +33,27 @@ video.overlay {
     color: white; 
     font-size: 3rem; 
 }
+
+footer {
+    background-color: #00000A; 
+    color: white;  
+    padding: 1rem ;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+header {
+    background-color: var(--nav-color);
+    border-bottom: var(--detail-color) 5px solid;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Faz o header ocupar toda a largura */
+    z-index: 1000; /* Garante que ele fique sobre outros elementos */
+}
+
+

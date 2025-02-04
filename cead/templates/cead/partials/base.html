@@ -28,38 +28,60 @@
                 <img src="{% static 'images/logos/logo_ead.png' %}" alt="" class="logo"></img>
             </div>
 
-            <nav class="navDesktop navbar navbar-expand-sm justify-content-center ">
+            <nav class="navDesktop navbar navbar-expand-sm justify-content-center">
                 <ul class="navbar-nav container px-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:cead' %}">Home</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'cead' %}active{% endif %}" 
+                           href="{% url 'cead:cead' %}">
+                           Home
+                        </a>
                     </li>
-
+            
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:curso_lista' %}">Cursos</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'curso_lista' %}active{% endif %}" 
+                           href="{% url 'cead:curso_lista' %}">
+                           Cursos
+                        </a>
                     </li>
-
+            
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:coordenador_lista' %}">Coordenadores</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'coordenador_lista' %}active{% endif %}" 
+                           href="{% url 'cead:coordenador_lista' %}">
+                           Coordenadores
+                        </a>
                     </li>
-
+            
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:noticia_lista' %}">Notícias</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'noticia_lista' %}active{% endif %}" 
+                           href="{% url 'cead:noticia_lista' %}">
+                           Notícias
+                        </a>
                     </li>
-
+            
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:polo_lista' %}">Polos</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'polo_lista' %}active{% endif %}" 
+                           href="{% url 'cead:polo_lista' %}">
+                           Polos
+                        </a>
                     </li>
-
+            
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:gestor_lista' %}">Gestores</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'gestor_lista' %}active{% endif %}" 
+                           href="{% url 'cead:gestor_lista' %}">
+                           Gestores
+                        </a>
                     </li>
-
+            
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cead:mediador_lista' %}">Mediadores</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'mediador_lista' %}active{% endif %}" 
+                           href="{% url 'cead:mediador_lista' %}">
+                           Mediadores
+                        </a>
                     </li>
-
+            
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'perfil' %}active{% endif %}" 
+                           href="#" role="button" data-bs-toggle="dropdown">
                             {% if request.user.is_authenticated %}
                                 {{ request.user.first_name|default:request.user.username }}
                             {% endif %}
@@ -72,6 +94,7 @@
                     </li> 
                 </ul>
             </nav>
+            
 
             <!-- Responsividade -->
             <nav class="navMob navbar navbar_offcanvas text-white disable">
@@ -88,33 +111,54 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav container px-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cead:cead' %}">Home</a>
+                                <a class="nav-link {% if request.resolver_match.url_name == 'cead' %}active{% endif %}" 
+                                   href="{% url 'cead:cead' %}">
+                                   Home
+                                </a>
                             </li>
-        
+                    
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cead:curso_lista' %}">Cursos</a>
+                                <a class="nav-link {% if request.resolver_match.url_name == 'curso_lista' %}active{% endif %}" 
+                                   href="{% url 'cead:curso_lista' %}">
+                                   Cursos
+                                </a>
                             </li>
-
+                    
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cead:coordenador_lista' %}">Coordenadores</a>
+                                <a class="nav-link {% if request.resolver_match.url_name == 'coordenador_lista' %}active{% endif %}" 
+                                   href="{% url 'cead:coordenador_lista' %}">
+                                   Coordenadores
+                                </a>
                             </li>
-
+                    
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cead:noticia_lista' %}">Notícias</a>
+                                <a class="nav-link {% if request.resolver_match.url_name == 'noticia_lista' %}active{% endif %}" 
+                                   href="{% url 'cead:noticia_lista' %}">
+                                   Notícias
+                                </a>
                             </li>
-        
+                    
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cead:polo_lista' %}">Polos</a>
+                                <a class="nav-link {% if request.resolver_match.url_name == 'polo_lista' %}active{% endif %}" 
+                                   href="{% url 'cead:polo_lista' %}">
+                                   Polos
+                                </a>
                             </li>
-
+                    
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cead:gestor_lista' %}">Gestores</a>
+                                <a class="nav-link {% if request.resolver_match.url_name == 'gestor_lista' %}active{% endif %}" 
+                                   href="{% url 'cead:gestor_lista' %}">
+                                   Gestores
+                                </a>
                             </li>
-
-                            <li class="nav-item"></li>
-                                <a class="nav-link" href="{% url 'cead:mediador_lista' %}">Mediadores</a>
+                    
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'mediador_lista' %}active{% endif %}" 
+                                   href="{% url 'cead:mediador_lista' %}">
+                                   Mediadores
+                                </a>
                             </li>
-
+                
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Sair</a>
                             </li>
@@ -137,40 +181,71 @@
         <nav class="navDesktop navbar navbar-expand-sm justify-content-center">
             <ul class="navbar-nav container px-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'coo:coordenacao' %}">Home</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'coordenacao' %}active{% endif %}" 
+                       href="{% url 'coo:coordenacao' %}">
+                       Home
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'curso_lista_coo' %}active{% endif %}" 
+                       href="{% url 'coo:curso_lista_coo' %}">
+                       Cursos
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'noticia_lista' %}active{% endif %}" 
+                       href="{% url 'coo:noticia_lista' %}">
+                       Notícias
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'mediador_lista' %}active{% endif %}" 
+                       href="{% url 'coo:mediador_lista' %}">
+                       Mediadores
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'disciplina_lista' %}active{% endif %}" 
+                       href="{% url 'coo:disciplina_lista' %}">
+                       Disciplinas
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contato_lista' %}active{% endif %}" 
+                       href="{% url 'coo:contato_lista' %}">
+                       Contatos
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/documentos/' %}active{% endif %}" 
+                       href="">
+                       Documentos
+                    </a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/perguntas/' %}active{% endif %}" 
+                       href="">
+                       Perguntas
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'coo:curso_lista_coo' %}">Cursos</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contato_publico' %}active{% endif %}" 
+                       href="{% url 'coo:contato_publico' %}">
+                       Contatos teste
+                    </a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'coo:noticia_lista' %}">Notícias</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'coo:mediador_lista' %}">Mediadores</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'coo:disciplina_lista' %}">Disciplinas</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="">Contatos</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="">Documentos</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="">Perguntas</a>
-                </li>
-                
-
+        
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'perfil' %}active{% endif %}" 
+                       href="#" role="button" data-bs-toggle="dropdown">
                         {% if request.user.is_authenticated %}
                             {{ request.user.first_name|default:request.user.username }}
                         {% endif %}
@@ -248,12 +323,12 @@
         </header>
     {% endif %}
 
-    {% block content %}
+    {% block content %}   
     {% endblock content %}
 
     <footer class="footer-content d-flex justify-content-between align-items-center mt-5">
         <span></span>
-        <p>&copy; 2024 Curso Técnico Subsequente ao Ensino Médio</p>
+        <p>&copy; 2025 Curso Técnico Subsequente ao Ensino Médio</p>
         <img class="formigueiro-tecnologico" src="{% static 'images/logos/Formigueiro-tec.svg' %}" alt="">
     </footer>
 

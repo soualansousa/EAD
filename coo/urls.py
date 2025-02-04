@@ -32,6 +32,16 @@ urlpatterns = [
     path('excluir_disciplina/<int:disciplina_id>/', views.excluir_disciplina, name='excluir_disciplina'),
     path('detalhar_disciplina/<int:disciplina_id>/', views.detalhar_disciplina, name='detalhar_disciplina'),
 
+#contato
+    path('contato/',views.contato_lista, name="contato_lista"),
+    path('criar_contato/', views.criar_contato, name='criar_contato'),
+    path('editar_contato/<int:contato_id>/', views.editar_contato, name='editar_contato'),
+    path('excluir_contato/<int:contato_id>/', views.excluir_contato, name='excluir_contato'),
+    path('detalhar_contato/<int:contato_id>/', views.detalhar_contato, name='detalhar_contato'),
+
+#contato_publico
+    path('contato_publico/', views.contato_publico, name='contato_publico')
+
 ]
 
 if settings.DEBUG:

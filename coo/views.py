@@ -10,7 +10,8 @@ import logging
 from django.urls import resolve
 
 from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas, Contato
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm
+
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm, ContatoForm
 
 
 
@@ -351,7 +352,7 @@ def editar_disciplina(request, disciplina_id):
     disciplina = get_object_or_404(Disciplina, id=disciplina_id)
 
     if request.method == 'GET':
-        cursos = Curso.objects.all()  # Obtenha todos os cursos para popular o dropdown
+        cursos = Curso.objects.all()  
         cursos_data = [{'id': curso.id, 'nome': curso.nome} for curso in cursos]
         data = {
             'curso': disciplina.curso.id,
@@ -379,7 +380,7 @@ def excluir_disciplina(request, disciplina_id):
     if request.method == 'POST':
         disciplina = get_object_or_404(Disciplina, id=disciplina_id)
         try:
-            disciplina.delete()  # Exclui a disciplina
+            disciplina.delete() 
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
@@ -393,5 +394,110 @@ def detalhar_disciplina(request, cursoPolo_id):
         'edicao': curso_polos.edicao.strftime('%d/%m/%Y') if curso_polos.edicao else "Não editado",
     }
     return JsonResponse(dados)
+
+
+#contato
+
+def contato_publico(request):
+    form = ContatoForm()
+    return render(request, 'publico.html', {'form': form})
+
+
+def criar_contato(request):
+    coordenador_curso_id = request.session.get('coordenador_curso_id')
+
+    if request.method == 'POST':
+        form = DisciplinaForm(request.POST, coordenador_curso_id=coordenador_curso_id)
+        if form.is_valid():
+            disciplina = form.save()
+
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+    
+def contato_lista(request):
+    make_disciplina = DisciplinaForm(request.POST)
+    search_disciplina = SearchForm(request.GET)
+    query = request.GET.get('query')
+    disciplina_cursos = Disciplina.objects.select_related('curso').all()
+
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''
+
+    if query:
+        disciplina_cursos = disciplina_cursos.filter(
+            Q(curso__nome__icontains=query) | Q(nome__icontains=query) | Q(modulo__icontains=query)
+        )
+
+    disciplina_cursos_paginada = Paginator(disciplina_cursos, 10)
+    p = request.GET.get("p")
+    try:
+        pagina = disciplina_cursos_paginada.page(p)
+    except PageNotAnInteger:
+        pagina = disciplina_cursos_paginada.page(1)
+    except EmptyPage:
+        pagina = disciplina_cursos_paginada.page(1)
+
+    context = {
+        'make_disciplina': make_disciplina,
+        'search_disciplina': search_disciplina,
+        'disciplina_cursos': pagina,
+        'query': query,
+    }
+
+    return render(request, 'coo/pages/contato.html', context)
+
+
+
+def editar_contato(request, disciplina_id):
+    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+
+    if request.method == 'GET':
+        cursos = Curso.objects.all()  # Obtenha todos os cursos para popular o dropdown
+        cursos_data = [{'id': curso.id, 'nome': curso.nome} for curso in cursos]
+        data = {
+            'curso': disciplina.curso.id,
+            'nome': disciplina.nome,
+            'ementa': disciplina.ementa,
+            'ch': disciplina.carga_horaria,
+            'cursos': cursos_data
+        }
+        return JsonResponse(data)
+
+    elif request.method == 'POST':
+        try:
+            disciplina.curso_id = request.POST.get('curso')
+            disciplina.nome = request.POST.get('nome')
+            disciplina.ementa = request.POST.get('ementa')
+            disciplina.carga_horaria = request.POST.get('ch')
+            disciplina.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'errors': str(e)})
+
+
+
+def excluir_contato(request, disciplina_id):
+    if request.method == 'POST':
+        disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+        try:
+            disciplina.delete()  # Exclui a disciplina
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+def detalhar_contato(request, cursoPolo_id):
+    curso_polos = get_object_or_404(CursoPolo, id=cursoPolo_id)
+    dados = {
+        'curso': curso_polos.curso.nome,
+        'polo': curso_polos.polo.cidade,
+        'publicacao': curso_polos.publicacao.strftime('%d/%m/%Y') if curso_polos.publicacao else "Data não disponível",
+        'edicao': curso_polos.edicao.strftime('%d/%m/%Y') if curso_polos.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
+
+
+
 
 

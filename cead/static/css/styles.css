@@ -130,3 +130,10 @@ footer {
 .pagination li a:hover {
     color: black;
 }
+
+.navbar-nav .nav-link.active {
+    background-color: #FF2900; 
+    color: white;
+    border-radius: 5px; /* Borda arredondada opcional */
+    padding: 8px 12px;
+}

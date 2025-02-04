@@ -1,6 +1,6 @@
 from django import forms
 
-from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos, Disciplina
+from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos, Disciplina, Contato
 
 
 class SearchForm(forms.Form):
@@ -285,6 +285,11 @@ class DisciplinaForm(forms.ModelForm):
                 raise ValueError("Coordenador não encontrado para o ID fornecido.")
 
         return instance
+
+class ContatoForm(forms.ModelForm):
+    class Meta:
+        model = Contato
+        fields = ['curso', 'nome', 'email', 'telefone', 'matricula', 'assunto', 'mensagem']
 
 
 

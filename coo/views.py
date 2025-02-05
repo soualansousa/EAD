@@ -288,12 +288,6 @@ def excluir_mediador(request, mediador_id):
 
 #disciplina
 def criar_disciplina(request):
-    # if request.method == 'POST':
-    #     form = DisciplinaForm(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         return JsonResponse({'success': True})
-    #     return JsonResponse({'success': False, 'errors': form.errors})
     coordenador_curso_id = request.session.get('coordenador_curso_id')
 
     if request.method == 'POST':
@@ -399,10 +393,32 @@ def detalhar_disciplina(request, cursoPolo_id):
 #contato
 
 def contato_publico(request):
-    form = ContatoForm()
-    return render(request, 'publico.html', {'form': form})
+    cursos = Curso.objects.all()  # Lista de cursos para preencher o select
+    if request.method == 'POST':
+        form = ContatoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('coo:contato_publico')  # Redireciona para a mesma página ou para outra após envio
+    else:
+        form = ContatoForm()
+
+    return render(request, 'coo/pages/publico.html', {'form': form, 'cursos': cursos})
 
 
+def enviar_contato(request):
+    if request.method == 'POST':
+        form = ContatoForm(request.POST)
+        if form.is_valid():
+            form.save()  # Salva o formulário no banco
+            return redirect('coo:contato_publico')  # Redireciona para a página de contato após o envio
+    else:
+        form = ContatoForm()
+
+    # Exibe o formulário para preenchimento na página
+    cursos = Curso.objects.all()  # Lista de cursos para preencher o select
+    return render(request, 'coo/pages/publico.html', {'form': form, 'cursos': cursos})
+
+#--------------------------------------------------------------------------------------------------------------#
 def criar_contato(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')
 
@@ -416,37 +432,31 @@ def criar_contato(request):
 
     
 def contato_lista(request):
-    make_disciplina = DisciplinaForm(request.POST)
-    search_disciplina = SearchForm(request.GET)
-    query = request.GET.get('query')
-    disciplina_cursos = Disciplina.objects.select_related('curso').all()
+    contatos = Contato.objects.all()  # Busca todos os contatos
 
-    query = request.GET.get('query', '')
-    if query == 'none':
-        query = ''
+    # Criar a instância do Paginator com 10 contatos por página
+    paginator = Paginator(contatos, 10)
 
-    if query:
-        disciplina_cursos = disciplina_cursos.filter(
-            Q(curso__nome__icontains=query) | Q(nome__icontains=query) | Q(modulo__icontains=query)
-        )
+    # Pega o número da página da URL
+    page_number = request.GET.get('page')
 
-    disciplina_cursos_paginada = Paginator(disciplina_cursos, 10)
-    p = request.GET.get("p")
     try:
-        pagina = disciplina_cursos_paginada.page(p)
+        # Tenta obter a página solicitada
+        page_obj = paginator.page(page_number)
     except PageNotAnInteger:
-        pagina = disciplina_cursos_paginada.page(1)
+        # Se o número da página não for inteiro, mostra a página 1
+        page_obj = paginator.page(1)
     except EmptyPage:
-        pagina = disciplina_cursos_paginada.page(1)
+        # Se a página solicitada estiver fora do intervalo, mostra a última página
+        page_obj = paginator.page(paginator.num_pages)
 
+    # Contexto com a página de contatos e outras informações
     context = {
-        'make_disciplina': make_disciplina,
-        'search_disciplina': search_disciplina,
-        'disciplina_cursos': pagina,
-        'query': query,
+        'contatos': page_obj,
     }
 
     return render(request, 'coo/pages/contato.html', context)
+
 
 
 

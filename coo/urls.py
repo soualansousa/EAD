@@ -40,7 +40,8 @@ urlpatterns = [
     path('detalhar_contato/<int:contato_id>/', views.detalhar_contato, name='detalhar_contato'),
 
 #contato_publico
-    path('contato_publico/', views.contato_publico, name='contato_publico')
+    path('contato_publico/', views.contato_publico, name='contato_publico'),
+    path('enviar_contato/', views.enviar_contato, name='enviar_contato'),
 
 ]
 

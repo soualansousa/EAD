@@ -10,7 +10,8 @@
 <body>
     <div class="container">
         <h2>Entre em contato</h2>
-        <form action="{% url 'enviar_contato' %}" method="POST">
+
+        <form action="{% url 'coo:enviar_contato' %}" method="POST">
             {% csrf_token %}
             
             <label for="nome">Nome:</label>

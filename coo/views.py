@@ -390,15 +390,15 @@ def detalhar_disciplina(request, cursoPolo_id):
     return JsonResponse(dados)
 
 
-#contato
+#contatos publico
 
 def contato_publico(request):
-    cursos = Curso.objects.all()  # Lista de cursos para preencher o select
+    cursos = Curso.objects.all()  #
     if request.method == 'POST':
         form = ContatoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('coo:contato_publico')  # Redireciona para a mesma página ou para outra após envio
+            return redirect('coo:contato_publico') 
     else:
         form = ContatoForm()
 
@@ -409,30 +409,18 @@ def enviar_contato(request):
     if request.method == 'POST':
         form = ContatoForm(request.POST)
         if form.is_valid():
-            form.save()  # Salva o formulário no banco
-            return redirect('coo:contato_publico')  # Redireciona para a página de contato após o envio
+            form.save() 
+            return redirect('coo:contato_publico') 
     else:
         form = ContatoForm()
 
-    # Exibe o formulário para preenchimento na página
-    cursos = Curso.objects.all()  # Lista de cursos para preencher o select
+    cursos = Curso.objects.all()  
     return render(request, 'coo/pages/publico.html', {'form': form, 'cursos': cursos})
 
-#--------------------------------------------------------------------------------------------------------------#
-def criar_contato(request):
-    coordenador_curso_id = request.session.get('coordenador_curso_id')
+#contato coordenador
 
-    if request.method == 'POST':
-        form = DisciplinaForm(request.POST, coordenador_curso_id=coordenador_curso_id)
-        if form.is_valid():
-            disciplina = form.save()
-
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'errors': form.errors})
-
-    
 def contato_lista(request):
-    contatos = Contato.objects.all()  # Busca todos os contatos
+    contatos = Contato.objects.all()  
 
     # Criar a instância do Paginator com 10 contatos por página
     paginator = Paginator(contatos, 10)
@@ -458,33 +446,54 @@ def contato_lista(request):
     return render(request, 'coo/pages/contato.html', context)
 
 
-
-
-def editar_contato(request, disciplina_id):
-    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
-
+def editar_contato(request, contato_id):
     if request.method == 'GET':
-        cursos = Curso.objects.all()  # Obtenha todos os cursos para popular o dropdown
-        cursos_data = [{'id': curso.id, 'nome': curso.nome} for curso in cursos]
-        data = {
-            'curso': disciplina.curso.id,
-            'nome': disciplina.nome,
-            'ementa': disciplina.ementa,
-            'ch': disciplina.carga_horaria,
-            'cursos': cursos_data
-        }
-        return JsonResponse(data)
-
+        contato = get_object_or_404(Contato, id=contato_id)
+        return JsonResponse({
+            'curso': contato.curso,
+            'nome': contato.nome,
+            'email': contato.email,
+            'telefone': contato.telefone,
+            'assunto': contato.assunto,
+            'mensagem': contato.mensagem,
+        })
+    
     elif request.method == 'POST':
+        curso = request.POST.get('curso')
+        nome = request.POST.get('nome')
+        email = request.POST.get('email')
+        telefone = request.POST.get('telefone')
+        assunto = request.POST.get('assunto')
+        mensagem = request.POST.get('mensagem')
+
+        contato = get_object_or_404(Contato, id=contato_id)
+        contato.curso = curso
+        contato.nome = nome
+        contato.email = email
+        contato.telefone = telefone
+        contato.assunto = assunto
+        contato.mensagem = mensagem
+        
         try:
-            disciplina.curso_id = request.POST.get('curso')
-            disciplina.nome = request.POST.get('nome')
-            disciplina.ementa = request.POST.get('ementa')
-            disciplina.carga_horaria = request.POST.get('ch')
-            disciplina.save()
+            contato.save()
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'errors': str(e)})
+
+
+
+
+
+def criar_contato(request):
+    coordenador_curso_id = request.session.get('coordenador_curso_id')
+
+    if request.method == 'POST':
+        form = DisciplinaForm(request.POST, coordenador_curso_id=coordenador_curso_id)
+        if form.is_valid():
+            disciplina = form.save()
+
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
 
 
 
@@ -511,3 +520,6 @@ def detalhar_contato(request, cursoPolo_id):
 
 
 
+
+def pagina_teste(request):
+    return render(request, 'coo/pages/teste.html')

@@ -46,6 +46,7 @@
                         <!-- <th>Telefone</th> -->
                         <th>Assunto</th>
                         <th>Data de Envio</th>
+                        <th>Ação</th>
                         <!-- <th>Matrícula</th> -->
                     </tr>
                 </thead>
@@ -61,7 +62,23 @@
                         <td>{{ contato.publicacao}}</td>
                         <!-- <td>{{ contato.matricula}}</td> -->
                         <td>
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#contatoModal{{ contato.id }}">Ver</button>
+                            <div class="icons_action d-flex justify-content-center gap-2">
+                                
+                                <button class="button_icon editar-contato" data-bs-toggle="modal" data-bs-target="#EditarContato" data-id="{{ contato.id }}">
+                                    <img src="{% static 'images/icons/edit.svg' %}" alt="Edit">
+                                </button>
+                                
+
+                                <button class="button_icon detalhar-disciplina" data-bs-toggle="modal" data-bs-target="#DetalharDisciplina" data-id="{{ disciplina.id }}">
+                                    <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
+                                </button>
+                                
+                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDisciplina" data-id="{{ disciplina.id }}">
+                                    <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
+                                </button>
+                            </div>
+
+                            <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#contatoModal{{ contato.id }}">Ver</button> -->
                         </td>
                     </tr>
         
@@ -136,7 +153,7 @@
         
           
 
-        {% include "coo/partials/modais_disciplina.html" %}
+        {% include "coo/partials/modais_contatos.html" %}
     </main>
 
 {% endblock content %}

@@ -1,0 +1,321 @@
+{% load static %}
+
+<!-- Criar -->
+<div class="modal fade" id="modalCriarDisciplina" tabindex="-1" aria-labelledby="modalCriarDisciplinaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalCriarDisciplinaLabel">Disciplina</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarDisciplina" method="post" action="{% url 'coo:disciplina_lista' %}">
+                    {% csrf_token %}
+                    
+                    <div class="input">
+                        {{ make_disciplina.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Excluir -->
+<div class="modal fade" id="ExcluirDisciplina" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header d-flex justify-content-center position-relative">
+                <span></span>
+                <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center gap-5">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="excluir-noticia" class="btn btn-danger">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detalhar -->
+<div class="modal fade" id="DetalharNoticia" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center position-relative">
+                <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h5 class="mb-1">Curso</h5>
+                        <p id="detalheCursoNoticia" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Título</h5>
+                    <p id="detalheTituloNoticia" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Descrição</h5>
+                    <p id="detalheDescricaoNoticia" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Arquivo</h5>
+                    <p id="detalheArquivoNoticia" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Publicação</h5>
+                    <p id="detalhePublicacaoNoticia" class="form-control bg-light"></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Edição</h5>
+                    <p id="detalheEdicaoNoticia" class="form-control bg-light"></p>
+                </div>
+            
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Editar-->
+<div id="EditarContato" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title">Editar Contato</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="editarContatoForm" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" id="contatoId" name="contatoId">
+
+                    <div class="mb-3">
+                        <label for="editarCursoContato" class="form-label">Curso</label>
+                        <input type="text" class="form-control" id="editarCursoContato" name="curso" value="{{ contato.curso }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarNomeContato" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNomeContato" name="nome" value="{{ contato.nome }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarEmailContato" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="editarEmailContato" name="email" value="{{ contato.email }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarTelefoneContato" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="editarTelefoneContato" name="telefone" value="{{ contato.telefone }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarAssuntoContato" class="form-label">Assunto</label>
+                        <input type="text" class="form-control" id="editarAssuntoContato" name="assunto" value="{{ contato.assunto }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarMensagemContato" class="form-label">Mensagem</label>
+                        <textarea class="form-control" id="editarMensagemContato" name="mensagem">{{ contato.mensagem }}</textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary d-flex justify-content-center mb-3">Salvar alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#formCriarDisciplina').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'coo:criar_disciplina' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Disciplina criada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar disciplina: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+        
+        $('.button_icon').on('click', function() {
+            dataId = $(this).data('id');
+            [disciplinaId] = dataId.split('-');
+        });
+
+        $('#excluir-disciplina').on('click', function() {
+
+            $.ajax({
+                type: 'POST',
+                url: `excluir_disciplina/${disciplinaId}/`, 
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $(`tr[data-id="${disciplinaId}"]`).remove();
+                        $('#Excluir').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir disciplina.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro na requisição de exclusão: " + error);
+                }
+            });
+        });
+
+        $('.detalhar-noticia').on('click', function() {
+
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+            
+            $.ajax({
+                type: 'GET',
+                url: `detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
+                success: function(response) {
+                    $('#detalheCursoNoticia').text(response.curso);
+                    $('#detalheTituloNoticia').text(response.titulo);
+                    $('#detalheDescricaoNoticia').text(response.descricao);
+                    $('#detalheArquivoNoticia').text(response.arquivo);
+                    $('#detalhePublicacaoNoticia').text(response.publicacao);
+                    $('#detalheEdicaoNoticia').text(response.edicao);
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes da notícia: " + error);
+                }
+            });
+        });
+
+// Quando o botão de editar contato for clicado
+$('.editar-contato').on('click', function() {
+    const contatoId = $(this).data('id');  // Captura o ID do contato
+    console.log(contatoId);  // Verifique se o ID está correto
+    $.ajax({
+        type: 'GET',
+        url: `/coo/editar_contato/${contatoId}/`,  // URL com o ID do contato
+        success: function(response) {
+            console.log(response);  // Verifique os dados da resposta no console
+            
+            // Preenche os campos do modal com os dados
+            $('#editarCursoContato').val(response.curso);
+            $('#editarNomeContato').val(response.nome);
+            $('#editarEmailContato').val(response.email);
+            $('#editarTelefoneContato').val(response.telefone);
+            $('#editarAssuntoContato').val(response.assunto);
+            $('#editarMensagemContato').val(response.mensagem);
+
+            // Definir o valor do campo oculto 'contatoId'
+            $('#contatoId').val(contatoId);  // Define o ID do contato no campo oculto
+
+            $('#EditarContato').modal('show');  // Exibe o modal
+        },
+        error: function() {
+            alert("Erro ao carregar dados do contato.");
+        }
+    });
+});
+
+
+$('#editarContatoForm').on('submit', function(e) {
+    e.preventDefault();
+    const contatoId = $('#contatoId').val();  // Pega o ID do campo oculto
+    const formData = {
+        contatoId: contatoId, // Passa o ID do contato
+        curso: $('#editarCursoContato').val(),
+        nome: $('#editarNomeContato').val(),
+        email: $('#editarEmailContato').val(),
+        telefone: $('#editarTelefoneContato').val(),
+        assunto: $('#editarAssuntoContato').val(),
+        mensagem: $('#editarMensagemContato').val(),
+        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: `/coo/editar_contato/${contatoId}/`,  // Envia o ID no URL
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                alert("Contato atualizado com sucesso!");
+                location.reload();  // Atualiza a página após salvar
+            } else {
+                alert("Erro ao atualizar contato: " + JSON.stringify(response.errors));
+            }
+        },
+        error: function() {
+            alert("Erro ao salvar as mudanças.");
+        }
+    });
+});
+
+
+
+// Quando o botão de salvar alterações for clicado
+$('#salvar-contato').on('click', function() {
+    let formData = {
+        curso: $('#editarCursoContato').val(),
+        nome: $('#editarNomeContato').val(),
+        email: $('#editarEmailContato').val(),
+        telefone: $('#editarTelefoneContato').val(),
+        assunto: $('#editarAssuntoContato').val(),
+        mensagem: $('#editarMensagemContato').val(),
+        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+    };
+
+    const contatoId = $(this).data('id');  // Captura o ID do contato novamente
+
+    $.ajax({
+        type: 'POST',
+        url: `/editar_contato/${contatoId}/`,  // URL com o ID do contato
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                alert("Contato atualizado com sucesso!");
+                location.reload();  // Recarrega a página para refletir as mudanças
+            } else {
+                alert("Erro ao atualizar o contato: " + JSON.stringify(response.errors));
+            }
+        },
+        error: function() {
+            alert("Erro ao salvar as mudanças.");
+        }
+    });
+});
+
+    });
+</script>

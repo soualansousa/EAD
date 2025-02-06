@@ -8,6 +8,8 @@
 {% block title %} Home | COO {% endblock title %}
 
 {% block content %}
+
+
     
 <main>
   <div class="video-background">
@@ -15,7 +17,6 @@
           <source src="{% static 'images/video/if.mp4' %}" type="video/mp4">
           Seu navegador não suporta vídeos HTML5.
       </video>
-
       <div class="overlay-filter"></div> 
 
       <div class="content d-flex justify-content-center">
@@ -24,24 +25,24 @@
         {% else %}
           <h1>Bem-vindo, visitante</h1>
         {% endif %}
+
+      <!-- <div class="botao-container">
+        <button class="btn-teste">Teste</button>
+      </div>
+       -->
       </div>
   </div>
+ 
 
-  <nav aria-label="breadcrumb" style="color: #FF2900;">
-    <ol class="breadcrumb" style="color: #FF2900;">
-        {% for crumb in breadcrumbs %}
-            <li class="breadcrumb-item" style="color: #FF2900;">
-                <a href="{{ crumb.url }}">{{ crumb.name }}</a>
-            </li>
-        {% endfor %}
-    </ol>
-  </nav>
-
-
-  
-  
-  
 </main>
+
+
+
+
+
+
+
+
 
 
 

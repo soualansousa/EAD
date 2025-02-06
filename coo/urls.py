@@ -43,6 +43,10 @@ urlpatterns = [
     path('contato_publico/', views.contato_publico, name='contato_publico'),
     path('enviar_contato/', views.enviar_contato, name='enviar_contato'),
 
+
+#teste
+    path('teste/', views.pagina_teste, name='pagina_teste'),
+
 ]
 
 if settings.DEBUG:

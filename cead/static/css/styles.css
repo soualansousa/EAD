@@ -137,3 +137,25 @@ footer {
     border-radius: 5px; /* Borda arredondada opcional */
     padding: 8px 12px;
 }
+
+.botao-container {
+    position: fixed; /* O botão será fixo em relação à tela */
+    bottom: 20px; /* Distância do botão da parte inferior da tela */
+    left: 5%; /* Distância do botão da lateral esquerda */
+    z-index: 999; /* Garante que o botão fique acima do vídeo */
+}
+
+.btn-teste {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff2900;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-teste:hover {
+    background-color: #d11f00;
+}

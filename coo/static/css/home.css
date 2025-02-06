@@ -33,6 +33,43 @@ video.overlay {
     color: white; 
     font-size: 3rem; 
 }
+/*---------------------------------------------------------------*/
+main {
+    position: relative; /* Para garantir que o conteúdo se comporte normalmente */
+    height: 100vh; /* Faz o main ocupar 100% da altura da tela */
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    overflow: hidden; /* Impede que o conteúdo se sobreponha ao vídeo */
+}
+
+.botao-container {
+    position: absolute; /* Para garantir que fique no lugar certo */
+    bottom: 20px; /* Distância do botão da parte inferior da tela */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta para centralizar perfeitamente */
+    z-index: 999; /* Garante que o botão fique acima do vídeo */
+}
+
+.btn-teste {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff2900;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-teste:hover {
+    background-color: #d11f00;
+}
+
+
+
+
+
 
 
 

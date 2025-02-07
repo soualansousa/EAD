@@ -9,7 +9,9 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import logging 
 from django.urls import resolve
 
-from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas, Contato
+from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas
+
+from .models import Contato
 
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm, ContatoForm
 
@@ -420,7 +422,34 @@ def enviar_contato(request):
 #contato coordenador
 
 def contato_lista(request):
-    contatos = Contato.objects.all()  
+    from django.shortcuts import render, redirect
+from .models import Contato
+from cead.models import Curso
+
+def contato_lista(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        email = request.POST.get('email')
+        telefone = request.POST.get('telefone')
+        assunto = request.POST.get('assunto')
+        mensagem = request.POST.get('mensagem')
+        curso_id = request.POST.get('curso')
+
+        if curso_id:
+            curso = Curso.objects.get(id=curso_id)
+            contato = Contato(curso=curso, nome=nome, email=email, telefone=telefone, assunto=assunto, mensagem=mensagem)
+            contato.save()
+
+            # Redirecionar ou exibir mensagem de sucesso
+            return redirect('coo:contato_lista')  # ou você pode redirecionar para uma página de sucesso
+        else:
+            # Se não houver curso selecionado, você pode exibir um erro ou mensagem de alerta
+            return render(request, 'contato_form.html', {'erro': 'Curso é obrigatório'})
+
+    # Se a requisição for GET, exiba os dados salvos
+    contatos = Contato.objects.all()  # Ou filtrar conforme necessário
+    return render(request, 'coo/pages/contato.html', {'contatos': contatos})
+
 
     # Criar a instância do Paginator com 10 contatos por página
     paginator = Paginator(contatos, 10)
@@ -447,38 +476,29 @@ def contato_lista(request):
 
 
 def editar_contato(request, contato_id):
+    contato = get_object_or_404(Contato, id=contato_id)
+    cursos = Curso.objects.all()
+
     if request.method == 'GET':
-        contato = get_object_or_404(Contato, id=contato_id)
+        # Retorna os dados do contato para preencher o modal
         return JsonResponse({
-            'curso': contato.curso,
+            'curso': contato.curso.nome,
             'nome': contato.nome,
             'email': contato.email,
             'telefone': contato.telefone,
             'assunto': contato.assunto,
             'mensagem': contato.mensagem,
         })
-    
-    elif request.method == 'POST':
-        curso = request.POST.get('curso')
-        nome = request.POST.get('nome')
-        email = request.POST.get('email')
-        telefone = request.POST.get('telefone')
-        assunto = request.POST.get('assunto')
-        mensagem = request.POST.get('mensagem')
 
-        contato = get_object_or_404(Contato, id=contato_id)
-        contato.curso = curso
-        contato.nome = nome
-        contato.email = email
-        contato.telefone = telefone
-        contato.assunto = assunto
-        contato.mensagem = mensagem
-        
-        try:
-            contato.save()
+    if request.method == 'POST':
+        form = ContatoForm(request.POST, instance=contato)
+        if form.is_valid():
+            form.save()
             return JsonResponse({'success': True})
-        except Exception as e:
-            return JsonResponse({'success': False, 'errors': str(e)})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+
+
 
 
 

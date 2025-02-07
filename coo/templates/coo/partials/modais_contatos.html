@@ -115,7 +115,9 @@
 
                     <div class="mb-3">
                         <label for="editarCursoContato" class="form-label">Curso</label>
-                        <input type="text" class="form-control" id="editarCursoContato" name="curso" value="{{ contato.curso }}">
+                        <select class="form-select" id="editarCursoContato" name="curso" required>
+                            <option value="">Selecione o curso</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="editarNomeContato" class="form-label">Nome</label>
@@ -221,67 +223,63 @@
             });
         });
 
+        
+
 // Quando o botão de editar contato for clicado
-$('.editar-contato').on('click', function() {
-    const contatoId = $(this).data('id');  // Captura o ID do contato
-    console.log(contatoId);  // Verifique se o ID está correto
-    $.ajax({
-        type: 'GET',
-        url: `/coo/editar_contato/${contatoId}/`,  // URL com o ID do contato
-        success: function(response) {
-            console.log(response);  // Verifique os dados da resposta no console
-            
-            // Preenche os campos do modal com os dados
-            $('#editarCursoContato').val(response.curso);
-            $('#editarNomeContato').val(response.nome);
-            $('#editarEmailContato').val(response.email);
-            $('#editarTelefoneContato').val(response.telefone);
-            $('#editarAssuntoContato').val(response.assunto);
-            $('#editarMensagemContato').val(response.mensagem);
+$(document).ready(function() {
+    $('.editar-contato').on('click', function() {
+        const contatoId = $(this).data('id');
 
-            // Definir o valor do campo oculto 'contatoId'
-            $('#contatoId').val(contatoId);  // Define o ID do contato no campo oculto
+        $.ajax({
+            type: 'GET',
+            url: `/editar_contato/${contatoId}/`,
+            success: function(response) {
+                $('#contatoId').val(contatoId);  // Adiciona o ID no campo oculto
+                $('#editarNomeContato').val(response.nome);
+                $('#editarEmailContato').val(response.email);
+                $('#editarTelefoneContato').val(response.telefone);
+                $('#editarAssuntoContato').val(response.assunto);
+                $('#editarMensagemContato').val(response.mensagem);
 
-            $('#EditarContato').modal('show');  // Exibe o modal
-        },
-        error: function() {
-            alert("Erro ao carregar dados do contato.");
-        }
-    });
-});
-
-
-$('#editarContatoForm').on('submit', function(e) {
-    e.preventDefault();
-    const contatoId = $('#contatoId').val();  // Pega o ID do campo oculto
-    const formData = {
-        contatoId: contatoId, // Passa o ID do contato
-        curso: $('#editarCursoContato').val(),
-        nome: $('#editarNomeContato').val(),
-        email: $('#editarEmailContato').val(),
-        telefone: $('#editarTelefoneContato').val(),
-        assunto: $('#editarAssuntoContato').val(),
-        mensagem: $('#editarMensagemContato').val(),
-        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: `/coo/editar_contato/${contatoId}/`,  // Envia o ID no URL
-        data: formData,
-        success: function(response) {
-            if (response.success) {
-                alert("Contato atualizado com sucesso!");
-                location.reload();  // Atualiza a página após salvar
-            } else {
-                alert("Erro ao atualizar contato: " + JSON.stringify(response.errors));
+                // Preenche o campo select com os cursos
+                $('#editarCursoContato').empty();  // Limpa as opções existentes
+                response.cursos.forEach(function(curso) {
+                    const selected = curso.id == response.curso ? 'selected' : '';
+                    $('#editarCursoContato').append(`<option value="${curso.id}" ${selected}>${curso.nome}</option>`);
+                });
+            },
+            error: function() {
+                alert('Erro ao carregar os dados do contato.');
             }
-        },
-        error: function() {
-            alert("Erro ao salvar as mudanças.");
-        }
+        });
+    });
+
+    $('#editarContatoForm').on('submit', function(event) {
+        event.preventDefault();  // Evita recarregar a página
+
+        const contatoId = $('#contatoId').val();
+        const formData = $(this).serialize();  // Serializa os dados do formulário
+
+        $.ajax({
+            type: 'POST',
+            url: `/editar_contato/${contatoId}/`,
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    alert('Contato atualizado com sucesso!');
+                    location.reload();  // Recarrega a página para atualizar os dados
+                } else {
+                    alert('Erro ao atualizar contato: ' + response.errors);
+                }
+            },
+            error: function() {
+                alert('Erro na requisição.');
+            }
+        });
     });
 });
+
+
 
 
 

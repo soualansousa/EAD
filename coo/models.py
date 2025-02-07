@@ -95,7 +95,7 @@ class Perguntas(models.Model):
         return self.pergunta
     
 class Contato(models.Model):
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    curso = models.ForeignKey('cead.Curso', on_delete=models.CASCADE)
     nome = models.CharField(max_length=150)
     email = models.EmailField(max_length=100)
     telefone = models.CharField(max_length=11)

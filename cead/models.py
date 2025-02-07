@@ -90,19 +90,6 @@ class Perguntas(models.Model):
     def __str__(self):
         return self.pergunta
     
-class Contato(models.Model):
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    nome = models.CharField(max_length=150)
-    email = models.EmailField(max_length=100)
-    telefone = models.CharField(max_length=15, default="7499999999")
-    matricula = models.CharField(max_length=50)
-    assunto = models.CharField(max_length=255)
-    mensagem = models.TextField()
-    publicacao = models.DateField(auto_now_add=True)
-    edicao = models.DateField(auto_now=True)
-
-    def __str__(self):
-        return self.assunto
 
 class Noticia(models.Model):
     titulo = models.CharField(max_length=100)

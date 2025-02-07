@@ -1,6 +1,8 @@
 from django import forms
 
-from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos, Disciplina, Contato
+from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos, Disciplina
+
+from coo.models import Contato
 
 
 class SearchForm(forms.Form):

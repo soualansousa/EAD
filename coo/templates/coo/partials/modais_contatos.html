@@ -50,47 +50,43 @@
 </div>
 
 <!-- Detalhar -->
-<div class="modal fade" id="DetalharNoticia" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+<div class="modal fade" id="DetalharContato" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header d-flex justify-content-center position-relative">
-                <h5 class="modal-title" id="DetalharLabel">Detalhes da Notícia</h5>
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="DetalharContatoLabel">Detalhes do Contato</h5>
             </div>
+
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 class="mb-1">Curso</h5>
-                        <p id="detalheCursoNoticia" class="form-control bg-light"></p>
+                    <p id="detalheCursoContato" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
-                    <h5 class="mb-1">Título</h5>
-                    <p id="detalheTituloNoticia" class="form-control bg-light"></p>
+                    <h5 class="mb-1">Nome</h5>
+                    <p id="detalheNomeContato" class="form-control bg-light"></p>
                 </div>
-
                 <div class="mb-3">
-                    <h5 class="mb-1">Descrição</h5>
-                    <p id="detalheDescricaoNoticia" class="form-control bg-light"></p>
+                    <h5 class="mb-1">E-mail</h5>
+                    <p id="detalheEmailContato" class="form-control bg-light"></p>
                 </div>
-
                 <div class="mb-3">
-                    <h5 class="mb-1">Arquivo</h5>
-                    <p id="detalheArquivoNoticia" class="form-control bg-light"></p>
+                    <h5 class="mb-1">Assunto</h5>
+                    <p id="detalheAssuntoContato" class="form-control bg-light"></p>
                 </div>
-
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
-                    <p id="detalhePublicacaoNoticia" class="form-control bg-light"></p>
+                    <p id="detalhePublicacaoContato" class="form-control bg-light"></p>
                 </div>
-
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
-                    <p id="detalheEdicaoNoticia" class="form-control bg-light"></p>
-                </div>
-            
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Fechar</button>
+                    <p id="detalheEdicaoContato" class="form-control bg-light"></p>
                 </div>
             </div>
-
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Fechar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -172,7 +168,7 @@
         
         $('.button_icon').on('click', function() {
             dataId = $(this).data('id');
-            [disciplinaId] = dataId.split('-');
+            [contatoId] = dataId.split('-');
         });
 
         $('#excluir-disciplina').on('click', function() {
@@ -198,31 +194,29 @@
             });
         });
 
-        $('.detalhar-noticia').on('click', function() {
-
+        $('detalhar-contato').on('click', function() {
             if (!dataId || !dataId.includes('-')) {
                 console.error("Formato inválido para data-id:", dataId);
                 alert("Erro: botão configurado incorretamente.");
                 return;
             }
-            
+
             $.ajax({
                 type: 'GET',
-                url: `detalhar_noticia/${noticiaId}/?curso=${cursoId}`,
+                url: `detalhar_contato/${contatoId}//curso=${cursosPolosId}`,
                 success: function(response) {
-                    $('#detalheCursoNoticia').text(response.curso);
-                    $('#detalheTituloNoticia').text(response.titulo);
-                    $('#detalheDescricaoNoticia').text(response.descricao);
-                    $('#detalheArquivoNoticia').text(response.arquivo);
-                    $('#detalhePublicacaoNoticia').text(response.publicacao);
-                    $('#detalheEdicaoNoticia').text(response.edicao);
+                    $('#detalheCursoContato').text(response.curso_polo);
+                    $('#detalheNomeContato').text(response.nome);
+                    $('#detalheEmailContato').text(response.email);
+                    $('#detalheAssuntoContato').text(response.assunto);
+                    $('#detalhePublicacaoContato').text(response.publicacao);
+                    $('#detalheEdicaoContato').text(response.edicao);
                 },
                 error: function(xhr, status, error) {
-                    alert("Erro ao carregar detalhes da notícia: " + error);
+                    alert("Erro ao carregar detalhes do contato." + error);
                 }
             });
         });
-
         
 
 // Quando o botão de editar contato for clicado

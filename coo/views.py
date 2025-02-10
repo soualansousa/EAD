@@ -499,6 +499,22 @@ def editar_contato(request, contato_id):
             return JsonResponse({'success': False, 'errors': form.errors})
 
 
+def detalhar_contato(request, contato_id):
+    if request.method == "GET":
+        curso_polos_id = request.GET.get("curso")
+        if not curso_polos_id:
+            return JsonResponse({"success": False, "message": "ID do CursoPolo não fornecido."})
+
+        contato = get_object_or_404(Contato, contato_id=contato_id, curso_polos_id=curso_polos_id)
+    dados = {
+        'curso_polo': f"{contato.curso_polos.curso.nome} - {contato.curso_polos.polo.cidade}",
+        'nome': contato.nome,
+        'email': contato.email,
+        'assunto': contato.assunto,
+        'publicacao': contato.publicacao.strftime('%d/%m/%Y') if contato.publicacao else "Data não disponível",
+        'edicao': contato.edicao.strftime('%d/%m/%Y') if contato.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
 
 
 
@@ -526,15 +542,7 @@ def excluir_contato(request, disciplina_id):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-def detalhar_contato(request, cursoPolo_id):
-    curso_polos = get_object_or_404(CursoPolo, id=cursoPolo_id)
-    dados = {
-        'curso': curso_polos.curso.nome,
-        'polo': curso_polos.polo.cidade,
-        'publicacao': curso_polos.publicacao.strftime('%d/%m/%Y') if curso_polos.publicacao else "Data não disponível",
-        'edicao': curso_polos.edicao.strftime('%d/%m/%Y') if curso_polos.edicao else "Não editado",
-    }
-    return JsonResponse(dados)
+
 
 
 

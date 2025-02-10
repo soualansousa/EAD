@@ -69,41 +69,16 @@
                                 </button>
                                 
 
-                                <button class="button_icon detalhar-disciplina" data-bs-toggle="modal" data-bs-target="#DetalharDisciplina" data-id="{{ disciplina.id }}">
-                                    <img src="{% static 'images/icons/visibility.svg' %}" alt="View">
+                                <button class="button_icon detalhar-contato" data-bs-toggle="modal" data-bs-target="#DetalharContato" data-id="{{ contato.curso.id }}">
+                                    <img src="{% static 'images/icons/visibility.svg' %}" alt="Ver detalhes">
                                 </button>
                                 
-                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDisciplina" data-id="{{ disciplina.id }}">
+                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="" data-id="{{ contato.id }}">
                                     <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                 </button>
                             </div>
-
-                            <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#contatoModal{{ contato.id }}">Ver</button> -->
                         </td>
-                    </tr>
-        
-                    <!-- Modal -->
-                    <div class="modal fade" id="contatoModal{{ contato.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Detalhes do Contato</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Curso:</strong> {{ contato.curso }}</p>
-                                    <p><strong>Nome:</strong> {{ contato.nome }}</p>
-                                    <p><strong>Email:</strong> {{ contato.email }}</p>
-                                    <p><strong>Telefone:</strong> {{ contato.telefone }}</p>
-                                    <p><strong>Assunto:</strong> {{ contato.assunto }}</p>
-                                    <p><strong>Mensagem:</strong> {{ contato.mensagem }}</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </tr>     
                     {% endfor %}
                 </tbody>
                 

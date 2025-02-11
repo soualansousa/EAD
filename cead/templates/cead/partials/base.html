@@ -223,8 +223,8 @@
                 </li>
         
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/documentos/' %}active{% endif %}" 
-                       href="">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'documento_lista' %}active{% endif %}" 
+                       href="{% url 'coo:documento_lista' %}">
                        Documentos
                     </a>
                 </li>

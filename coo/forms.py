@@ -2,7 +2,7 @@ from django import forms
 
 from cead.models import Noticia, Polo, Coordenador, Curso, Mediador, CoordenadorCurso, NoticiaCurso, CursoPolo, Mediacao, Gestor, GestorPolos, Disciplina
 
-from coo.models import Contato
+from coo.models import Contato, Documentos
 
 
 class SearchForm(forms.Form):
@@ -292,6 +292,24 @@ class ContatoForm(forms.ModelForm):
     class Meta:
         model = Contato
         fields = ['curso', 'nome', 'email', 'telefone', 'matricula', 'assunto', 'mensagem']
+
+class DocumentoForm(forms.ModelForm):
+    class Meta:
+        model = Documentos
+        fields = ['curso', 'titulo', 'descricao', 'arquivo']
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if commit:
+            instance.save()
+
+        else:
+            Documento.objects.create(
+                documentos=instance,
+            )
+
+        return instance
 
 
 

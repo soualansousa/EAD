@@ -43,6 +43,17 @@ urlpatterns = [
     path('contato_publico/', views.contato_publico, name='contato_publico'),
     path('enviar_contato/', views.enviar_contato, name='enviar_contato'),
 
+#documentos_publicos
+    path('documentos_publico/', views.documentos_publico, name='documentos_publico'),
+
+
+#documento
+    path('documento/',views.documento_lista, name="documento_lista"),
+    path('criar_documento/', views.criar_documento, name='criar_documento'),
+    path('editar_documento/<int:documento_id>/', views.editar_documento, name='editar_documento'),
+    path('excluir_documento/<int:documento_id>/', views.excluir_documento, name='excluir_documento'),
+    path('detalhar_documento/<int:documento_id>/', views.detalhar_documento, name='detalhar_documento'),
+
 
 #teste
     path('teste/', views.pagina_teste, name='pagina_teste'),

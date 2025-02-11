@@ -1,0 +1,306 @@
+{% load static %}
+
+<!-- Criar -->
+<div class="modal fade" id="modalCriarDocumento" tabindex="-1" aria-labelledby="modalCriarDocumentoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title" id="modalCriarDocumentoLabel">Documento</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarDocumento" method="post" action="{% url 'coo:documento_lista' %}">
+                    {% csrf_token %}
+                    
+                    <div class="input">
+                        {{ make_documento.as_p }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Excluir -->
+<div class="modal fade" id="ExcluirDocumento" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content d-flex justify-content-center">
+            <div class="modal-header d-flex justify-content-center position-relative">
+                <span></span>
+                <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-modal">
+                    Tem certeza de que deseja excluir?
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center gap-5">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="excluir-noticia" class="btn btn-danger">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detalhar -->
+<div class="modal fade" id="#DetalharDocumento" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="DetalharContatoLabel">Detalhes do Documento</h5>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h5 class="mb-1">Curso</h5>
+                    <p id="detalheCursoDocumento" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Título</h5>
+                    <p id="detalheTituloDocumento" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Descrição</h5>
+                    <p id="detalheDescricaoDocumento" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Arquivo</h5>
+                    <p id="detalheArquivoDocumento" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Publicação</h5>
+                    <p id="detalhePublicacaoDocumento" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Data de Edição</h5>
+                    <p id="detalheEdicaoDocumento" class="form-control bg-light"></p>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Editar-->
+<div id="EditarDocumento" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <span></span>
+                <h5 class="modal-title">Editar Documento</h5>
+                <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="editarDocumentoForm" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" id="documentoId" name="documentoId">
+
+                    <div class="mb-3">
+                        <label for="editarCursoDocumento" class="form-label">Curso</label>
+                        <select class="form-select" id="editarCursoDocumento" name="curso" required>
+                            <option value="">Selecione o curso</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editarTituloDocumento" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="editarTituloDocumento" name="titulo" value="{{ documento.titulo }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editarDescricaoDocumento" class="form-label">Descrição</label>
+                        <input type="text" class="form-control" id="editarDescricaoDocumento" name="descricao" value="{{ documento.descricao }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editarArquivoDocumento" class="form-label">Arquivo</label>
+                        <input type="text" class="form-control" id="editarArquivoDocumento" name="arquivo" value="{{ documento.arquivo }}">
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary d-flex justify-content-center mb-3">Salvar alterações</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#formCriarDocumento').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'coo:criar_documento' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Documento criado com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao criar documento: " + JSON.stringify(response.errors));
+                    }
+                }
+            });
+        });
+        
+        $('.button_icon').on('click', function() {
+            dataId = $(this).data('id');
+            [documentoId] = dataId.split('-');
+        });
+
+        $('#excluir-documento').on('click', function() {
+
+            $.ajax({
+                type: 'POST',
+                url: `excluir_documento/${documentoId}/`, 
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $(`tr[data-id="${documentoId}"]`).remove();
+                        $('#Excluir').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir documento.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro na requisição de exclusão: " + error);
+                }
+            });
+        });
+
+        $('detalhar-documento').on('click', function() {
+            if (!dataId || !dataId.includes('-')) {
+                console.error("Formato inválido para data-id:", dataId);
+                alert("Erro: botão configurado incorretamente.");
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: `detalhar_documento/${documentoId}//curso=${cursosPolosId}`,
+                success: function(response) {
+                    $('#detalheCursoDocumento').text(response.curso_polo);
+                    $('#detalheTituloDocumento').text(response.titulo);
+                    $('#detalheDescricaoDocumento').text(response.descricao);
+                    $('#detalheArquivo').text(response.arquivo);
+                    $('#detalhePublicacaoContato').text(response.publicacao);
+                    $('#detalheEdicaoContato').text(response.edicao);
+                },
+                error: function(xhr, status, error) {
+                    alert("Erro ao carregar detalhes do documento." + error);
+                }
+            });
+        });
+        
+
+// Quando o botão de editar contato for clicado
+$(document).ready(function() {
+    $('.editar-documento').on('click', function() {
+        const documento= $(this).data('id');
+
+        $.ajax({
+            type: 'GET',
+            url: `/editar_documento/${documentoId}/`,
+            success: function(response) {
+                $('#documentoId').val(documentoId);  // Adiciona o ID no campo oculto
+                $('#editarTituloDocumento').val(response.titulo);
+                $('#editarDescricaoDocumento').val(response.descricao);
+                $('#editarArquivoDocumento').val(response.arquivo);
+
+                // Preenche o campo select com os cursos
+                $('#editarCursoDocumento').empty();  // Limpa as opções existentes
+                response.cursos.forEach(function(curso) {
+                    const selected = curso.id == response.curso ? 'selected' : '';
+                    $('#editarCursoDocumento').append(`<option value="${curso.id}" ${selected}>${curso.nome}</option>`);
+                });
+            },
+            error: function() {
+                alert('Erro ao carregar os dados do documento.');
+            }
+        });
+    });
+
+    $('#editarDocumentoForm').on('submit', function(event) {
+        event.preventDefault();  // Evita recarregar a página
+
+        const documentoId = $('#documentoId').val();
+        const formData = $(this).serialize();  // Serializa os dados do formulário
+
+        $.ajax({
+            type: 'POST',
+            url: `/editar_documento/${documentoId}/`,
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    alert('Documento atualizado com sucesso!');
+                    location.reload();  // Recarrega a página para atualizar os dados
+                } else {
+                    alert('Erro ao atualizar documento: ' + response.errors);
+                }
+            },
+            error: function() {
+                alert('Erro na requisição.');
+            }
+        });
+    });
+});
+
+
+
+
+
+// Quando o botão de salvar alterações for clicado
+$('#salvar-documento').on('click', function() {
+    let formData = {
+        curso: $('#editarCursoDocumento').val(),
+        titulo: $('#editarTituloDocumento').val(),
+        descricao: $('#editarDescricaoDocumento').val(),
+        arquivo: $('#editarArquivoDocumento').val(),
+        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+    };
+
+    const documentoId = $(this).data('id');
+
+    $.ajax({
+        type: 'POST',
+        url: `/editar_documento/${documentoId}/`,
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                alert("Documento atualizado com sucesso!");
+                location.reload();
+            } else {
+                alert("Erro ao atualizar o documento: " + JSON.stringify(response.errors));
+            }
+        },
+        error: function() {
+            alert("Erro ao salvar as mudanças.");
+        }
+    });
+});
+
+    });
+</script>

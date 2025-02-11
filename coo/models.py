@@ -54,16 +54,19 @@ class Documentos(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=150)
     descricao = models.TextField()
-    arquivo = models.FileField()
+    arquivo = models.FileField(upload_to='documentos/')
     publicacao = models.DateField(auto_now_add=True)
     edicao = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.titulo
 
-    def Foto(self):
-        self.arquivo
-        return mark_safe('<img src="{}" height="50" />' .format(self.Imagem.url))
+    def arquivo_preview(self):
+        if self.arquivo:
+            if self.arquivo.url.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+                return mark_safe(f'<img src="{self.arquivo.url}" height="50" />')
+            return mark_safe(f'<a href="{self.arquivo.url}" target="_blank">Baixar Arquivo</a>')
+        return "Nenhum arquivo disponível"
 
 class Disciplina(models.Model):
     MODULO_CHOICES = [

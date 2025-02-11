@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentos</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Lista de Documentos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Arquivo</th>
+                <th>Data de Publicação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for documento in documentos %}
+            <tr>
+                <td>{{ documento.titulo }}</td>
+                <td>{{ documento.descricao }}</td>
+                <td>
+                    {% if documento.arquivo %}
+                        {% if documento.arquivo.url|lower|slice:"-4:" == ".png" or documento.arquivo.url|lower|slice:"-4:" == ".jpg" or documento.arquivo.url|lower|slice:"-5:" == ".jpeg" or documento.arquivo.url|lower|slice:"-4:" == ".gif" %}
+                            <img src="{{ documento.arquivo.url }}" height="50" alt="Prévia da imagem">
+                        {% else %}
+                            <a href="{{ documento.arquivo.url }}" target="_blank">Baixar Arquivo</a>
+                        {% endif %}
+                    {% else %}
+                        Nenhum arquivo disponível
+                    {% endif %}
+                </td>
+                <td>{{ documento.publicacao|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Nenhum documento encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

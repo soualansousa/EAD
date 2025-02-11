@@ -21,7 +21,7 @@ from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm
 def coordenacao(request):
     return render(request, "coo/pages/home.html")
 
-    
+#curso 
 def curso_lista_coo(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')
 
@@ -161,6 +161,7 @@ def editar_noticia(request, noticia_id):
     }
     return JsonResponse(dados)
 
+
 # mediador
 def mediadores_lista(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')
@@ -288,6 +289,7 @@ def excluir_mediador(request, mediador_id):
     return JsonResponse({'success': False, 'error': 'Método não permitido'})
 
 
+
 #disciplina
 def criar_disciplina(request):
     coordenador_curso_id = request.session.get('coordenador_curso_id')
@@ -300,14 +302,6 @@ def criar_disciplina(request):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
 
-    
-# def vincular_disciplina(request):
-#     if request.method == 'POST':
-#         form = CoordenadorCursoForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return JsonResponse({'success': True})
-#         return JsonResponse({'success': False, 'errors': form.errors})
     
 def disciplina_lista(request):
     make_disciplina = DisciplinaForm(request.POST)
@@ -395,7 +389,7 @@ def detalhar_disciplina(request, cursoPolo_id):
 #contatos publico
 
 def contato_publico(request):
-    cursos = Curso.objects.all()  #
+    cursos = Curso.objects.all()  
     if request.method == 'POST':
         form = ContatoForm(request.POST)
         if form.is_valid():
@@ -419,6 +413,7 @@ def enviar_contato(request):
     cursos = Curso.objects.all()  
     return render(request, 'coo/pages/publico.html', {'form': form, 'cursos': cursos})
 
+
 #contato coordenador
 
 def contato_lista(request):
@@ -440,38 +435,27 @@ def contato_lista(request):
             contato = Contato(curso=curso, nome=nome, email=email, telefone=telefone, assunto=assunto, mensagem=mensagem)
             contato.save()
 
-            # Redirecionar ou exibir mensagem de sucesso
-            return redirect('coo:contato_lista')  # ou você pode redirecionar para uma página de sucesso
+            
+            return redirect('coo:contato_lista')  
         else:
-            # Se não houver curso selecionado, você pode exibir um erro ou mensagem de alerta
             return render(request, 'contato_form.html', {'erro': 'Curso é obrigatório'})
 
-    # Se a requisição for GET, exiba os dados salvos
-    contatos = Contato.objects.all()  # Ou filtrar conforme necessário
+    contatos = Contato.objects.all()  
     return render(request, 'coo/pages/contato.html', {'contatos': contatos})
 
-
-    # Criar a instância do Paginator com 10 contatos por página
     paginator = Paginator(contatos, 10)
 
-    # Pega o número da página da URL
     page_number = request.GET.get('page')
 
     try:
-        # Tenta obter a página solicitada
         page_obj = paginator.page(page_number)
     except PageNotAnInteger:
-        # Se o número da página não for inteiro, mostra a página 1
         page_obj = paginator.page(1)
     except EmptyPage:
-        # Se a página solicitada estiver fora do intervalo, mostra a última página
         page_obj = paginator.page(paginator.num_pages)
-
-    # Contexto com a página de contatos e outras informações
     context = {
         'contatos': page_obj,
     }
-
     return render(request, 'coo/pages/contato.html', context)
 
 
@@ -480,7 +464,6 @@ def editar_contato(request, contato_id):
     cursos = Curso.objects.all()
 
     if request.method == 'GET':
-        # Retorna os dados do contato para preencher o modal
         return JsonResponse({
             'curso': contato.curso.nome,
             'nome': contato.nome,
@@ -537,17 +520,88 @@ def excluir_contato(request, disciplina_id):
     if request.method == 'POST':
         disciplina = get_object_or_404(Disciplina, id=disciplina_id)
         try:
-            disciplina.delete()  # Exclui a disciplina
+            disciplina.delete()
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
 
+#documentos publico
+def documentos_publico(request):
+    documentos = Documentos.objects.all().order_by('-publicacao')
+    return render(request, 'coo/pages/teste_documentos.html', {'documentos': documentos})
 
 
 
 
+#documentos coordenador
 
+def documento_lista(request):
+    query = request.GET.get('query', '')
+    documentos = Documentos.objects.filter(titulo__icontains=query)
+    
+    paginator = Paginator(documentos, 10)
+    page_number = request.GET.get('page')
+    try:
+        documentos_paginados = paginator.page(page_number)
+    except PageNotAnInteger:
+        documentos_paginados = paginator.page(1)
+    except EmptyPage:
+        documentos_paginados = paginator.page(paginator.num_pages)
+    
+    return render(request, 'coo/pages/documentos.html', {'documentos': documentos_paginados, 'query': query})
+
+
+
+def criar_documento(request):
+    if request.method == 'POST':
+        form = DocumentoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+
+def editar_documento(request, documento_id):
+    documento = get_object_or_404(Documento, id=documento_id)
+    if request.method == 'GET':
+        return JsonResponse({
+            'curso': documento.curso.nome,
+            'titulo': documento.titulo,
+            'descricao': documento.descricao,
+            'arquivo': documento.arquivo.url if documento.arquivo else '',
+            'publicacao': documento.publicacao.strftime('%d/%m/%Y')
+        })
+    
+    if request.method == 'POST':
+        form = DocumentoForm(request.POST, request.FILES, instance=documento)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+def detalhar_documento(request, documento_id):
+    documento = get_object_or_404(Documento, id=documento_id)
+    dados = {
+        'curso': documento.curso.nome,
+        'titulo': documento.titulo,
+        'descricao': documento.descricao,
+        'arquivo': documento.arquivo.url if documento.arquivo else '',
+        'publicacao': documento.publicacao.strftime('%d/%m/%Y')
+    }
+    return JsonResponse(dados)
+
+def excluir_documento(request, documento_id):
+    if request.method == 'POST':
+        documento = get_object_or_404(Documento, id=documento_id)
+        try:
+            documento.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+
+#pagina de testes
 
 def pagina_teste(request):
     return render(request, 'coo/pages/teste.html')

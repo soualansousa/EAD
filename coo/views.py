@@ -13,7 +13,7 @@ from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPo
 
 from .models import Contato
 
-from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm, ContatoForm
+from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm, ContatoForm, DocumentoForm
 
 
 
@@ -537,8 +537,8 @@ def documentos_publico(request):
 #documentos coordenador
 
 def documento_lista(request):
-    query = request.GET.get('query', '')
-    documentos = Documentos.objects.filter(titulo__icontains=query)
+    documentos = Documentos.objects.filter()
+    form = DocumentoForm()
     
     paginator = Paginator(documentos, 10)
     page_number = request.GET.get('page')
@@ -549,7 +549,7 @@ def documento_lista(request):
     except EmptyPage:
         documentos_paginados = paginator.page(paginator.num_pages)
     
-    return render(request, 'coo/pages/documentos.html', {'documentos': documentos_paginados, 'query': query})
+    return render(request, 'coo/pages/documentos.html', {'documentos': documentos_paginados, 'form': form})
 
 
 

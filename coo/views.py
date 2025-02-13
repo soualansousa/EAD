@@ -591,14 +591,39 @@ def detalhar_documento(request, documento_id):
     }
     return JsonResponse(dados)
 
+# def excluir_documento(request, documento_id):
+#     if request.method == 'POST':
+#         documento = get_object_or_404(Documento, id=documento_id)
+#         try:
+#             documento.delete()
+#             return JsonResponse({'success': True})
+#         except Exception as e:
+#             return JsonResponse({'success': False, 'error': str(e)})
+
+
 def excluir_documento(request, documento_id):
     if request.method == 'POST':
-        documento = get_object_or_404(Documento, id=documento_id)
+        curso_id = request.GET.get("curso")
+        if not curso_id:
+            return JsonResponse({"success": False, "message": "ID do Curso não fornecido."}, status=400)
+        
+        documento = get_object_or_404(Documentos, id=documento_id, curso_id=curso_id)
         try:
             documento.delete()
             return JsonResponse({'success': True})
         except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    elif request.method == 'GET':
+        # Caso queira tratar a requisição GET aqui, adicione um código condicional
+        curso_id = request.GET.get("curso")
+        if not curso_id:
+            return JsonResponse({"success": False, "message": "ID do Curso não fornecido."}, status=400)
+        
+        documento = get_object_or_404(Documentos, id=documento_id, curso_id=curso_id)
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'success': False, 'error': 'Método não permitido'}, status=405)
 
 
 #pagina de testes

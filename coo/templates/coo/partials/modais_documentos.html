@@ -32,8 +32,8 @@
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
-                <span></span>
-                <h5 class="modal-title text-center" id="Excluir">Confirmação</h5>
+                
+                <h5 class="modal-title text-center" id="Excluir">Confirmação de Exclusão</h5>
                 
             </div>
             <div class="modal-body">
@@ -42,8 +42,8 @@
                 </p>
             </div>
             <div class="modal-footer justify-content-center gap-5">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                <button type="button" id="excluir-noticia" class="btn btn-danger">Sim</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="excluir-documento" class="btn btn-danger">Excluir</button>
             </div>
         </div>
     </div>
@@ -168,28 +168,95 @@
             [documentoId] = dataId.split('-');
         });
 
-        $('#excluir-documento').on('click', function() {
 
-            $.ajax({
-                type: 'POST',
-                url: `excluir_documento/${documentoId}/`, 
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $(`tr[data-id="${documentoId}"]`).remove();
-                        $('#Excluir').modal('hide');
-                        location.reload();
-                    } else {
-                        alert("Erro ao excluir documento.");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert("Erro na requisição de exclusão: " + error);
-                }
-            });
-        });
+
+        $(document).on('click', '.button_icon', function() {
+    let dataId = $(this).data('id');
+
+    if (!dataId) {
+        console.error("Erro: data-id não encontrado no botão.");
+        return;
+    }
+
+    let ids = dataId.split('-');
+
+    if (ids.length < 2) {
+        console.error("Erro: formato de data-id inválido. Esperado: 'documentoId-cursoId'. Recebido:", dataId);
+        return;
+    }
+
+    let documentoId = ids[0];
+    let cursoId = ids[1];
+
+    console.log("Documento ID:", documentoId);
+    console.log("Curso ID:", cursoId);
+
+    // Agora, salva os IDs para uso posterior
+    $('#ExcluirDocumento').data('documento-id', documentoId);
+    $('#ExcluirDocumento').data('curso-id', cursoId);
+});
+
+// Quando clicar no botão de exclusão dentro do modal
+$('#excluir-documento').on('click', function() {
+    let documentoId = $('#ExcluirDocumento').data('documento-id');
+    let cursoId = $('#ExcluirDocumento').data('curso-id');
+
+    if (!documentoId || !cursoId) {
+        console.error("Erro: ID do documento ou do curso não encontrado.");
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: `/coo/excluir_documento/${documentoId}/?curso=${cursoId}`,
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function(response) {
+            if (response.success) {
+                $(`tr[data-id="${documentoId}-${cursoId}"]`).remove();
+                $('#ExcluirDocumento').modal('hide');
+                location.reload();
+            } else {
+                alert("Erro ao excluir documento.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("Erro na requisição de exclusão: " + error);
+        }
+    });
+});
+
+
+        // $('#excluir-documento').on('click', function() {
+        //     if (documentoId && cursoPolosId) {
+        //         alert("Erro: ID do documento ou do curso não foi encontrado.");
+        //         return;
+            
+
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: "{% url 'coo:excluir_documento' 0 %}".replace('0', documentoId) + `?curso=${cursoPolosId}`,
+        //             data: {
+        //                 csrfmiddlewaretoken: '{{ csrf_token }}',
+        //             },
+        //             success: function(response) {
+        //                 if (response.success) {
+        //                     $(`tr[data-id="${documentoId}-${cursoPolosId}"]`).remove();
+        //                     $('#Excluir').modal('hide');
+        //                     location.reload();
+        //                 } else {
+        //                     alert("Erro ao excluir documento.");
+        //                 }
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 alert("Erro na requisição de exclusão: " + error);
+        //             }
+        //         });
+        //     } else {
+        //         alert("Erro: ID do documento não encontrado.");
+        //     }
+        // });
 
         $('detalhar-documento').on('click', function() {
             if (!dataId || !dataId.includes('-')) {

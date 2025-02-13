@@ -70,16 +70,20 @@
                                 </button>
                                 
 
-                                <button class="button_icon detalhar-contato" data-bs-toggle="modal" data-bs-target="#DetalharContato" data-id="{{ contato.curso.id }}">
+                                <button class="button_icon detalhar-contato" data-bs-toggle="modal" data-bs-target="#DetalharContato" data-id="{{ contato.id }}">
                                     <img src="{% static 'images/icons/visibility.svg' %}" alt="Ver detalhes">
                                 </button>
                                 
-                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="" data-id="{{ contato.id }}">
+                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirContato" data-id="{{ contato.id }}">
                                     <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                 </button>
                             </div>
                         </td>
-                    </tr>     
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">Nenhum contato encontrado.</td>
+                        </tr>          
                     {% endfor %}
                 </tbody>
                 

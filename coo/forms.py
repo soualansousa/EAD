@@ -305,7 +305,7 @@ class DocumentoForm(forms.ModelForm):
             instance.save()
 
         else:
-            Documento.objects.create(
+            Documentos.objects.create(
                 documentos=instance,
             )
 

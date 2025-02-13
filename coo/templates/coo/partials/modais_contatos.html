@@ -1,22 +1,22 @@
 {% load static %}
 
 <!-- Criar -->
-<div class="modal fade" id="modalCriarDisciplina" tabindex="-1" aria-labelledby="modalCriarDisciplinaLabel" aria-hidden="true">
+<div class="modal fade" id="modalCriarContato" tabindex="-1" aria-labelledby="modalCriarContatoLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <span></span>
-                <h5 class="modal-title" id="modalCriarDisciplinaLabel">Disciplina</h5>
+                <h5 class="modal-title" id="modalCriarContatoLabel">Contato</h5>
                 <button type="button" class="button_close" data-bs-dismiss="modal" aria-label="Close">
                     <img src="{% static 'images/icons/close.svg' %}" alt="" class="icons_action"></img>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formCriarDisciplina" method="post" action="{% url 'coo:disciplina_lista' %}">
+                <form id="formCriarContato" method="post" action="{% url 'coo:contato_lista' %}">
                     {% csrf_token %}
                     
                     <div class="input">
-                        {{ make_disciplina.as_p }}
+                        {{ make_contato.as_p }}
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn d-flex justify-content-center">Salvar</button>
@@ -28,7 +28,7 @@
 </div>
 
 <!-- Excluir -->
-<div class="modal fade" id="ExcluirDisciplina" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
+<div class="modal fade" id="ExcluirContato" tabindex="-1" aria-labelledby="Excluir" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content d-flex justify-content-center">
             <div class="modal-header d-flex justify-content-center position-relative">
@@ -61,27 +61,39 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 class="mb-1">Curso</h5>
-                    <p id="detalheCursoContato" class="form-control bg-light"></p>
+                    <p id="detalheCurso" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Nome</h5>
-                    <p id="detalheNomeContato" class="form-control bg-light"></p>
+                    <p id="detalheNome" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Matrícula</h5>
+                    <p id="detalheMatricula" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">E-mail</h5>
-                    <p id="detalheEmailContato" class="form-control bg-light"></p>
+                    <p id="detalheEmail" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Telefone</h5>
+                    <p id="detalheTelefone" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Assunto</h5>
-                    <p id="detalheAssuntoContato" class="form-control bg-light"></p>
+                    <p id="detalheAssunto" class="form-control bg-light"></p>
+                </div>
+                <div class="mb-3">
+                    <h5 class="mb-1">Mensagem</h5>
+                    <p id="detalheMensagem" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Publicação</h5>
-                    <p id="detalhePublicacaoContato" class="form-control bg-light"></p>
+                    <p id="detalhePublicacao" class="form-control bg-light"></p>
                 </div>
                 <div class="mb-3">
                     <h5 class="mb-1">Data de Edição</h5>
-                    <p id="detalheEdicaoContato" class="form-control bg-light"></p>
+                    <p id="detalheEdicao" class="form-control bg-light"></p>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
@@ -110,30 +122,34 @@
                     <input type="hidden" id="contatoId" name="contatoId">
 
                     <div class="mb-3">
-                        <label for="editarCursoContato" class="form-label">Curso</label>
-                        <select class="form-select" id="editarCursoContato" name="curso" required>
+                        <label for="editarCurso" class="form-label">Curso</label>
+                        <select class="form-select" id="editarCurso" name="curso" required>
                             <option value="">Selecione o curso</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editarNomeContato" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="editarNomeContato" name="nome" value="{{ contato.nome }}">
+                        <label for="editarNome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="editarNome" name="nome" value="{{ contato.nome }}">
                     </div>
                     <div class="mb-3">
-                        <label for="editarEmailContato" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="editarEmailContato" name="email" value="{{ contato.email }}">
+                        <label for="editarMatricula" class="form-label">Matrícula</label>
+                        <input type="email" class="form-control" id="editarMatricula" name="email" value="{{ contato.matricula }}">
                     </div>
                     <div class="mb-3">
-                        <label for="editarTelefoneContato" class="form-label">Telefone</label>
-                        <input type="text" class="form-control" id="editarTelefoneContato" name="telefone" value="{{ contato.telefone }}">
+                        <label for="editarEmail" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="editarEmail" name="email" value="{{ contato.email }}">
                     </div>
                     <div class="mb-3">
-                        <label for="editarAssuntoContato" class="form-label">Assunto</label>
-                        <input type="text" class="form-control" id="editarAssuntoContato" name="assunto" value="{{ contato.assunto }}">
+                        <label for="editarTelefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="editarTelefone" name="telefone" value="{{ contato.telefone }}">
                     </div>
                     <div class="mb-3">
-                        <label for="editarMensagemContato" class="form-label">Mensagem</label>
-                        <textarea class="form-control" id="editarMensagemContato" name="mensagem">{{ contato.mensagem }}</textarea>
+                        <label for="editarAssunto" class="form-label">Assunto</label>
+                        <input type="text" class="form-control" id="editarAssunto" name="assunto" value="{{ contato.assunto }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editarMensagem" class="form-label">Mensagem</label>
+                        <textarea class="form-control" id="editarMensagem" name="mensagem">{{ contato.mensagem }}</textarea>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary d-flex justify-content-center mb-3">Salvar alterações</button>
@@ -149,18 +165,19 @@
 
 <script>
     $(document).ready(function() {
-        $('#formCriarDisciplina').on('submit', function(e) {
+        $('#formCriarContato').on('submit', function(e) {
+
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'coo:criar_disciplina' %}",
+                url: "{% url 'coo:criar_contato' %}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Disciplina criada com sucesso!");
+                        alert("Contato criada com sucesso!");
                         location.reload();
                     } else {
-                        alert("Erro ao criar disciplina: " + JSON.stringify(response.errors));
+                        alert("Erro ao criar contato: " + JSON.stringify(response.errors));
                     }
                 }
             });
@@ -168,24 +185,24 @@
         
         $('.button_icon').on('click', function() {
             dataId = $(this).data('id');
-            [contatoId] = dataId.split('-');
+            contatoId = dataId;
         });
 
-        $('#excluir-disciplina').on('click', function() {
+        $('#ExcluirContato').on('click', function() {
 
             $.ajax({
                 type: 'POST',
-                url: `excluir_disciplina/${disciplinaId}/`, 
+                url: `excluir_contato/${contatoId}/`, 
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function(response) {
                     if (response.success) {
-                        $(`tr[data-id="${disciplinaId}"]`).remove();
+                        $(`tr[data-id="${contatoId}"]`).remove();
                         $('#Excluir').modal('hide');
                         location.reload();
                     } else {
-                        alert("Erro ao excluir disciplina.");
+                        alert("Erro ao excluir contato.");
                     }
                 },
                 error: function(xhr, status, error) {
@@ -194,23 +211,23 @@
             });
         });
 
-        $('detalhar-contato').on('click', function() {
-            if (!dataId || !dataId.includes('-')) {
-                console.error("Formato inválido para data-id:", dataId);
-                alert("Erro: botão configurado incorretamente.");
-                return;
-            }
+        $('#DetalharContato').on('click', function() {
+            console.log('opa')
 
             $.ajax({
                 type: 'GET',
-                url: `detalhar_contato/${contatoId}//curso=${cursosPolosId}`,
+                url: `detalhar_contato/${contatoId}/`,
                 success: function(response) {
-                    $('#detalheCursoContato').text(response.curso_polo);
-                    $('#detalheNomeContato').text(response.nome);
-                    $('#detalheEmailContato').text(response.email);
-                    $('#detalheAssuntoContato').text(response.assunto);
-                    $('#detalhePublicacaoContato').text(response.publicacao);
-                    $('#detalheEdicaoContato').text(response.edicao);
+                    $('#detalheCurso').text(response.curso);
+                    console.log(response.curso)
+                    $('#detalheNome').text(response.nome);
+                    $('#detalheMatricula').text(response.matricula);
+                    $('#detalheEmail').text(response.email);
+                    $('#detalheTelefone').text(response.telefone);
+                    $('#detalheAssunto').text(response.assunto);
+                    $('#detalheMensagem').text(response.mensagem);
+                    $('#detalhePublicacao').text(response.publicacao);
+                    $('#detalheEdicao').text(response.edicao);
                 },
                 error: function(xhr, status, error) {
                     alert("Erro ao carregar detalhes do contato." + error);
@@ -218,96 +235,5 @@
             });
         });
         
-
-// Quando o botão de editar contato for clicado
-$(document).ready(function() {
-    $('.editar-contato').on('click', function() {
-        const contatoId = $(this).data('id');
-
-        $.ajax({
-            type: 'GET',
-            url: `/editar_contato/${contatoId}/`,
-            success: function(response) {
-                $('#contatoId').val(contatoId);  // Adiciona o ID no campo oculto
-                $('#editarNomeContato').val(response.nome);
-                $('#editarEmailContato').val(response.email);
-                $('#editarTelefoneContato').val(response.telefone);
-                $('#editarAssuntoContato').val(response.assunto);
-                $('#editarMensagemContato').val(response.mensagem);
-
-                // Preenche o campo select com os cursos
-                $('#editarCursoContato').empty();  // Limpa as opções existentes
-                response.cursos.forEach(function(curso) {
-                    const selected = curso.id == response.curso ? 'selected' : '';
-                    $('#editarCursoContato').append(`<option value="${curso.id}" ${selected}>${curso.nome}</option>`);
-                });
-            },
-            error: function() {
-                alert('Erro ao carregar os dados do contato.');
-            }
-        });
-    });
-
-    $('#editarContatoForm').on('submit', function(event) {
-        event.preventDefault();  // Evita recarregar a página
-
-        const contatoId = $('#contatoId').val();
-        const formData = $(this).serialize();  // Serializa os dados do formulário
-
-        $.ajax({
-            type: 'POST',
-            url: `/editar_contato/${contatoId}/`,
-            data: formData,
-            success: function(response) {
-                if (response.success) {
-                    alert('Contato atualizado com sucesso!');
-                    location.reload();  // Recarrega a página para atualizar os dados
-                } else {
-                    alert('Erro ao atualizar contato: ' + response.errors);
-                }
-            },
-            error: function() {
-                alert('Erro na requisição.');
-            }
-        });
-    });
-});
-
-
-
-
-
-// Quando o botão de salvar alterações for clicado
-$('#salvar-contato').on('click', function() {
-    let formData = {
-        curso: $('#editarCursoContato').val(),
-        nome: $('#editarNomeContato').val(),
-        email: $('#editarEmailContato').val(),
-        telefone: $('#editarTelefoneContato').val(),
-        assunto: $('#editarAssuntoContato').val(),
-        mensagem: $('#editarMensagemContato').val(),
-        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-    };
-
-    const contatoId = $(this).data('id');  // Captura o ID do contato novamente
-
-    $.ajax({
-        type: 'POST',
-        url: `/editar_contato/${contatoId}/`,  // URL com o ID do contato
-        data: formData,
-        success: function(response) {
-            if (response.success) {
-                alert("Contato atualizado com sucesso!");
-                location.reload();  // Recarrega a página para refletir as mudanças
-            } else {
-                alert("Erro ao atualizar o contato: " + JSON.stringify(response.errors));
-            }
-        },
-        error: function() {
-            alert("Erro ao salvar as mudanças.");
-        }
-    });
-});
-
     });
 </script>

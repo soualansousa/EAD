@@ -6,16 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-import logging 
 from django.urls import resolve
+import logging 
 
 from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas
 
 from .models import Contato
 
 from .forms import SearchForm, NoticiaForm, PoloForm, CoordenadorForm, CursoForm, MediadorForm, GestorForm, CoordenadorCursoForm, CursoPoloForm, MediacaoForm, DisciplinaForm, ContatoForm, DocumentoForm
-
-
 
 @login_required
 def coordenacao(request):
@@ -417,89 +415,93 @@ def enviar_contato(request):
 #contato coordenador
 
 def contato_lista(request):
-    from django.shortcuts import render, redirect
-from .models import Contato
-from cead.models import Curso
+    coordenador_curso_id = request.session.get('coordenador_curso_id')
+    contatos = Contato.objects.filter(curso_id=coordenador_curso_id)
+    make_contato = ContatoForm(request.POST)
+    search_contato = SearchForm(request.GET)
+    query = request.GET.get('query')
 
-def contato_lista(request):
-    if request.method == 'POST':
-        nome = request.POST.get('nome')
-        email = request.POST.get('email')
-        telefone = request.POST.get('telefone')
-        assunto = request.POST.get('assunto')
-        mensagem = request.POST.get('mensagem')
-        curso_id = request.POST.get('curso')
+    query = request.GET.get('query', '')
+    if query == 'none':
+        query = ''
 
-        if curso_id:
-            curso = Curso.objects.get(id=curso_id)
-            contato = Contato(curso=curso, nome=nome, email=email, telefone=telefone, assunto=assunto, mensagem=mensagem)
-            contato.save()
+    if query:
+        contatos = contatos.filter(
+            Q(nome__icontains=query) | Q(email__icontains=query) | Q(assunto__icontains=query)
+        )
 
-            
-            return redirect('coo:contato_lista')  
-        else:
-            return render(request, 'contato_form.html', {'erro': 'Curso é obrigatório'})
-
-    contatos = Contato.objects.all()  
-    return render(request, 'coo/pages/contato.html', {'contatos': contatos})
-
-    paginator = Paginator(contatos, 10)
-
-    page_number = request.GET.get('page')
-
+    contatos_paginada = Paginator(contatos, 10)
+    p = request.GET.get("p")
     try:
-        page_obj = paginator.page(page_number)
+        pagina = contatos_paginada.page(p)
     except PageNotAnInteger:
-        page_obj = paginator.page(1)
+        pagina = contatos_paginada.page(1)
     except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
+        pagina = contatos_paginada.page(1)
+
     context = {
-        'contatos': page_obj,
+        'make_contato': make_contato,
+        'search_contato': search_contato,
+        'contatos': pagina,
+        'query': query,
     }
+
     return render(request, 'coo/pages/contato.html', context)
 
 
 def editar_contato(request, contato_id):
-    contato = get_object_or_404(Contato, id=contato_id)
-    cursos = Curso.objects.all()
+    coordenador_curso_id = request.session.get('coordenador_curso_id')
 
-    if request.method == 'GET':
-        return JsonResponse({
-            'curso': contato.curso.nome,
-            'nome': contato.nome,
-            'email': contato.email,
-            'telefone': contato.telefone,
-            'assunto': contato.assunto,
-            'mensagem': contato.mensagem,
-        })
+    if not coordenador_curso_id:
+        return JsonResponse({'error': 'Curso não encontrado para o coordenador.'}, status=404)
+
+    contatos = Contato.objects.filter(contato_id=contato_id, curso_id=coordenador_curso_id).first()
 
     if request.method == 'POST':
-        form = ContatoForm(request.POST, instance=contato)
+        form = ContatoForm(request.POST, instance=contatos)
         if form.is_valid():
-            form.save()
+            contatos = form.save()
             return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors})
-
-
-def detalhar_contato(request, contato_id):
-    if request.method == "GET":
-        curso_polos_id = request.GET.get("curso")
-        if not curso_polos_id:
-            return JsonResponse({"success": False, "message": "ID do CursoPolo não fornecido."})
-
-        contato = get_object_or_404(Contato, contato_id=contato_id, curso_polos_id=curso_polos_id)
+        return JsonResponse({'success': False, 'errors': form.errors})
+    
     dados = {
-        'curso_polo': f"{contato.curso_polos.curso.nome} - {contato.curso_polos.polo.cidade}",
-        'nome': contato.nome,
-        'email': contato.email,
-        'assunto': contato.assunto,
-        'publicacao': contato.publicacao.strftime('%d/%m/%Y') if contato.publicacao else "Data não disponível",
-        'edicao': contato.edicao.strftime('%d/%m/%Y') if contato.edicao else "Não editado",
+        'nome': contatos.nome,
+        'email': contatos.email,
+        'telefone': contatos.telefone,
+        'matricula': contatos.matricula,
+        'assunto': contatos.assunto,
+        'mensagem': contatos.mensagem,
+        'publicacao': contatos.publicacao.strftime('%d/%m/%Y') if contatos.publicacao else "Data não disponível",
+        'edicao': contatos.edicao.strftime('%d/%m/%Y') if contatos.edicao else "Não editado",
+        'curso': contatos.curso.id,
+        'cursos': list(Curso.objects.all().values('id', 'nome')),
     }
     return JsonResponse(dados)
 
 
+def detalhar_contato(request, contato_id):
+    coordenador_curso_id = request.session.get('coordenador_curso_id')
+    curso_id = request.GET.get('curso')
+    
+    try:
+        contatos = Contato.objects.filter(contato_id=contato_id, curso_id=coordenador_curso_id).get(
+            curso_id=curso_id
+        )
+    except NoticiaCurso.DoesNotExist:
+        return JsonResponse({'error': 'Contato(s) não encontrado(s).'}, status=404)
+
+    dados = {
+        'curso': contatos.curso.nome if contatos.curso else "Curso não informado",
+        'nome': contatos.nome,
+        'matricula': contatos.matricula,
+        'email': contatos.email,
+        'telefone': contatos.telefone,
+        'assunto': contatos.assunto,
+        'mensagem': contatos.mensagem,
+        'publicacao': contatos.publicacao.strftime('%d/%m/%Y') if contatos.publicacao else "Data não disponível",
+        'edicao': contatos.edicao.strftime('%d/%m/%Y') if contatos.edicao else "Não editado",
+    }
+    return JsonResponse(dados)
 
 
 
@@ -509,7 +511,7 @@ def criar_contato(request):
     if request.method == 'POST':
         form = DisciplinaForm(request.POST, coordenador_curso_id=coordenador_curso_id)
         if form.is_valid():
-            disciplina = form.save()
+            contato = form.save()
 
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})

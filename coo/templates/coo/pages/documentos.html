@@ -17,11 +17,12 @@
             <ol class="breadcrumb" style="color: #FF2900;">
                 {% for crumb in breadcrumbs %}
                     <li class="breadcrumb-item" style="color: #FF2900;">
-                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                        {{ crumb.name }}
                     </li>
                 {% endfor %}
             </ol>
         </nav>
+        
         
         <h1 class="container d-flex justify-content-center mt-3">Documentos</h1>
         
@@ -69,9 +70,10 @@
                                     <img src="{% static 'images/icons/visibility.svg' %}" alt="Ver detalhes">
                                 </button>
                                 
-                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="" data-id="{{ documento.id }}">
+                                <button class="button_icon button_delete" data-bs-toggle="modal" data-bs-target="#ExcluirDocumento" data-id="{{ documento.id }}-{{ documento.curso.id }}">
                                     <img src="{% static 'images/icons/delete.svg' %}" alt="Delete"></img>
                                 </button>
+
                             </div>
                         </td>
                     </tr>     

@@ -16,11 +16,12 @@
             <ol class="breadcrumb" style="color: #FF2900;">
                 {% for crumb in breadcrumbs %}
                     <li class="breadcrumb-item" style="color: #FF2900;">
-                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                        {{ crumb.name }}
                     </li>
                 {% endfor %}
             </ol>
         </nav>
+        
         
         <h1 class="container d-flex justify-content-center mt-3">Coordenadores</h1>
         

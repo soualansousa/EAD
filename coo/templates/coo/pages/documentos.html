@@ -61,12 +61,12 @@
                         <td>
                             <div class="icons_action d-flex justify-content-center gap-2">
                                 
-                                <button class="button_icon editar-documento" data-bs-toggle="modal" data-bs-target="#EditarDocumento" data-id="{{ documento.id }}">
+                                <button class="button_icon editar-documento" data-bs-toggle="modal" data-bs-target="#EditarDocumento" data-id="{{ documento.id }}-{{ documento.curso.id }}">
                                     <img src="{% static 'images/icons/edit.svg' %}" alt="Edit">
                                 </button>
                                 
 
-                                <button class="button_icon detalhar-documento" data-bs-toggle="modal" data-bs-target="#DetalharDocumento" data-id="{{ documento.curso.id }}">
+                                <button class="button_icon detalhar-documento"  data-bs-target="#DetalharDocumento" data-id="{{ documento.id }}-{{ documento.curso.id }}">
                                     <img src="{% static 'images/icons/visibility.svg' %}" alt="Ver detalhes">
                                 </button>
                                 

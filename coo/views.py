@@ -565,33 +565,49 @@ def criar_documento(request):
 
 
 def editar_documento(request, documento_id):
-    documento = get_object_or_404(Documento, id=documento_id)
-    if request.method == 'GET':
-        return JsonResponse({
+    if request.method == 'POST':
+        curso_id = request.GET.get('curso')
+        if not curso_id:
+            return JsonResponse({'success': False, 'message': 'ID do Curso não fornecido.'})
+
+        # Obtém o documento
+        documento = get_object_or_404(Documentos, id=documento_id, curso_id=curso_id)
+
+        # Atualiza os campos
+        documento.titulo = request.POST.get('titulo')
+        documento.descricao = request.POST.get('descricao')
+        if request.FILES.get('arquivo'):
+            documento.arquivo = request.FILES['arquivo']
+        documento.publicacao = request.POST.get('publicacao')
+        documento.edicao = request.POST.get('edicao')
+
+        # Salva as mudanças
+        documento.save()
+
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'message': 'Método não permitido.'})
+
+    
+
+def detalhar_documento(request, documento_id):
+    if request.method == "GET":
+        curso_id = request.GET.get("curso")
+
+        if not curso_id:
+            return JsonResponse({"success": False, "message": "ID do Curso não fornecido."}, status=400)
+
+        documento = get_object_or_404(Documentos, id=documento_id, curso_id=curso_id)
+
+        dados = {
             'curso': documento.curso.nome,
             'titulo': documento.titulo,
             'descricao': documento.descricao,
             'arquivo': documento.arquivo.url if documento.arquivo else '',
-            'publicacao': documento.publicacao.strftime('%d/%m/%Y')
-        })
-    
-    if request.method == 'POST':
-        form = DocumentoForm(request.POST, request.FILES, instance=documento)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'errors': form.errors})
+            'publicacao': documento.publicacao.strftime('%d/%m/%Y'),
+            'edicao': documento.edicao.strftime('%d/%m/%Y')
+        }
+        return JsonResponse(dados)
 
-def detalhar_documento(request, documento_id):
-    documento = get_object_or_404(Documento, id=documento_id)
-    dados = {
-        'curso': documento.curso.nome,
-        'titulo': documento.titulo,
-        'descricao': documento.descricao,
-        'arquivo': documento.arquivo.url if documento.arquivo else '',
-        'publicacao': documento.publicacao.strftime('%d/%m/%Y')
-    }
-    return JsonResponse(dados)
 
 # def excluir_documento(request, documento_id):
 #     if request.method == 'POST':

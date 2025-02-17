@@ -50,12 +50,12 @@
 </div>
 
 <!-- Detalhar -->
-<div class="modal fade" id="#DetalharDocumento" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
+<div class="modal fade" id="DetalharDocumento" tabindex="-1" aria-labelledby="DetalharLabel" aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center">
-                <h5 class="modal-title" id="DetalharContatoLabel">Detalhes do Documento</h5>
+                <h5 class="modal-title" id="DetalharDocumentoLabel">Detalhes do Documento</h5>
             </div>
 
             <div class="modal-body">
@@ -128,7 +128,7 @@
 
                     <div class="mb-3">
                         <label for="editarArquivoDocumento" class="form-label">Arquivo</label>
-                        <input type="text" class="form-control" id="editarArquivoDocumento" name="arquivo" value="{{ documento.arquivo }}">
+                        <input type="file" class="form-control" id="editarArquivoDocumento" name="arquivo" value="{{ documento.arquivo }}">
                     </div>
 
                     <div class="d-flex justify-content-center">
@@ -145,229 +145,200 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#formCriarDocumento').on('submit', function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'coo:criar_documento' %}",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        alert("Documento criado com sucesso!");
-                        location.reload();
-                    } else {
-                        alert("Erro ao criar documento: " + JSON.stringify(response.errors));
-                    }
-                }
-            });
-        });
-        
-        $('.button_icon').on('click', function() {
-            dataId = $(this).data('id');
-            [documentoId] = dataId.split('-');
-        });
-
-
-
-        $(document).on('click', '.button_icon', function() {
-    let dataId = $(this).data('id');
-
-    if (!dataId) {
-        console.error("Erro: data-id não encontrado no botão.");
-        return;
-    }
-
-    let ids = dataId.split('-');
-
-    if (ids.length < 2) {
-        console.error("Erro: formato de data-id inválido. Esperado: 'documentoId-cursoId'. Recebido:", dataId);
-        return;
-    }
-
-    let documentoId = ids[0];
-    let cursoId = ids[1];
-
-    console.log("Documento ID:", documentoId);
-    console.log("Curso ID:", cursoId);
-
-    // Agora, salva os IDs para uso posterior
-    $('#ExcluirDocumento').data('documento-id', documentoId);
-    $('#ExcluirDocumento').data('curso-id', cursoId);
-});
-
-// Quando clicar no botão de exclusão dentro do modal
-$('#excluir-documento').on('click', function() {
-    let documentoId = $('#ExcluirDocumento').data('documento-id');
-    let cursoId = $('#ExcluirDocumento').data('curso-id');
-
-    if (!documentoId || !cursoId) {
-        console.error("Erro: ID do documento ou do curso não encontrado.");
-        return;
-    }
-
-    $.ajax({
-        type: 'POST',
-        url: `/coo/excluir_documento/${documentoId}/?curso=${cursoId}`,
-        data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-        },
-        success: function(response) {
-            if (response.success) {
-                $(`tr[data-id="${documentoId}-${cursoId}"]`).remove();
-                $('#ExcluirDocumento').modal('hide');
-                location.reload();
-            } else {
-                alert("Erro ao excluir documento.");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert("Erro na requisição de exclusão: " + error);
-        }
-    });
-});
-
-
-        // $('#excluir-documento').on('click', function() {
-        //     if (documentoId && cursoPolosId) {
-        //         alert("Erro: ID do documento ou do curso não foi encontrado.");
-        //         return;
-            
-
-        //         $.ajax({
-        //             type: 'POST',
-        //             url: "{% url 'coo:excluir_documento' 0 %}".replace('0', documentoId) + `?curso=${cursoPolosId}`,
-        //             data: {
-        //                 csrfmiddlewaretoken: '{{ csrf_token }}',
-        //             },
-        //             success: function(response) {
-        //                 if (response.success) {
-        //                     $(`tr[data-id="${documentoId}-${cursoPolosId}"]`).remove();
-        //                     $('#Excluir').modal('hide');
-        //                     location.reload();
-        //                 } else {
-        //                     alert("Erro ao excluir documento.");
-        //                 }
-        //             },
-        //             error: function(xhr, status, error) {
-        //                 alert("Erro na requisição de exclusão: " + error);
-        //             }
-        //         });
-        //     } else {
-        //         alert("Erro: ID do documento não encontrado.");
-        //     }
-        // });
-
-        $('detalhar-documento').on('click', function() {
-            if (!dataId || !dataId.includes('-')) {
-                console.error("Formato inválido para data-id:", dataId);
-                alert("Erro: botão configurado incorretamente.");
-                return;
-            }
-
-            $.ajax({
-                type: 'GET',
-                url: `detalhar_documento/${documentoId}//curso=${cursosPolosId}`,
-                success: function(response) {
-                    $('#detalheCursoDocumento').text(response.curso_polo);
-                    $('#detalheTituloDocumento').text(response.titulo);
-                    $('#detalheDescricaoDocumento').text(response.descricao);
-                    $('#detalheArquivo').text(response.arquivo);
-                    $('#detalhePublicacaoContato').text(response.publicacao);
-                    $('#detalheEdicaoContato').text(response.edicao);
-                },
-                error: function(xhr, status, error) {
-                    alert("Erro ao carregar detalhes do documento." + error);
-                }
-            });
-        });
-        
-
-// Quando o botão de editar contato for clicado
 $(document).ready(function() {
-    $('.editar-documento').on('click', function() {
-        const documento= $(this).data('id');
+    // Função para criar documento
+    $('#formCriarDocumento').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'coo:criar_documento' %}",
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    alert("Documento criado com sucesso!");
+                    location.reload();
+                } else {
+                    alert("Erro ao criar documento: " + JSON.stringify(response.errors));
+                }
+            }
+        });
+    });
+
+    // Função para abrir modal de detalhamento
+    $(document).on('click', '.detalhar-documento', function() {
+        let dataId = $(this).data('id');
+        let ids = dataId.split('-');
+
+        if (ids.length !== 2) {
+            console.error("Erro: Formato inválido de data-id:", dataId);
+            alert("Erro ao abrir detalhes. ID do documento inválido.");
+            return;
+        }
+
+        let documentoId = ids[0];
+        let cursoId = ids[1];
+
+        console.log("Documento ID:", documentoId);
+        console.log("Curso ID:", cursoId);
 
         $.ajax({
             type: 'GET',
-            url: `/editar_documento/${documentoId}/`,
+            url: `/coo/detalhar_documento/${documentoId}/?curso=${cursoId}`,
+            dataType: "json",
             success: function(response) {
-                $('#documentoId').val(documentoId);  // Adiciona o ID no campo oculto
-                $('#editarTituloDocumento').val(response.titulo);
-                $('#editarDescricaoDocumento').val(response.descricao);
-                $('#editarArquivoDocumento').val(response.arquivo);
+                console.log("Resposta recebida", response);
 
-                // Preenche o campo select com os cursos
-                $('#editarCursoDocumento').empty();  // Limpa as opções existentes
-                response.cursos.forEach(function(curso) {
-                    const selected = curso.id == response.curso ? 'selected' : '';
-                    $('#editarCursoDocumento').append(`<option value="${curso.id}" ${selected}>${curso.nome}</option>`);
-                });
+                $('#detalheCursoDocumento').text(response.curso);
+                $('#detalheTituloDocumento').text(response.titulo);
+                $('#detalheDescricaoDocumento').text(response.descricao);
+                $('#detalheArquivoDocumento').text(response.arquivo);
+                $('#detalhePublicacaoDocumento').text(response.publicacao);
+                $('#detalheEdicaoDocumento').text(response.edicao);
+
+                let modal = $('#DetalharDocumento');
+                if (modal.length) {
+                    modal.modal('show'); 
+                } else {
+                    console.error("Erro: Modal 'DetalharDocumento' não encontrado.");
+                }
             },
-            error: function() {
-                alert('Erro ao carregar os dados do documento.');
+            error: function(xhr, status, error) {
+                console.error("Erro ao carregar detalhes do documento:", xhr.responseText);
+                alert("Erro ao carregar detalhes do documento.");
             }
         });
     });
 
-    $('#editarDocumentoForm').on('submit', function(event) {
-        event.preventDefault();  // Evita recarregar a página
+    // Função para editar documento
+    $(document).on('click', '.editar-documento', function() {
+        let dataId = $(this).data('id');
+        let [documentoId, cursoId] = dataId.split('-');
 
-        const documentoId = $('#documentoId').val();
-        const formData = $(this).serialize();  // Serializa os dados do formulário
+        if (!documentoId || !cursoId) {
+            console.error("Erro: IDs não encontrados.");
+            alert("Erro ao abrir o modal de edição. Tente novamente.");
+            return;
+        }
 
         $.ajax({
+            type: 'GET',
+            url: `/coo/detalhar_documento/${documentoId}/?curso=${cursoId}`,
+            dataType: "json",
+            success: function(response) {
+                console.log("Detalhes recebidos:", response);
+
+                // Tornando o campo de curso editável
+                $('#editarCursoDocumento').val(response.curso); // Agora pode ser editado
+                $('#editarTituloDocumento').val(response.titulo);
+                $('#editarDescricaoDocumento').val(response.descricao);
+                
+                // Mostrando o nome do arquivo atual
+                $('#editarArquivoDocumento').val(response.arquivo);  // Aqui você pode mostrar o nome do arquivo atual no campo de input
+
+                // Preenchendo as datas
+                $('#editarPublicacaoDocumento').val(response.publicacao);
+                $('#editarEdicaoDocumento').val(response.edicao);
+
+                // Exibindo o modal
+                $('#EditarDocumento').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error("Erro ao carregar detalhes do documento para edição:", xhr.responseText);
+                alert("Erro ao carregar detalhes do documento: " + error);
+            }
+        });
+    });
+
+    // Envia a requisição de atualização ao salvar o formulário de edição
+    $('#editarDocumentoForm').on('submit', function(e) {
+        e.preventDefault();
+
+        let documentoIdStr = $('.editar-documento').data('id'); // Obtém o ID do documento
+        let [documentoId, cursoId] = documentoIdStr.split('-'); // Destruição com nomes diferentes
+
+        let titulo = $('#editarTituloDocumento').val();
+        let descricao = $('#editarDescricaoDocumento').val();
+        let arquivo = $('#editarArquivoDocumento')[0].files[0]; // Arquivo selecionado
+        let publicacao = $('#editarPublicacaoDocumento').val();
+        let edicao = $('#editarEdicaoDocumento').val();
+
+        // FormData para enviar o arquivo corretamente
+        let formData = new FormData();
+        formData.append('titulo', titulo);
+        formData.append('descricao', descricao);
+        if (arquivo) {
+            formData.append('arquivo', arquivo); // Se o usuário selecionou um arquivo, envia
+        }
+        formData.append('publicacao', publicacao);
+        formData.append('edicao', edicao);
+
+        // Envia a requisição AJAX
+        $.ajax({
             type: 'POST',
-            url: `/editar_documento/${documentoId}/`,
+            url: `/coo/editar_documento/${documentoId}/?curso=${cursoId}`,
             data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
                 if (response.success) {
                     alert('Documento atualizado com sucesso!');
-                    location.reload();  // Recarrega a página para atualizar os dados
+                    $('#EditarDocumento').modal('hide');
+                    location.reload();
                 } else {
-                    alert('Erro ao atualizar documento: ' + response.errors);
+                    alert('Erro ao atualizar o documento.');
                 }
             },
-            error: function() {
-                alert('Erro na requisição.');
+            error: function(xhr, status, error) {
+                console.error("Erro ao editar o documento:", xhr.responseText);
+                alert("Erro ao editar o documento: " + error);
+            }
+        });
+    });
+
+    // Excluir documento
+    $(document).on('click', '.button_icon', function() {
+        let dataId = $(this).data('id');
+        let [documentoId, cursoId] = dataId.split('-');
+
+        if (!documentoId || !cursoId) {
+            console.error("Erro: IDs não encontrados.");
+            alert("Erro ao abrir o modal de exclusão. Tente novamente.");
+            return;
+        }
+
+        $('#ExcluirDocumento').data('documento-id', documentoId);
+        $('#ExcluirDocumento').data('curso-id', cursoId);
+    });
+
+    $('#excluir-documento').on('click', function() {
+        let documentoId = $('#ExcluirDocumento').data('documento-id');
+        let cursoId = $('#ExcluirDocumento').data('curso-id');
+
+        if (!documentoId || !cursoId) {
+            console.error("Erro: ID do documento ou do curso não encontrado.");
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: `/coo/excluir_documento/${documentoId}/?curso=${cursoId}`,
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function(response) {
+                if (response.success) {
+                    $(`tr[data-id="${documentoId}-${cursoId}"]`).remove();
+                    $('#ExcluirDocumento').modal('hide');
+                    location.reload();
+                } else {
+                    alert("Erro ao excluir documento.");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Erro na requisição de exclusão: " + error);
             }
         });
     });
 });
 
-
-
-
-
-// Quando o botão de salvar alterações for clicado
-$('#salvar-documento').on('click', function() {
-    let formData = {
-        curso: $('#editarCursoDocumento').val(),
-        titulo: $('#editarTituloDocumento').val(),
-        descricao: $('#editarDescricaoDocumento').val(),
-        arquivo: $('#editarArquivoDocumento').val(),
-        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-    };
-
-    const documentoId = $(this).data('id');
-
-    $.ajax({
-        type: 'POST',
-        url: `/editar_documento/${documentoId}/`,
-        data: formData,
-        success: function(response) {
-            if (response.success) {
-                alert("Documento atualizado com sucesso!");
-                location.reload();
-            } else {
-                alert("Erro ao atualizar o documento: " + JSON.stringify(response.errors));
-            }
-        },
-        error: function() {
-            alert("Erro ao salvar as mudanças.");
-        }
-    });
-});
-
-    });
 </script>

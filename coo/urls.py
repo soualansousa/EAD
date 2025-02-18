@@ -45,6 +45,8 @@ urlpatterns = [
 
 #documentos_publicos
     path('documentos_publico/', views.documentos_publico, name='documentos_publico'),
+    path('documento/<int:documento_id>/', views.visualizar_documento, name='visualizar_documento'),
+    path('coo/visualizar_imagem/<int:id>/', views.visualizar_imagem, name='visualizar_imagem'),
 
 
 #documento
@@ -53,6 +55,14 @@ urlpatterns = [
     path('editar_documento/<int:documento_id>/', views.editar_documento, name='editar_documento'),
     path('excluir_documento/<int:documento_id>/', views.excluir_documento, name='excluir_documento'),
     path('detalhar_documento/<int:documento_id>/', views.detalhar_documento, name='detalhar_documento'),
+
+
+#perguntas
+    path('perguntas/', views.perguntas_lista, name="perguntas_lista"),
+    path('criar_pergunta/', views.criar_pergunta, name='criar_pergunta'),
+    path('editar_pergunta/<int:pergunta_id>/', views.editar_pergunta, name='editar_pergunta'),
+    path('excluir_pergunta/<int:pergunta_id>/', views.excluir_pergunta, name='excluir_pergunta'),
+    path('detalhar_pergunta/<int:pergunta_id>/', views.detalhar_pergunta, name='detalhar_pergunta'),
 
 
 #teste

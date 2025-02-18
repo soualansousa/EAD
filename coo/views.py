@@ -7,7 +7,11 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import resolve
+from django.http import FileResponse
+from django.conf import settings
+import os
 import logging 
+
 
 from cead.models import Noticia, NoticiaCurso, Polo, Curso, Coordenador, CursoPolo, Mediador, GestorPolos, CoordenadorCurso, Gestor, Mediacao, Disciplina, Documentos, Perguntas
 
@@ -535,6 +539,24 @@ def documentos_publico(request):
 
 
 
+def visualizar_documento(request, documento_id):
+    documento = get_object_or_404(Documentos, id=documento_id)
+    
+    # Caminho completo do arquivo
+    file_path = os.path.join(settings.MEDIA_ROOT, str(documento.arquivo))
+    
+    # Abre o arquivo e inicia o download automaticamente
+    response = FileResponse(open(file_path, 'rb'))
+    response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+    
+    return response
+
+def visualizar_imagem(request, id):
+    documento = Documentos.objects.get(id=id)
+    return render(request, 'coo/pages/imagem.html', {'documento': documento})
+
+
+
 
 #documentos coordenador
 
@@ -609,15 +631,6 @@ def detalhar_documento(request, documento_id):
         return JsonResponse(dados)
 
 
-# def excluir_documento(request, documento_id):
-#     if request.method == 'POST':
-#         documento = get_object_or_404(Documento, id=documento_id)
-#         try:
-#             documento.delete()
-#             return JsonResponse({'success': True})
-#         except Exception as e:
-#             return JsonResponse({'success': False, 'error': str(e)})
-
 
 def excluir_documento(request, documento_id):
     if request.method == 'POST':
@@ -642,6 +655,50 @@ def excluir_documento(request, documento_id):
         return JsonResponse({'success': True})
     
     return JsonResponse({'success': False, 'error': 'Método não permitido'}, status=405)
+
+
+#perguntas coordenador
+
+def perguntas_lista(request):
+    query = request.GET.get('query', '')
+    perguntas = Perguntas.objects.filter(pergunta__icontains=query)
+
+  
+    perguntas = perguntas.order_by('-publicacao')
+    return render(request,  'coo/pages/perguntas.html', {'perguntas': perguntas, 'query': query})
+
+
+def criar_pergunta(request):
+    if request.method == 'POST':
+        form = PerguntaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+
+def editar_pergunta(request, pergunta_id):
+    pergunta = get_object_or_404(Perguntas, id=pergunta_id)
+    if request.method == 'POST':
+        form = PerguntaForm(request.POST, request.FILES, instance=pergunta)
+        if form.is_valid():
+            form.save()
+            return redirect('perguntas_lista')
+    else:
+        form = PerguntaForm(instance=pergunta)
+    return render(request, 'perguntas/form.html', {'form': form})
+
+
+def excluir_pergunta(request, pergunta_id):
+    pergunta = get_object_or_404(Perguntas, id=pergunta_id)
+    pergunta.delete()
+    return redirect('perguntas_lista')
+
+
+def detalhar_pergunta(request, pergunta_id):
+    pergunta = get_object_or_404(Perguntas, id=pergunta_id)
+    return render(request, 'perguntas/detalhar.html', {'pergunta': pergunta})
+
 
 
 #pagina de testes

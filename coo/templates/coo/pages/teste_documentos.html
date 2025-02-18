@@ -23,12 +23,17 @@
             <tr>
                 <td>{{ documento.titulo }}</td>
                 <td>{{ documento.descricao }}</td>
+
+
                 <td>
                     {% if documento.arquivo %}
                         {% if documento.arquivo.url|lower|slice:"-4:" == ".png" or documento.arquivo.url|lower|slice:"-4:" == ".jpg" or documento.arquivo.url|lower|slice:"-5:" == ".jpeg" or documento.arquivo.url|lower|slice:"-4:" == ".gif" %}
-                            <img src="{{ documento.arquivo.url }}" height="50" alt="Prévia da imagem">
+                            <!-- Adicionando link para visualizar a imagem -->
+                            <a href="{% url 'coo:visualizar_imagem' documento.id %}">
+                                <img src="{{ documento.arquivo.url }}" height="200" alt="Visualizar imagem">
+                            </a>
                         {% else %}
-                            <a href="{{ documento.arquivo.url }}" target="_blank">Baixar Arquivo</a>
+                            <a href="{% url 'coo:visualizar_documento' documento.id %}" target="_blank">Visualizar Documento</a>
                         {% endif %}
                     {% else %}
                         Nenhum arquivo disponível
